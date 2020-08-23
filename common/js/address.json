@@ -1,0 +1,1010 @@
+[{
+	"number": "0",
+	"address": "重庆市",
+	"level": "1",
+	"option": [{
+		"number": "01",
+		"address": "沙坪坝区",
+		"level": "2",
+		"option": [{
+				"number": "0101",
+				"address": "青木关镇",
+				"level": "3",
+				"option": [{
+						"number": "010101",
+						"address": "新青路社区",
+						"level": "4"
+					},
+					{
+						"number": "010102",
+						"address": "青云街社区",
+						"level": "4"
+					},
+					{
+						"number": "010103",
+						"address": "关口村",
+						"level": "4"
+					},
+					{
+						"number": "010104",
+						"address": "管家桥村",
+						"level": "4"
+					},
+					{
+						"number": "010105",
+						"address": "青木湖村",
+						"level": "4"
+					},
+					{
+						"number": "010106",
+						"address": "石碾桥村",
+						"level": "4"
+					},
+					{
+						"number": "010107",
+						"address": "四楞碑村",
+						"level": "4"
+					}
+				]
+			},
+			{
+				"number": "0102",
+				"address": "凤凰镇",
+				"level": "3",
+				"option": [{
+						"number": "010201",
+						"address": "凤凰社区",
+						"level": "4"
+					},
+					{
+						"number": "010202",
+						"address": "八字桥村",
+						"level": "4"
+					},
+					{
+						"number": "010203",
+						"address": "胡南坝村",
+						"level": "4"
+					},
+					{
+						"number": "010204",
+						"address": "威灵寺村",
+						"level": "4"
+					},
+					{
+						"number": "010205",
+						"address": "五福村",
+						"level": "4"
+					},
+					{
+						"number": "010206",
+						"address": "杨家庙村",
+						"level": "4"
+					},
+					{
+						"number": "010207",
+						"address": "皂桷树村",
+						"level": "4"
+					},
+					{
+						"number": "010208",
+						"address": "凤凰桥村",
+						"level": "4"
+					}
+				]
+			},
+			{
+				"number": "0103",
+				"address": "回龙坝镇",
+				"level": "3",
+				"option": [{
+						"number": "010301",
+						"address": "回龙坝社区",
+						"level": "4"
+					},
+					{
+						"number": "010302",
+						"address": "聚龙城社区",
+						"level": "4"
+					},
+					{
+						"number": "010303",
+						"address": "保农村",
+						"level": "4"
+					},
+					{
+						"number": "010304",
+						"address": "大桥村",
+						"level": "4"
+					},
+					{
+						"number": "010305",
+						"address": "大水沟村",
+						"level": "4"
+					},
+					{
+						"number": "010306",
+						"address": "回龙坝村",
+						"level": "4"
+					},
+					{
+						"number": "010307",
+						"address": "梁滩桥村",
+						"level": "4"
+					},
+					{
+						"number": "010308",
+						"address": "青龙庙村",
+						"level": "4"
+					},
+					{
+						"number": "010309",
+						"address": "四龙村",
+						"level": "4"
+					},
+					{
+						"number": "010310",
+						"address": "五云山村",
+						"level": "4"
+					},
+					{
+						"number": "010311",
+						"address": "西溪桥村",
+						"level": "4"
+					},
+					{
+						"number": "010312",
+						"address": "真武山村",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0104",
+				"address": "土主镇",
+				"level": "3",
+				"option": [{
+						"number": "010401",
+						"address": "团结湾社区",
+						"level": "4"
+					},
+					{
+						"number": "010402",
+						"address": "土主社区",
+						"level": "4"
+					},
+					{
+						"number": "010403",
+						"address": "永祥社区",
+						"level": "4"
+					},
+					{
+						"number": "010404",
+						"address": "双龙社区",
+						"level": "4"
+					},
+					{
+						"number": "010405",
+						"address": "向家坪村",
+						"level": "4"
+					},
+					{
+						"number": "010406",
+						"address": "力量村",
+						"level": "4"
+					},
+					{
+						"number": "010407",
+						"address": "明珠山村",
+						"level": "4"
+					},
+					{
+						"number": "010408",
+						"address": "三圣宫村",
+						"level": "4"
+					},
+					{
+						"number": "010409",
+						"address": "四塘村",
+						"level": "4"
+					},
+					{
+						"number": "010410",
+						"address": "田坝村",
+						"level": "4"
+					},
+					{
+						"number": "010411",
+						"address": "五一村",
+						"level": "4"
+					}
+				]
+			},
+
+
+
+			{
+				"number": "0106",
+				"address": "中梁镇",
+				"level": "3",
+				"option": [{
+						"number": "010601",
+						"address": "新店子社区",
+						"level": "4"
+					},
+					{
+						"number": "010602",
+						"address": "龙泉村",
+						"level": "4"
+					},
+					{
+						"number": "010603",
+						"address": "茅山峡村",
+						"level": "4"
+					},
+					{
+						"number": "010604",
+						"address": "庆丰山村",
+						"level": "4"
+					},
+					{
+						"number": "010605",
+						"address": "石院村",
+						"level": "4"
+					},
+					{
+						"number": "010606",
+						"address": "新发村",
+						"level": "4"
+					},
+					{
+						"number": "010607",
+						"address": "永宁寺村",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0107",
+				"address": "覃家岗街道",
+				"level": "3",
+				"option": [{
+						"number": "010701",
+						"address": "金星社区",
+						"level": "4"
+					},
+					{
+						"number": "010702",
+						"address": "新立社区",
+						"level": "4"
+					},
+					{
+						"number": "010703",
+						"address": "金桥社区",
+						"level": "4"
+					},
+					{
+						"number": "010704",
+						"address": "马家岩社区",
+						"level": "4"
+					},
+					{
+						"number": "010705",
+						"address": "新鸣社区",
+						"level": "4"
+					},
+					{
+						"number": "010706",
+						"address": "凤天路社区",
+						"level": "4"
+					},
+					{
+						"number": "010707",
+						"address": "梨泉社区",
+						"level": "4"
+					},
+					{
+						"number": "010708",
+						"address": "梨园社区",
+						"level": "4"
+					},
+					{
+						"number": "010709",
+						"address": "新凤社区",
+						"level": "4"
+					},
+					{
+						"number": "010710",
+						"address": "梨树湾村",
+						"level": "4"
+					},
+					{
+						"number": "010711",
+						"address": "上桥村",
+						"level": "4"
+					},
+					{
+						"number": "010712",
+						"address": "童家桥村",
+						"level": "4"
+					},
+					{
+						"number": "010713",
+						"address": "新桥村",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0108",
+				"address": "渝碚路街道",
+				"level": "3",
+				"option": [{
+						"number": "010801",
+						"address": "杨梨路社区",
+						"level": "4"
+					},
+					{
+						"number": "010802",
+						"address": "杨公桥社区",
+						"level": "4"
+					},
+					{
+						"number": "010803",
+						"address": "白鹤岭社区",
+						"level": "4"
+					},
+					{
+						"number": "010804",
+						"address": "沙杨路社区",
+						"level": "4"
+					},
+					{
+						"number": "010805",
+						"address": "沙南街社区",
+						"level": "4"
+					},
+					{
+						"number": "010806",
+						"address": "汉渝路社区",
+						"level": "4"
+					},
+					{
+						"number": "010807",
+						"address": "新体村社区",
+						"level": "4"
+					},
+					{
+						"number": "010808",
+						"address": "站东路社区",
+						"level": "4"
+					},
+					{
+						"number": "010809",
+						"address": "双巷子社区",
+						"level": "4"
+					},
+					{
+						"number": "010810",
+						"address": "南友村社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0109",
+				"address": "沙坪坝街道",
+				"level": "3",
+				"option": [{
+						"number": "010901",
+						"address": "一心村社区",
+						"level": "4"
+					},
+					{
+						"number": "010902",
+						"address": "沙正街社区",
+						"level": "4"
+					},
+					{
+						"number": "010903",
+						"address": "松林坡社区",
+						"level": "4"
+					},
+					{
+						"number": "010904",
+						"address": "建工村社区",
+						"level": "4"
+					},
+					{
+						"number": "010905",
+						"address": "中渡口社区",
+						"level": "4"
+					},
+					{
+						"number": "010906",
+						"address": "饮水村社区",
+						"level": "4"
+					},
+					{
+						"number": "010907",
+						"address": "劳动路社区",
+						"level": "4"
+					},
+					{
+						"number": "010908",
+						"address": "新华村社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0110",
+				"address": "小龙坎街道",
+				"level": "3",
+				"option": [{
+						"number": "011001",
+						"address": "龙泉路社区",
+						"level": "4"
+					},
+					{
+						"number": "011002",
+						"address": "嘉新社区",
+						"level": "4"
+					},
+					{
+						"number": "011003",
+						"address": "康宁村社区",
+						"level": "4"
+					},
+					{
+						"number": "011004",
+						"address": "快乐里社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0111",
+				"address": "天星桥街道",
+				"level": "3",
+				"option": [{
+						"number": "011101",
+						"address": "小正街社区",
+						"level": "4"
+					},
+					{
+						"number": "011102",
+						"address": "石碾盘社区",
+						"level": "4"
+					},
+					{
+						"number": "011103",
+						"address": "天陈路社区",
+						"level": "4"
+					},
+					{
+						"number": "011104",
+						"address": "晒光坪社区",
+						"level": "4"
+					},
+					{
+						"number": "011105",
+						"address": "柑子村社区",
+						"level": "4"
+					},
+					{
+						"number": "011106",
+						"address": "都市花园社区",
+						"level": "4"
+					},
+					{
+						"number": "011107",
+						"address": "红糟房社区",
+						"level": "4"
+					},
+					{
+						"number": "011108",
+						"address": "梨树湾社区",
+						"level": "4"
+					},
+					{
+						"number": "011109",
+						"address": "泉景社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0112",
+				"address": "土湾街道",
+				"level": "3",
+				"option": [{
+						"number": "011201",
+						"address": "民主村社区",
+						"level": "4"
+					},
+					{
+						"number": "011202",
+						"address": "工人村社区",
+						"level": "4"
+					},
+					{
+						"number": "011203",
+						"address": "模范村社区",
+						"level": "4"
+					},
+					{
+						"number": "011204",
+						"address": "新生村社区",
+						"level": "4"
+					},
+					{
+						"number": "011205",
+						"address": "滨江社区",
+						"level": "4"
+					},
+					{
+						"number": "011206",
+						"address": "金沙社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0113",
+				"address": "新桥街道",
+				"level": "3",
+				"option": [{
+						"number": "011301",
+						"address": "高滩岩社区",
+						"level": "4"
+					},
+					{
+						"number": "011302",
+						"address": "新桥社区",
+						"level": "4"
+					},
+					{
+						"number": "011303",
+						"address": "凤鸣山社区",
+						"level": "4"
+					},
+					{
+						"number": "011304",
+						"address": "上桥社区",
+						"level": "4"
+					},
+					{
+						"number": "011305",
+						"address": "张家湾社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0114",
+				"address": "双碑街道",
+				"level": "3",
+				"option": [{
+						"number": "011401",
+						"address": "双碑街社区",
+						"level": "4"
+					},
+					{
+						"number": "011402",
+						"address": "自由村社区",
+						"level": "4"
+					},
+					{
+						"number": "011403",
+						"address": "勤居村社区",
+						"level": "4"
+					},
+					{
+						"number": "011404",
+						"address": "堆金村社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0115",
+				"address": "石井坡街道",
+				"level": "3",
+				"option": [{
+						"number": "011501",
+						"address": "团结坝社区",
+						"level": "4"
+					},
+					{
+						"number": "011502",
+						"address": "建设坡社区",
+						"level": "4"
+					},
+					{
+						"number": "011503",
+						"address": "远祖桥社区",
+						"level": "4"
+					},
+					{
+						"number": "011504",
+						"address": "和平山社区",
+						"level": "4"
+					},
+					{
+						"number": "011505",
+						"address": "光荣坡社区",
+						"level": "4"
+					},
+					{
+						"number": "011506",
+						"address": "中心湾社区",
+						"level": "4"
+					},
+					{
+						"number": "011507",
+						"address": "石滨路社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0116",
+				"address": "童家桥街道",
+				"level": "3",
+				"option": [{
+						"number": "011601",
+						"address": "文苑社区",
+						"level": "4"
+					},
+					{
+						"number": "011602",
+						"address": "壮志路社区",
+						"level": "4"
+					},
+					{
+						"number": "011603",
+						"address": "阳光社区",
+						"level": "4"
+					},
+					{
+						"number": "011604",
+						"address": "和睦村社区",
+						"level": "4"
+					},
+					{
+						"number": "011605",
+						"address": "五灵观社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0117",
+				"address": "磁器口街道",
+				"level": "3",
+				"option": [{
+						"number": "011701",
+						"address": "金蓉社区",
+						"level": "4"
+					},
+					{
+						"number": "011702",
+						"address": "金碧社区",
+						"level": "4"
+					},
+					{
+						"number": "011703",
+						"address": "磁建村社区",
+						"level": "4"
+					},
+					{
+						"number": "011704",
+						"address": "凤凰山社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0118",
+				"address": "山洞街道",
+				"level": "3",
+				"option": [{
+						"number": "011801",
+						"address": "山洞社区",
+						"level": "4"
+					},
+					{
+						"number": "011802",
+						"address": "林园社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0119",
+				"address": "歌乐山街道",
+				"level": "3",
+				"option": [{
+						"number": "011901",
+						"address": "高店子社区",
+						"level": "4"
+					},
+					{
+						"number": "011902",
+						"address": "矿山坡社区",
+						"level": "4"
+					},
+					{
+						"number": "011903",
+						"address": "大土村社区",
+						"level": "4"
+					},
+					{
+						"number": "011904",
+						"address": "歌乐村",
+						"level": "4"
+					},
+					{
+						"number": "011905",
+						"address": "金刚村",
+						"level": "4"
+					},
+					{
+						"number": "011906",
+						"address": "山洞村",
+						"level": "4"
+					},
+					{
+						"number": "011907",
+						"address": "天池村",
+						"level": "4"
+					},
+					{
+						"number": "011908",
+						"address": "新开寺村",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0120",
+				"address": "井口街道",
+				"level": "3",
+				"option": [{
+						"number": "012012",
+						"address": "井口园区",
+						"level": "4"
+					}, {
+						"number": "012001",
+						"address": "江家院社区",
+						"level": "4"
+					},
+					{
+						"number": "012002",
+						"address": "经济桥社区",
+						"level": "4"
+					},
+					{
+						"number": "012003",
+						"address": "果园社区",
+						"level": "4"
+					},
+					{
+						"number": "012004",
+						"address": "松堡社区",
+						"level": "4"
+					},
+					{
+						"number": "012005",
+						"address": "柏杨村社区",
+						"level": "4"
+					},
+					{
+						"number": "012006",
+						"address": "宏城名都社区",
+						"level": "4"
+					},
+					{
+						"number": "012007",
+						"address": "美丽阳光家园社区",
+						"level": "4"
+					},
+					{
+						"number": "012008",
+						"address": "二塘村",
+						"level": "4"
+					},
+					{
+						"number": "012009",
+						"address": "井口村",
+						"level": "4"
+					},
+					{
+						"number": "012010",
+						"address": "南溪村",
+						"level": "4"
+					},
+					{
+						"number": "012011",
+						"address": "双碑村",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0121",
+				"address": "陈家桥街道",
+				"level": "3",
+				"option": [{
+						"number": "012101",
+						"address": "桥北社区",
+						"level": "4"
+					},
+					{
+						"number": "012102",
+						"address": "桥东社区",
+						"level": "4"
+					},
+					{
+						"number": "012103",
+						"address": "桥南社区",
+						"level": "4"
+					},
+					{
+						"number": "012104",
+						"address": "学苑社区",
+						"level": "4"
+					},
+					{
+						"number": "012105",
+						"address": "学林社区",
+						"level": "4"
+					},
+					{
+						"number": "012106",
+						"address": "学府社区",
+						"level": "4"
+					},
+					{
+						"number": "012107",
+						"address": "官房寺社区",
+						"level": "4"
+					},
+					{
+						"number": "012108",
+						"address": "天马山社区",
+						"level": "4"
+					}
+				]
+			},
+
+
+
+
+
+			{
+				"number": "0124",
+				"address": "联芳街道",
+				"level": "3",
+				"option": [{
+						"number": "012401",
+						"address": "联芳桥社区",
+						"level": "4"
+					},
+					{
+						"number": "012402",
+						"address": "平顶山社区",
+						"level": "4"
+					},
+					{
+						"number": "012403",
+						"address": "圣泉社区",
+						"level": "4"
+					},
+					{
+						"number": "012404",
+						"address": "双朝门社区",
+						"level": "4"
+					},
+					{
+						"number": "012405",
+						"address": "香榭里社区",
+						"level": "4"
+					},
+					{
+						"number": "012406",
+						"address": "学堂堡社区",
+						"level": "4"
+					}
+				]
+			},
+
+			{
+				"number": "0125",
+				"address": "丰文街道",
+				"level": "3",
+				"option": [{
+						"number": "012501",
+						"address": "丰文社区",
+						"level": "4"
+					},
+					{
+						"number": "012502",
+						"address": "清悦社区",
+						"level": "4"
+					},
+					{
+						"number": "012503",
+						"address": "崇贤社区",
+						"level": "4"
+					},
+					{
+						"number": "012504",
+						"address": "丰盛社区",
+						"level": "4"
+					},
+					{
+						"number": "012505",
+						"address": "人和门村",
+						"level": "4"
+					},
+					{
+						"number": "012506",
+						"address": "三河村",
+						"level": "4"
+					}
+				]
+			},
+
+
+			{
+				"number": "0129",
+				"address": "民防办",
+				"level": "3",
+				"option": [{
+					"number": "012901",
+					"address": "民防办",
+					"level": "4"
+				}]
+			},
+			{
+				"number": "0128",
+				"address": "三峡商圈",
+				"level": "3",
+				"option": [{
+					"number": "012801",
+					"address": "三峡商圈",
+					"level": "4"
+				}]
+			},
+			{
+				"number": "0127",
+				"address": "西站",
+				"level": "3",
+				"option": [{
+					"number": "012701",
+					"address": "西站",
+					"level": "4"
+				}]
+			}
+		]
+
+	}]
+}]

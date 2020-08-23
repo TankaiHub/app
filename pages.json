@@ -1,0 +1,120 @@
+{
+	"pages": [{
+			"path": "pages/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		}, {//首页
+			"path": "pages/check/index/index"
+			// "style": {
+			// 	"navigationBarTitleText": "首页",
+			// 	"app-plus": { //App端扩展配置
+			// 		"titleNView": {
+			// 			"buttons": [{
+			// 				"type": "menu",
+			// 				"fontSize": "22px",
+			// 				"float": "left"
+			// 			}]
+			// 		}
+			// 	}
+			// }
+		},
+		{//企业总数
+			"path":"pages/check/index/indexPage/comTotal"
+		},
+		{//风险分析
+			"path": "pages/check/tj/tj" 
+		},
+		{//企业管理
+			"path": "pages/check/businessManagement/businessManagement" 
+		}, 
+		{//新增企业
+			"path": "pages/check/businessManagement/page/newEnterprise" 
+		},
+		{//企业管理  详情
+			"path": "pages/check/businessManagement/page/detail" 
+		},
+		{//下载export excel
+			"path":"pages/check/businessManagement/page/exportExcel"
+		},
+		{//执法计划
+			"path": "pages/check/law/lawPlan" 
+		},
+		{//执法详情
+			"path": "pages/check/law/page/lawTask" 
+		},
+		{//执法详情 - 添加企业
+			"path": "pages/check/law/page/addCompany" 
+		},
+		{//执法详情 - 选择企业
+			"path": "pages/check/law/page/selectIndustry" 
+		},
+		{//执法添加
+			"path": "pages/check/law/page/addLawContent" 
+		},
+		{//查看执法详情
+			"path": "pages/check/law/page/seeDetails" 
+		},
+		{//执法统计
+			"path": "pages/check/law/lawCount" 
+		},
+		{//开始检查
+			"path":"pages/check/law/page/lawScheme"
+		},
+		{//开始检查 执法
+			"path":"pages/check/law/page/lawEnforcement"
+		},
+		{//新增 执法 方案
+			"path":"pages/check/law/page/addLawPlan"
+		},
+		{//复查
+			"path":"pages/check/law/page/review"
+		},
+		{//复查记录
+			"path":"pages/check/law/page/reviewRecord"
+		},
+		{//执法 -- 编辑企业信息
+			"path":"pages/check/law/page/editComInof"
+		},
+		{//账号设置
+			"path": "pages/check/system/accountSettings" 
+		},
+		{//修改密码
+			"path": "pages/check/system/systemPage/resetPassword" 
+		},
+		{//企业反馈
+			"path": "pages/check/system/companyFeedbackC" 
+		},
+		{//回收站
+			"path": "pages/check/system/systemPage/emailRecycleBin" 
+		},
+		{//发件箱
+			"path": "pages/check/system/companyMsg" 
+		},
+		{//收件箱
+			"path": "pages/check/system/emailGet" 
+		},
+		{//资源共享
+			"path": "pages/check/system/resourcePost" 
+		},
+		{//新建文件夹
+			"path": "pages/check/system/systemPage/newCreateFile" 
+		},
+		{//上传文件
+			"path": "pages/check/system/systemPage/upFile" 
+		},
+		
+		
+		
+		{
+			"path":"pages/test"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#007AFF",
+		"backgroundColor": "#FFFFFF",
+		"navigationStyle":"custom"
+	}
+}
