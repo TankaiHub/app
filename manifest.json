@@ -42,7 +42,12 @@
             },
             "ios" : {},
             "sdkConfigs" : {
-                "maps" : {}
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "8824fe66284740113392b0d0460fd903",
+                        "appkey_android" : "892ad98caa928dab5b4e6228bdf560df"
+                    }
+                }
             }
         }
     },

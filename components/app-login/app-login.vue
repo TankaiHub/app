@@ -1,5 +1,5 @@
 <template>
-	<view class="com_app_login">
+	<view class="com_app_login"> 
 		<view class="l_bg_wrap"></view>
 		<view class="l_top_text_wrap">
 			<view class="l_text_ch">重庆市工贸八大行业安全生产管理系统</view>

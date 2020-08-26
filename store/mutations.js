@@ -3,7 +3,11 @@ export default {
 		state.adminUserInfo = obj;
 	},
 	set_userInfo(state, obj) {
-		state.userInfo = obj;
+		if (obj.flag) {
+			state.userInfo['company_id'] = obj.company_id;
+		}else {
+			state.userInfo = obj;
+		}
 		state.isLogin = true;
 	}, 
 	set_table_data(state, arr) {
@@ -46,5 +50,15 @@ export default {
 			state.admin_law_add_company_select_info = val;
 		} 
 	},
+	
+	
+	
+	///////////////////////////////////
+	set_home_login_lock(state, bool) {
+		state.home_login_lock = bool;
+	},
+	set_userHomeInfoData(state, obj) {
+		state.userHomeInfoData = obj;
+	}
 	
 }

@@ -104,8 +104,19 @@
 			"path": "pages/check/system/systemPage/upFile" 
 		},
 		
-		
-		
+		//////////////////////////企业端/////////////////////////////////////
+		{//首页
+			"path": "pages/company/home/home" 
+		},
+		{//首页 --企业基本信息编辑
+			"path": "pages/company/home/page/edit" 
+		},
+		{//首页 --企业基本信息填写
+			"path": "pages/company/writeData/base" 
+		},
+		{//首页 --企业安全信息填写
+			"path": "pages/company/writeData/safety" 
+		},
 		{
 			"path":"pages/test"
 		}

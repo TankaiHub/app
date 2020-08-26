@@ -2,7 +2,7 @@ export default {
 	
 	isLogin:false,//登录
 	adminUserInfo:{},//后台用户信息
-	userInfo:{},//用户信息 ,
+	
 	table_data:[],//表格信息
 	admin_index_addrInfo:null, //首页地址信息
 	admin_item_company_info:{},//企业管理 -- 编辑 -- 企业信息
@@ -14,4 +14,10 @@ export default {
 	admin_law_add_law_plan_arr:[],///执法计划 新增执法内容, 
 	admin_law_add_company:[],///////执法计划 -- 添加企业
 	admin_law_add_company_select_info:{},///////执法计划 -- 添加企业 -- select
+	
+	///////////////////企业端////////////////////////
+	userInfo:{},//用户信息 ,
+	home_login_lock:true,//登陆判断是否有多个企业
+	userHomeInfoData:{}, //登陆获取的数据
+	
 }

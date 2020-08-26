@@ -1,7 +1,7 @@
 <template>
 	<uni-drawer :visible="drawerVisible" :mode="drawerMode" @close="onUniDrawerClose">
 		<view class="app_nav_container">
-			<view class="outer_wrap" v-for="(item, index) in navData" :key="index">
+			<view class="outer_wrap" v-for="(item, index) in currentNavData" :key="index">
 				<view @click="onItem(item, index)" class="padding_10px_top_bt">{{ item.text }}</view>
 				<view class="center_wrap" v-if="level2Array && level2Array.length > 0 && level2CurrentIndex == index">
 					<view class="" v-for="(ele, ind) in level2Array" :key='ind'>
@@ -21,19 +21,24 @@
 
 <script>
 	import {
-		navData
+		navData,
+		comNavData
 	} from "@/common/js/dataArray.js"
 	export default {
 		props: {
 			drawerVisible: {
 				type: Boolean,
 				default: false
-			}
+			},
+			currentNav:{
+				type:String, 
+				default:'index'
+			},
 		},
 		data() {
 			return {
 				drawerMode: "left", //导航位置 
-				navData,
+				currentNavData:[],
 				level2Array: [],
 				level3Array: [],
 				level2CurrentIndex: -1,
@@ -43,6 +48,13 @@
 		model:{
 			prop:"drawerVisible",
 			event:"change"
+		},
+		created() { 
+			if (this.currentNav == 'index') {
+				this.currentNavData = navData;
+			}else if (this.currentNav == 'company') {
+				this.currentNavData = comNavData;
+			}
 		},
 		methods: {
 			onItem(item, index) {

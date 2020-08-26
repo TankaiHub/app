@@ -1,11 +1,11 @@
 <template>
-	<view class="cmp_app_picker_select c_t_sel" :class="{ isBorder:isBorder }">
+	<view class="cmp_app_picker_select c_t_sel" :class="{ isBorder:isBorder, padding_5px:isPadding }">
 		<view class="t_s_title_wrap c_t_wrap">
 			<view class="t_s_title_bd c_t_bd">
 				<!-- , isBorder:isBorder -->
 				<input @click="onPickerSelectTitle" placeholder-style="color:#ccc"  :style="{ textAlign:textAlign }" v-model="curVal" :placeholder="placeholder" disabled />
 				<input type="text" v-model="selectValue" v-show="isShow" />
-				<view class="t_s_close_btn c_t_close_btn" @click="onSelectClear">X</view>
+				<view class="t_s_close_btn c_t_close_btn" v-if="isShowClose" @click="onSelectClear">X</view>
 			</view>
 		</view>
 		<view class="app_picker_select_wrap_bd" v-if="isShowPickerSelect">
@@ -55,6 +55,14 @@
 			isBorder:{
 				type:Boolean,
 				default:true
+			},
+			isShowClose:{
+				type:Boolean,
+				default:true
+			},
+			isPadding:{
+				type:Boolean,
+				default:true
 			}
 		},
 		data() {
@@ -75,6 +83,9 @@
 		watch: {
 			selectValue(newVal) {
 				this._initData(newVal);
+			},
+			selectData() {
+				this.onSelectClear();
 			},
 		},
 		created() { 

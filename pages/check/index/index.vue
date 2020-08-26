@@ -4,7 +4,7 @@
 		<uni-nav-bar left-icon="list" fixed="true" @clickLeft="onNavBarLeft" title="首页"></uni-nav-bar>
 
 		<view class="index_com top_select">
-			<view class=" border_1px_all_ccc padding_5px border_radius_5 clearfix">
+			<view class=" border_1px_all_ccc padding_5px border_radius_5 clearfix"> 
 				<input type="text" placeholder="请选择地址" placeholder-style="color:#ccc" v-model="addressInfo.str" class="w_90_per  float_left"
 				 disabled @click="onAddrInput" />
 				<text class="w_10_per float_left text_align_center" @click="onInputArrressClear">X</text>

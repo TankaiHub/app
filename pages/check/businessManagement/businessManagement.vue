@@ -743,44 +743,39 @@
 					bzh: this.bzh,
 					approval_status: this.approval_status,
 				};
-				console.log('点击')
-				setTimeout(() => {
-					var url = 'http://api.cqgmaq.com/excel/20200823/1598176627沙坪坝区企业名单.xlsx';
-					var a;
-					const downloadTask = uni.downloadFile({
-						url, //仅为示例，并非真实的资源
-						success: (res) => {
-							if (res.statusCode === 200) {
-								console.log('下载成功');
-							}
-							let that = this;
-							uni.saveFile({
-								tempFilePath: res.tempFilePath,
-								success: function(red) {
-									a = red.savedFilePath
-									console.log(red, a)
-									uni.showToast({
-										title:"下载完成",
-										icon:'none'
-									})
+				console.log('点击') 
+				this.$http.post('companyListNExcel', opts).then(res => {
+					if (res.code == 200) {
+						var url = 'http://api.cqgmaq.com/excel/20200823/1598176627沙坪坝区企业名单.xlsx';
+						var a;
+						const downloadTask = uni.downloadFile({
+							url, //仅为示例，并非真实的资源
+							success: (res) => {
+								if (res.statusCode === 200) {
+									console.log('下载成功');
 								}
-							});
-						}
-					});
+								let that = this;
+								uni.saveFile({
+									tempFilePath: res.tempFilePath,
+									success: function(red) {
+										a = red.savedFilePath
+										console.log(red, a)
+										uni.showToast({
+											title: "下载完成",
+											icon: 'none'
+										})
+									}
+								});
+							}
+						});
 
-					downloadTask.onProgressUpdate((res) => {
-						console.log('下载进度' + res.progress);
-						console.log('已经下载的数据长度' + res.totalBytesWritten);
-						console.log('预期需要下载的数据总长度' + res.totalBytesExpectedToWrite);
-					});
-
-
-				}, 2000);
-				// this.$http.post('companyListNExcel', opts).then(res => {
-				// 	if (res.code == 200) {
-
-				// 	}
-				// });
+						downloadTask.onProgressUpdate((res) => {
+							console.log('下载进度' + res.progress);
+							console.log('已经下载的数据长度' + res.totalBytesWritten);
+							console.log('预期需要下载的数据总长度' + res.totalBytesExpectedToWrite);
+						});
+					}
+				});
 			},
 		}
 	}

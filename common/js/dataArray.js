@@ -55,6 +55,67 @@ var navData = [{
 ];
 
 
+// { 
+//             name: '首页',
+//             href: 'home',
+//             icon:'iconhome-fill'
+//           }, {
+//             name: '企业信息',
+//             href: 'companyTableHome',
+//             icon:'iconorder-fill'
+
+//           }
+//           ,{
+//             name: '安全技术要求',
+//             href: 'companyRules',
+//             icon:'iconbili'
+//           }, {
+//             name: '消息通知',
+//             href: 'message',
+//             icon:'iconemail-fill',
+//             num:this.badgeNum
+//           },
+//           {
+//             name: '账号设置',
+//             href: 'settin',
+//             icon:'iconset'
+//           },
+//           {
+//             name: '问题反馈',
+//             href: 'companyFeedback',
+//             icon:'iconfankui'
+//           },{
+//             name: '资源下载',
+//             href: 'resourceDown',
+//             icon:'iconxiazai1'
+//           },
+	
+var comNavData = [{
+		text: '首页',
+		href: '../home/home'
+	},
+	{
+		text: '企业信息',
+		href: ''
+	},
+	{
+		text: '安全技术要求',
+		href: ''
+	},
+	{
+		text: '消息通知',
+		href: '', 
+	},
+	{
+		text: '问题反馈',
+		href: '', 
+	},
+	{
+		text:'资源下载',
+		herf: ''
+	}
+];
+
 var lawData = [{
 		"label": "经营主体合法",
 		"disabled": false,
@@ -244,5 +305,6 @@ var lawData = [{
 
 export {
 	navData,
-	lawData
+	lawData,
+	comNavData
 }
