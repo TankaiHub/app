@@ -69,7 +69,7 @@
 					this.empty = true;
 					return;
 				}
-				this.$emit('confirm',_formdata)
+				this.$emit('confirm',_formdata);
 			},
 			formReset: function(e) {
 				this.$emit('cancel')

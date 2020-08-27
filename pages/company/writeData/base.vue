@@ -34,8 +34,8 @@
 					<uni-list-item title="主营产品" :showArrow="false">
 						<view class="n_ent_list_down_wrap" slot="right">
 							<view class="n_show_list_wrap" @click="onTabInp(3)"> 
-								<text class="color_ccc" v-if="main_selse_list && main_selse_list.length == 0">请选择</text>
-								<view class="n_show_item text_align_right" v-for="(item, index) in main_selse_list" :key="index">{{item.lbmc}}</view>
+								<text class="color_ccc" v-if="individual_select_list && individual_select_list.length == 0">请选择</text>
+								<view class="n_show_item text_align_right" v-for="(item, index) in individual_select_list" :key="index">{{item.lbmc}}</view>
 							</view>
 							<multiple-select v-model="showIndividual" 
 											label-name="lbmc" 
@@ -308,6 +308,7 @@
 				console.log(main_products_arr)
 				this.defaultSelected = final_main_products_arr.nArr;
 				this.main_selse_list = final_main_products_arr.tArr;
+				this.individual_select_list = this.main_selse_list;
 				//主要工序
 				// this.baseInfoData['main_process'] = data.main_process;
 				// main_process: "普通机加（钻铣磨冲剪压焊）,熔炼,锻造"

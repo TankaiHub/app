@@ -43,7 +43,7 @@
 											 v-if="item['is_show_account_input' + index]" class="l_enf_l_i_common l_enf_l_i_inp_bd" type="text" v-model="item.accord" />
 											<view class="l_enf_l_i_common img_size_40upx mar_left_5px">
 												<image v-show="item['account_isRadio' + index]" @click="onEditImg(item['account_radio' + index], index)"
-												 class="img_size_40upx mar_left_5px" src="../../../../static/edit.png" mode="aspectFill"></image>
+												 class="img_size_40px mar_left_5px" src="../../../../static/edit.png" mode="aspectFill"></image>
 											</view>
 										</view>
 									</label>
@@ -59,7 +59,7 @@
 											 v-model="item.accord_n" />
 											<view class="l_enf_l_i_common img_size_40upx mar_left_5px">
 												<image v-if="item['account_n_isRadio' +index]" @click="onEditImg(item['accord_n_radio' + index], index)"
-												 class="img_size_40upx" src="../../../../static/edit.png" mode="aspectFill"></image>
+												 class="img_size_40px" src="../../../../static/edit.png" mode="aspectFill"></image>
 											</view>
 										</view>
 										<view class="clearfix"></view>

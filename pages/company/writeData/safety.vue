@@ -271,11 +271,12 @@
 					value: "3",
 					show: true,
 				}],
+				test:''
 			}
 		},
 		computed: {
 			...mapState(["userInfo"]),
-		},
+		}, 
 		components: {
 			appPickerSelect,
 			multipleSelect,
@@ -324,13 +325,6 @@
 				this.safetyData['safety_inspection_pj'] = data.safety_inspection_pj;
 				//获取到能源相关的数据
 				var allEnergy = this._changeStr(data.energy, ',');
-				// energy2: '', //天然气供给方式
-				// isShowCannedMode: false, //罐装 时
-				// energy3: '', //购买渠道
-				// energy4: '', //最大存储量
-				// energy4Unit: '', //单位
-				// isShowPowerDistributionRoom: false, //是否显示配电房
-				// energy5: '', //有无配电房
 				var en = allEnergy[0];
 				this.energyDefaultSelected = this._changeStr(en, '-');
 				this.energy_select_list = this._changeArr(this.energyDefaultSelected, this.energyArray);
@@ -351,16 +345,18 @@
 				this['energy2'] = allEnergy[1] || '';
 				if (this['energy2'] == 2) {
 					this.isShowCannedMode = true;
-				}
+				} 
 				this['energy3'] = allEnergy[2] || '';
 				this['energy4'] = allEnergy[3] || '';
 				this['energy4Unit'] = allEnergy[4] || '';
+				console.log(this['energy4Unit'], '111')
 				this['energy5'] = allEnergy[5] || '';
+				this.test = allEnergy[4] 
 				//获取到投保数据
 				this.insuredDefaultSelected = this._changeStr(data.insured, ',');
 				//投保默认值
 				this.insured_selse_list = this._changeArr(this.insuredDefaultSelected, this.insuredArray);
-
+				console.log(this['energy4Unit'], '222')
 
 			},
 			//处理数组 把value相同的提出
@@ -415,7 +411,7 @@
 						this.energy2 = "";
 						this.energy3 = "";
 						this.energy4 = "";
-						this.energy4Unit = "";
+						this.energy4Unit = ""; 
 					}
 				}
 			},
@@ -460,7 +456,7 @@
 					this.energy2 = "";
 					this.energy3 = "";
 					this.energy4 = "";
-					this.energy4Unit = "";
+					this.energy4Unit = ""; 
 				}
 				if (!this.isShowPowerDistributionRoom) {
 					this.energy5 = '';
@@ -479,7 +475,7 @@
 						if (res.code == 200) {
 							var url = '';
 							if (this.isIndividual) {//个体
-								url = './riskPage/individual/specialWorkAndDevice';
+								url = './riskMainPage/individual';
 							}else {
 								
 							}
@@ -490,7 +486,7 @@
 								success() {
 									setTimeout(() => {
 										uni.navigateTo({
-											// url: './riskPage/individual/specialWorkAndDevice',
+											url
 										})
 									}, 1500);
 								}

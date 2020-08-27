@@ -28,7 +28,7 @@
 			</view>
 
 			<view class="l_sch_btb dis_flex_center mar_top_20rpx" v-if="carryOutState">
-				<button type="primary" size="mini" @click="onCarryOut">检查完成</button>
+				<button type="primary" class="mar_top_20px" size="mini" @click="onCarryOut">检查完成</button>
 				<date-time-picker ref='date-time' :indicatorStyle='indicatorStyle' :type='type' :datestring='dateString' @change='dateTimeChange'></date-time-picker>
 			</view>
 

@@ -84,8 +84,8 @@
 			selectValue(newVal) {
 				this._initData(newVal);
 			},
-			selectData() {
-				this.onSelectClear();
+			selectData() { 
+				// this.onSelectClear();
 			},
 		},
 		created() { 
@@ -129,7 +129,7 @@
 			onSelectClear() { 
 				this.currentSelect = {}; 
 				this.curVal = '';
-				this.value = [0];
+				this.value = [0]; 
 				this.$emit("onSelectClear"); 
 		},
 		breakClick(variable, str) {

@@ -230,6 +230,13 @@
 			},
 			//选择登录企业确定
 			onSelectMask() {
+				if (this.currentComId == "") {
+					uni.showToast({
+						title:"请选择登录企业",
+						icon:'none'
+					});
+					return;
+				}
 				this.title = '首页';
 				this.navIcon = 'list';
 				this.isShowCompanyMask = false;
@@ -304,8 +311,12 @@
 				if (this.companyBaseInfo.industry_category_zfl) {
 					if (this.companyBaseInfo.scale == 3) {
 						//个体
+						uni.navigateTo({
+							url:'../writeData/riskPage/specialWorkAndDevice'
+						})
 					} else {
 						//非个体
+						
 					} 
 				} else {
 					uni.showModal({
