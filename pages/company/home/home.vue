@@ -3,7 +3,7 @@
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar :left-icon="navIcon" fixed="true" @clickLeft="onNavBarLeft" :title="title"></uni-nav-bar>
 		<view class="home_wrapper padding_10px">
-			<!-- 选择登录企业 -->
+			<!-- 选择登录企业 --> 
 			<view class="h_login_first_mask_wrap border_1px_all_ccc border_radius_5" v-if="isShowCompanyMask">
 				<view class="h_l_f_m_top_title text_align_center border_1px">选择登录企业</view>
 				<view class="h_l_f_m_list_wrap">

@@ -237,7 +237,7 @@
 					label: '生物燃料',
 					value: "6"
 				}],
-				//天然气供给方式
+				//天然气供给方式   
 				energy2Array: [{
 					label: '管输',
 					value: "1",

@@ -12,7 +12,7 @@
 					<button class="l_sch_top_btn" type="primary" v-if="carryOutState" @click="onGoAddLawPlan">新增</button>
 				</view>
 			</view>
-
+ 
 			<view class="l_sch_table_wrap">
 				<app-table :headerData="headerData" :bodyData="checkList" :tablePorps="tableProps" :isShowOper="isShowOper">
 					<template slot="other" slot-scope="props">

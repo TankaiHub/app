@@ -16,7 +16,7 @@
 					<li v-for="(item, index) in listData" class="list_item_wrap " :key="index">
 						<div class="file_wrap">
 							<div class="file_icon item_con">
-								<image src="../../../static/icon-file.png" class="icon-style" v-if="item.type==1" />
+						 		<image src="../../../static/icon-file.png" class="icon-style" v-if="item.type==1" />
 								<image :src="item.url" class="icon-style" v-if="item.type==2" />
 								<image src="../../../static/icon-video.png" class="icon-style" v-if="item.type==3" />
 								<image src="../../../static/icon-wenjian.png" class="icon-style" v-if="item.type==4" />

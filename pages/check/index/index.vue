@@ -10,7 +10,7 @@
 				<text class="w_10_per float_left text_align_center" @click="onInputArrressClear">X</text>
 				<app-picker-address ref="addr" @onAddressBtn="onAddressBtn"></app-picker-address>
 			</view>
-
+ 
 
 			<!-- <app-picker-address class="i_c_sel" @onAddressBtn="onAddressBtn" @onClose="onAddressClose" :isClearAdrress="isClearAdrress"
 			 :isShowPickerAddress="isShowPickerAddress"></app-picker-address> -->

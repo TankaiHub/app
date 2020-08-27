@@ -29,7 +29,7 @@
 						<input type="number" placeholder="请输入人员数量" class="text_align_right" v-model="baseInfoData.number_of_employees" />
 					</view>
 				</uni-list-item>
-				<!-- 主营产品 -->
+				<!--   主营产品  -->
 				<block v-if="isIndividual">
 					<uni-list-item title="主营产品" :showArrow="false">
 						<view class="n_ent_list_down_wrap" slot="right">

@@ -14,7 +14,7 @@
 				<button class="n_c_f_btn half" @click="onCancel" type="default">取消</button>
 				<button class="n_c_f_btn half" @click="onDetermine" type="primary">确认</button>
 			</view>
-		</view>
+		</view> 
 	</view>
 </template>
 

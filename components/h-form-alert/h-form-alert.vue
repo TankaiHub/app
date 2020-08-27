@@ -8,8 +8,7 @@
 				<input :type="type" :value="value" :placeholder="placeholder" @input="onInp" :name="name"/>
 				<view class="red_color" v-show="empty">内容不能为空</view>
 			</view>
-			<view class="a_btn">
-				
+			<view class="a_btn">  
 				<button form-type="reset" :style="{color:cancelColor}">{{cancelText}}</button>
 				<button form-type="submit" :style="{color:confirmColor}">{{confirmText}}</button>
 			</view>

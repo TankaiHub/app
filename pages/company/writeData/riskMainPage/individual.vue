@@ -7,7 +7,7 @@
 			<!-- 特殊作业及特种设备 -->
 			<special-work-and-device v-if="currentIndex == 0" ref="sp_word_dev"></special-work-and-device> 
 			
-			
+			 
 			<view class="mar_top_20px mar_bottom_20px dis_flex_center">
 				<button type="primary" @click="onSubmit(false)">上一步</button>
 				<button type="primary" @click="onSubmit(true)">下一步</button>

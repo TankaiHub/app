@@ -9,7 +9,7 @@
 				</view>
 				<view class="a_b_total">
 					企业总数:{{total}}家
-				</view>
+				</view> 
 			</view>
 			<view class="app_bm_select_wrap">
 				<view class="item_wrap clearfix">

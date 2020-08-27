@@ -11,7 +11,7 @@
 						<text>已处理：{{infoData.ycl || 0}}</text>
 					</view>
 					<text @click="onCompanyDetail">详情</text>
-				</view>
+				</view> 
 				<view class="a_c_f_search">
 					<app-search class="a_c_f_search_cmp" @onSearch="onSearch"></app-search>
 					<button class="a_c_f_btn" type="primary">回收站</button>

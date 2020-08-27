@@ -9,7 +9,7 @@
 					 @onSelectClear="onSelectClear('industry_category')" @onSelectBtn="onSelectBtn($event, 'industry_category')"></app-picker-select>
 					<app-picker-select class="w_max even" placeholder="请选择经营状态" :selectValue="produce_state" :selectData="produceStateData"
 					 @onSelectClear="onSelectClear('produce_state')" @onSelectBtn="onSelectBtn($event, 'produce_state')"></app-picker-select>
-				</view>
+				</view> 
 				<view class="item_wrap clearfix">
 					<app-picker-select class="w_max odd" placeholder="请选择风险类别" :selectValue="risk_type" :selectData="riskTypeData"
 					 @onSelectClear="onSelectClear('risk_type')" @onSelectBtn="onSelectBtn($event, 'risk_type')"></app-picker-select>

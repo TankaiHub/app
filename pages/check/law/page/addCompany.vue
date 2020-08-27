@@ -3,7 +3,7 @@
 		<app-nav v-model="drawerVisible"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="添加企业"></uni-nav-bar>
 		<view class="a_com_wrap">
-			<uni-list>
+			<uni-list> 
 				<uni-list-item title="检查类型：" :showArrow="false">
 					<view class="" slot="right">
 						<app-picker-select class="a_com_select" placeholder="请选择检查类型" :selectValue="typeValue" :selectData="typeData"

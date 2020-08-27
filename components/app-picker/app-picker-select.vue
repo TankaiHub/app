@@ -11,7 +11,7 @@
 		<view class="app_picker_select_wrap_bd" v-if="isShowPickerSelect">
 			<view class="a_p_mask" @click="onMask"></view>
 			<view class="minselCity">
-				<view class="itmTps">
+				<view class="itmTps">  
 					<view class="lf" @click="onBtn(false)">取消</view>
 					<view class="rg" @click="onBtn(true)">确定</view>
 				</view>

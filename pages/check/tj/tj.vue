@@ -8,7 +8,7 @@
 				 disabled @click="onAddrInput" />
 				<text class="w_10_per float_left text_align_center" @click="onInputArrressClear">X</text>
 				<app-picker-address ref="addr" @onAddressBtn="onAddressBtn"></app-picker-address>
-			</view>
+			</view> 
 			<!-- 可燃性粉尘 -->
 			<view class="a_t_risk_wrap">
 				<view class="a_t_risk_item">

@@ -7,7 +7,7 @@
 			<view class="l_enf_plan_wrap l_enf_common_wrap">
 				<view class="l_enf_pl_title l_enf_common_title color_blue_btb text_blod">检查方案</view>
 				<view class="l_enf_pl_content l_enf_common_content ">{{lawData.plan}}</view>
-			</view>
+			</view> 
 			<view class="l_enf_norm_wrap l_enf_common_wrap">
 				<view class="l_enf_no_title l_enf_common_title color_blue_btb text_blod">技术指导标准</view>
 				<view class="l_enf_no_content l_enf_common_content">{{lawData.normal}}</view>

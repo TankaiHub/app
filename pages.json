@@ -117,7 +117,7 @@
 		{//首页 --企业安全信息填写
 			"path": "pages/company/writeData/safety" 
 		},
-		{//首页 --企业风险信息填写 -- 个体
+		{//首页 --企业风险信息填写 -- 个体  
 			"path": "pages/company/writeData/riskMainPage/individual" 
 		},
 		{

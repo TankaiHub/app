@@ -15,7 +15,7 @@
 	import tkiFileManager from "@/components/tki-file-manager/tki-file-manager.vue"
 	export default {
 		data() {
-			return {
+			return { 
 				drawerVisible: false,
 				isShowArrow: false,
 				title: '',

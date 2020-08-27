@@ -10,7 +10,7 @@
 			</view>
 
 			<view class="s_det_bd_wrap" :style="{ marginBottom:marginBtHeight + 'px' }">
-
+ 
 				<!-- /// 检查方案-->
 				<view class="s_det_not_add_plan_wrap s_det_common_wrap" v-if="isAddLawPlan">
 					<view class="s_det_n_a_p_title s_det_common_title">

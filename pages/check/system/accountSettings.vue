@@ -15,7 +15,7 @@
 		</view>
 	</view>
 </template>
-
+ 
 <script>
 	import appNav from '@/components/app-nav/app-nav'
 	import {

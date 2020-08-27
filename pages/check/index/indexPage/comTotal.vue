@@ -9,7 +9,7 @@
 			<view class="p_c_t_table_wrap">
 				<!-- table -->
 				<view class="p_c_t_table_bd">
-					<!-- header -->
+					<!-- header --> 
 					<view class="p_c_t_table_head_wrap">
 						<view class="p_c_t_table_head_bd">
 							<view class="p_c_t_table_td">序号</view>

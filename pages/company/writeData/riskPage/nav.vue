@@ -21,8 +21,7 @@
 </script>
 
 <style lang="less">
-	@import url("@/common/less/base.less");
-
+	@import url("@/common/less/base.less"); 
 	.app_nav_container {
 		.nav_wrapp {
 			.nv_list_wrap {

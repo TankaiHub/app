@@ -321,8 +321,7 @@
 			hFormAlert
 		},
 		methods: {
-			checkboxChange(e) {
-
+			checkboxChange(e) { 
 				var arr = e.detail.value;
 				var checkVal = this.checkVal;
 				this.isNotInvolv = false;

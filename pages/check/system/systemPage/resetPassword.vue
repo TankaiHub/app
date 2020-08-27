@@ -14,7 +14,7 @@
 					<view class="" slot='right'>
 						<input type="text" placeholder="请输入新密码" v-model="newPsd" />
 					</view>
-				</uni-list-item>
+				</uni-list-item> 
 				<uni-list-item title="确认密码" :showArrow="isShowArrow">
 					<view class="" slot='right'>
 						<input type="text" placeholder="请再次输入新密码" v-model="oncePsd" />

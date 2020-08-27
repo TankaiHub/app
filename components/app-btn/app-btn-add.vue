@@ -16,6 +16,7 @@
 		methods:{
 			onBtn() {
 				this.$emit("onBtn");
+				
 			}
 		}
 	}

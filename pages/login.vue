@@ -11,7 +11,7 @@
 				<view class="l_img_btn_wrap">
 					<view class="l_left_btn l_btn" @click="onChangeLogin(true)"></view>
 					<view class="l_right_btn l_btn" @click="onChangeLogin(false)"></view>
-				</view>
+				</view>   
 			</view>
 			<view class="l_form_wrap" v-if="isShowLoginForm">
 				<form @submit="formSubmit">

@@ -8,7 +8,7 @@
 					<view class="" slot="right">
 						<input class="text_align_right border" type="text" placeholder="请输入被检查单位" v-model="admin_law_company_detail_info.company_name" />
 					</view>
-				</uni-list-item>
+				</uni-list-item> 
 				<uni-list-item title="检查场所" :showArrow="false">
 					<view class="" slot="right">
 						<input class="text_align_right" type="text" placeholder="请输入检查场所" v-model="admin_law_company_detail_info.inspection_site" />
