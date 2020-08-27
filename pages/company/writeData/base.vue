@@ -803,6 +803,7 @@
 				console.log(opts)
 				this.$http.post("save", opts).then(res => {
 					if (res.code == 200) {
+						console.log('ok');
 						uni.showToast({
 							title: res.msg,
 							icon: 'success',
@@ -812,7 +813,7 @@
 										url: './safety'
 									})
 								}, 1500);
-							}
+							}  
 						})
 					}
 				});
