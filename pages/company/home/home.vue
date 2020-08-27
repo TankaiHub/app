@@ -286,7 +286,7 @@
 						success(res) {
 							if (res.confirm) {
 								uni.navigateTo({
-									url:'../writeData/safety'
+									url:'../writeData/base'
 								})
 							} else if (res.cancel) {
 								console.log('用户点击取消');
@@ -294,7 +294,9 @@
 						}
 					});
 				} else {
-
+					uni.navigateTo({
+						url:'../writeData/safety'
+					})
 
 				}
 			},

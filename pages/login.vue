@@ -16,7 +16,7 @@
 			<view class="l_form_wrap" v-if="isShowLoginForm">
 				<form @submit="formSubmit">
 					<view class="uni-form-item uni-column l_inp_wrap">
-						<input class="uni-input" :value="changeLoginStatus ? '22' : 'yjjcjx'" name="account" :placeholder="changeLoginStatus ? '请输入社信代码':'请输入账号'" />
+						<input class="uni-input" :value="changeLoginStatus ? '500106608198482' : 'yjjcjx'" name="account" :placeholder="changeLoginStatus ? '请输入社信代码':'请输入账号'" />
 						<input class="uni-input" :value="changeLoginStatus ? '000000' : '65465922'" :password="true" name="psd" placeholder="请输入密码" />
 					</view>
 					<view class="uni-btn-v">

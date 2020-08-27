@@ -19,7 +19,7 @@
 							 :class="[item.disabled ? 'disabled' : '',selectedArr[index] ? 'selected' : '']" 
 							 v-for="(item,index) in data" 
 							 :key="item[valueName]" 
-							 @tap="onSelected(index)">
+							 @tap="onSelected(index, item)">
 							<view class="label">{{item[labelName]}}</view>
 							<text v-show="selectedArr[index]" class="selected-icon">✔</text> 
 						</view> 
@@ -181,11 +181,22 @@
 			/**
 			 * 选择事件
 			 * @index {Number} 点击下标
+			 * @item {Object} 
 			 */
-			onSelected(index) {
+			onSelected(index, item) {
+				var len = this.data.length;
 				if (this.data[index].disabled) return;
+				this.selectedArr[len - 1] = false;
 				let index2Active = this.selectedArr[index];
 				this.selectedArr.splice(index, 1, !index2Active);
+				if (item[this.labelName] == '无') {
+					this.selectedArr = [];
+					
+					for (var i = 0; i < len; i ++) {
+						this.selectedArr.push(false);
+					}
+					this.selectedArr[len - 1] = true;
+				}
 			},
 			onPluralSelect(item, index) {
 				if (item == '其他') {
@@ -241,6 +252,9 @@
 					if (this.data[i] == '无' || this.data[i] == '其他') {
 						this.selectedArr[len - 1] = false;
 						this.selectedArr[len - 2] = false;
+					}
+					if (this.data[i][this.labelName] == '无') {
+						this.selectedArr[len - 1] = false;
 					}
 				}
 			},

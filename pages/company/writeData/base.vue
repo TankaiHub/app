@@ -29,80 +29,98 @@
 						<input type="number" placeholder="请输入人员数量" class="text_align_right" v-model="baseInfoData.number_of_employees" />
 					</view>
 				</uni-list-item>
-				<uni-list-item title="上年产值" :showArrow="false">
-					<view class="n_ent_list_down_wrap clearfix" slot="right">
-						<input type="number" placeholder="请输入上年产值" class="text_align_right float_left" v-model="baseInfoData.lastyear_value" />
-						<view class="float_left mar_left_5px">万元</view>
-					</view>
-				</uni-list-item>
-				<uni-list-item title="安全管理负责人" :showArrow="false">
-					<view class="n_ent_list_down_wrap" slot="right">
-						<input type="text" placeholder="请输入安全管理负责人" class="text_align_right" v-model="baseInfoData.sp_principal" />
-					</view>
-				</uni-list-item>
-				<uni-list-item title="联系电话" :showArrow="false">
-					<view class="n_ent_list_down_wrap" slot="right">
-						<input type="number" placeholder="请输入联系电话" class="text_align_right" v-model="baseInfoData.sp_principal_phone" />
-					</view>
-				</uni-list-item>
-				<!-- //////////////////////////////////////////////////////////////////////////// -->
-				<uni-list-item title="安全员" :showArrow="false">
-					<view class="n_ent_list_down_wrap" slot="right">
-						<view class="clearfix">
-							<view class="clearfix mar_bottom_5px">
-								<view class="float_left mar_right_5px">专职:</view>
-								<input type="text" class="float_left width100px" placeholder="无请填写0" v-model="security_officer" />
-								<view class="float_left">人</view>
+				<!-- 主营产品 -->
+				<block v-if="isIndividual">
+					<uni-list-item title="主营产品" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<view class="n_show_list_wrap" @click="onTabInp(3)"> 
+								<text class="color_ccc" v-if="main_selse_list && main_selse_list.length == 0">请选择</text>
+								<view class="n_show_item text_align_right" v-for="(item, index) in main_selse_list" :key="index">{{item.lbmc}}</view>
 							</view>
-							<view class="border_1px height10px"></view>
-							<view class="clearfix mar_top_10px">
-								<view class="float_left mar_right_5px">兼职:</view>
-								<input type="text" class="float_left width100px" placeholder="无请填写0" v-model="security_officer2" />
-								<view class="float_left">人</view>
+							<multiple-select v-model="showIndividual" 
+											label-name="lbmc" 
+											value-name="xldm"
+											:data="individual_list" 
+											:default-selected="defaultProessSelected" 
+											@confirm="mainIndividualSelectBtn">
+							</multiple-select>
+						</view>
+					</uni-list-item>
+
+				</block>
+
+				<block v-if="!isIndividual">
+					<uni-list-item title="上年产值" :showArrow="false">
+						<view class="n_ent_list_down_wrap clearfix" slot="right">
+							<input type="number" placeholder="请输入上年产值" class="text_align_right float_left" v-model="baseInfoData.lastyear_value" />
+							<view class="float_left mar_left_5px">万元</view>
+						</view>
+					</uni-list-item>
+					<uni-list-item title="安全管理负责人" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<input type="text" placeholder="请输入安全管理负责人" class="text_align_right" v-model="baseInfoData.sp_principal" />
+						</view>
+					</uni-list-item>
+					<uni-list-item title="联系电话" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<input type="number" placeholder="请输入联系电话" class="text_align_right" v-model="baseInfoData.sp_principal_phone" />
+						</view>
+					</uni-list-item>
+
+					<uni-list-item title="安全员" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<view class="clearfix">
+								<view class="clearfix mar_bottom_5px">
+									<view class="float_left mar_right_5px">专职:</view>
+									<input type="text" class="float_left width100px" placeholder="无请填写0" v-model="security_officer" />
+									<view class="float_left">人</view>
+								</view>
+								<view class="border_1px height10px"></view>
+								<view class="clearfix mar_top_10px">
+									<view class="float_left mar_right_5px">兼职:</view>
+									<input type="text" class="float_left width100px" placeholder="无请填写0" v-model="security_officer2" />
+									<view class="float_left">人</view>
+								</view>
 							</view>
 						</view>
-					</view>
-				</uni-list-item>
-				<uni-list-item title="行业类别" :showArrow="false">
-					<view class="n_ent_list_down_wrap clearfix" slot="right">
-						<app-picker-select :selectData="categoryMenus" :selectValue="baseInfoData.industry_category" placeholder="请选择行业类别"
-						 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('industry_category')"
-						 @onSelectBtn="onSelectBtn($event, 'industry_category')"></app-picker-select>
-						<view class="border_1px height10px" v-if="category1Menus && category1Menus.length > 0"></view>
-						<app-picker-select class="mar_top_10px" :selectData="category1Menus" v-if="category1Menus && category1Menus.length > 0"
-						 :selectValue="baseInfoData.industry_category_1" placeholder="请选择行业类别" :isBorder="false" textAlign="right"
-						 :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('industry_category_1')" @onSelectBtn="onSelectBtn($event, 'industry_category_1')"></app-picker-select>
-					</view>
-				</uni-list-item>
-				<uni-list-item title="主营产品" :showArrow="false">
-					<view class="n_ent_list_down_wrap" slot="right"> 
-						<view class="n_show_list_wrap" @click="onTabInp(1)">
-							<text class="color_ccc" v-if="main_selse_list && main_selse_list.length == 0">请选择</text> 
-							<view class="n_show_item text_align_right" v-for="(item, index) in main_selse_list" :key="index">{{item.lbmc}}</view>
+					</uni-list-item>
+					<uni-list-item title="行业类别" :showArrow="false">
+						<view class="n_ent_list_down_wrap clearfix" slot="right">
+							<app-picker-select :selectData="categoryMenus" :selectValue="baseInfoData.industry_category" placeholder="请选择行业类别"
+							 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('industry_category')"
+							 @onSelectBtn="onSelectBtn($event, 'industry_category')"></app-picker-select>
+							<view class="border_1px height10px" v-if="category1Menus && category1Menus.length > 0"></view>
+							<app-picker-select class="mar_top_10px" :selectData="category1Menus" v-if="category1Menus && category1Menus.length > 0"
+							 :selectValue="baseInfoData.industry_category_1" placeholder="请选择行业类别" :isBorder="false" textAlign="right"
+							 :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('industry_category_1')" @onSelectBtn="onSelectBtn($event, 'industry_category_1')"></app-picker-select>
 						</view>
-						<multiple-select v-model="show" :data="main_list" :default-selected="defaultSelected" @confirm="mainSelectBtn"
-						 label-name="lbmc" value-name="xldm">
-						</multiple-select>
-					</view>
-				</uni-list-item>
-				<uni-list-item title="主要工序" :showArrow="false">
-					<view class="n_ent_list_down_wrap" slot="right">
-						<view class="n_show_list_wrap" @click="onTabInp(2)">
-							<text class="color_ccc" v-if="main_proess_selse_list && main_proess_selse_list.length == 0">请选择</text>
-							<view class="n_show_item text_align_right" v-for="(item, index) in main_proess_selse_list" :key="index">{{item}}</view>
+					</uni-list-item>
+					<uni-list-item title="主营产品" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<view class="n_show_list_wrap" @click="onTabInp(1)">
+								<text class="color_ccc" v-if="main_selse_list && main_selse_list.length == 0">请选择</text>
+								<view class="n_show_item text_align_right" v-for="(item, index) in main_selse_list" :key="index">{{item.lbmc}}</view>
+							</view>
+							<multiple-select v-model="show" :data="main_list" :default-selected="defaultSelected" @confirm="mainSelectBtn"
+							 label-name="lbmc" value-name="xldm">
+							</multiple-select>
 						</view>
-						<multiple-select v-model="showPress" 
-										 :data="main_proess_list" 
-										 :default-selected="defaultProessSelected" 
-										 @confirm="mainProessSelectBtn" 
-										 @onOther="onOther"
-										 :isPlural="isPlural">
-						</multiple-select>
-					</view>
-				</uni-list-item>
+					</uni-list-item>
+					<uni-list-item title="主要工序" :showArrow="false">
+						<view class="n_ent_list_down_wrap" slot="right">
+							<view class="n_show_list_wrap" @click="onTabInp(2)">
+								<text class="color_ccc" v-if="main_proess_selse_list && main_proess_selse_list.length == 0">请选择</text>
+								<view class="n_show_item text_align_right" v-for="(item, index) in main_proess_selse_list" :key="index">{{item}}</view>
+							</view>
+							<multiple-select v-model="showPress" :data="main_proess_list" :default-selected="defaultProessSelected" @confirm="mainProessSelectBtn"
+							 @onOther="onOther" :isPlural="isPlural">
+							</multiple-select>
+						</view>
+					</uni-list-item>
+				</block>
 			</uni-list>
 			<hFormAlert v-if="isShowCancel" placeholder="请输入" title='添加主要工序' confirmText="添加" @confirm="onDetermine" @cancel="onCancel"></hFormAlert>
-			
+
 			<view class="mar_top_20px mar_bottom_20px">
 				<button type="primary" @click="onSubmit">下一步</button>
 			</view>
@@ -129,7 +147,7 @@
 			return {
 				drawerVisible: false, //导航显示 
 				baseInfoData: {
-					company_id:'',//id
+					company_id: '', //id
 					name: '', //企业名称
 					credit_code: '', //社信代码
 					cegal_person: '', //法人代表
@@ -186,19 +204,26 @@
 				category1Menus: [],
 				/////////////////////////
 
-
+				////是否是个体
+				isIndividual: false, //是否是个体  true 个体  false非个体
 				/////
 				show: false, //主营产品是否显示 - 双向绑定
 				info: "",
 				main_list: [], //主营产品数据源
 				defaultSelected: [], //主营产品默认选中项
 				main_selse_list: [], //选中的主营产品
-				main_proess_list:[],//主要工序数据源
-				main_proess_selse_list:[],//选中的主要工序
-				defaultProessSelected:[], //主要工序默认选中项
-				isPlural:false,
-				showPress:false,//主要工序是否显示 - 双向绑定
-				isShowCancel:false,//主要工序其他弹窗
+				main_proess_list: [], //主要工序数据源
+				main_proess_selse_list: [], //选中的主要工序
+				defaultProessSelected: [], //主要工序默认选中项
+				isPlural: false,
+				showPress: false, //主要工序是否显示 - 双向绑定
+				isShowCancel: false, //主要工序其他弹窗
+				
+				//个体
+				showIndividual:false,//主要工序个体时弹窗
+				individual_list:product,
+				individual_select_list:[],
+				defaultindIvidualSelected:[], 
 			}
 		},
 		components: {
@@ -206,7 +231,7 @@
 			multipleSelect,
 			hFormAlert
 		},
-		computed:{
+		computed: {
 			...mapState(["userInfo"]),
 		},
 		onLoad() {
@@ -224,7 +249,7 @@
 				var opts = {
 					company_id: this.userInfo.company_id || 2437
 				};
-				this.$http.post('info', opts).then(res=> {
+				this.$http.post('info', opts).then(res => {
 					if (res.code == 200) {
 						var data = res.data;
 						this._handleBaseData(data);
@@ -232,7 +257,12 @@
 				});
 			},
 			//处理数据
-			_handleBaseData(data) { 
+			_handleBaseData(data) {
+				// this.baseInfoData = { //纠结
+				// 	...data
+				// };
+				//是否是个体
+				this.isIndividual = this._isIndividual(data.scale);
 				this.baseInfoData['company_id'] = data.company_id;
 				this.baseInfoData['name'] = data.name;
 				this.baseInfoData['credit_code'] = data.credit_code;
@@ -244,34 +274,36 @@
 				this.baseInfoData['sp_principal_phone'] = data.sp_principal_phone;
 				this.baseInfoData['industry_category'] = data.industry_category;
 				this.baseInfoData['industry_category_1'] = data.industry_category_1;
-				this.baseInfoData['industry_category_zfl'] = data.industry_category_zfl;
+				this.baseInfoData['main_process'] = data.main_process;
+				this.baseInfoData['main_products'] = data.main_products;
 				//安全员专职&兼职
-				var security_officer_arr;
+				var security_officer_arr = this.changeStr(data.security_officer, data, 'security_officer');
 				// 主营产品
-				var main_products_arr;
+				var main_products_arr = this.changeStr(data.main_products, data, 'main_products');
 				//主要工序
-				var main_process_arr;
-				try{
-					security_officer_arr = data.security_officer.split(','); 
-					main_products_arr = data.main_products.split(',');
-					main_process_arr = data.main_process.split(',');
-				}catch(e){
-					security_officer_arr = [];
-					main_products_arr = [];
-					main_process_arr = [];
-				}
+				var main_process_arr = this.changeStr(data.main_process, data, 'main_process');
+				// try{
+				// 	security_officer_arr = data.security_officer.split(','); 
+				// 	main_products_arr = data.main_products.split(',');
+				// 	main_process_arr = data.main_process.split(',');
+				// }catch(e){
+				// 	security_officer_arr = [];
+				// 	main_products_arr = [];
+				// 	main_process_arr = [];
+				// }
+
 				this.security_officer = security_officer_arr[0];
 				this.security_officer2 = security_officer_arr[1];
 				this._changeProduct(data.industry_category);
 				//主营产品 
 				// this.baseInfoData['main_products'] = data.main_products;
 				var temp = {
-					dh:data.industry_category,
-					value:data.industry_category_1
+					dh: data.industry_category,
+					value: data.industry_category_1
 				};
 				console.log(temp)
 				this._changeLightIndustry(temp);
-				
+
 				var final_main_products_arr = this._handleProduct(main_products_arr);
 				console.log(main_products_arr)
 				this.defaultSelected = final_main_products_arr.nArr;
@@ -280,23 +312,36 @@
 				// this.baseInfoData['main_process'] = data.main_process;
 				// main_process: "普通机加（钻铣磨冲剪压焊）,熔炼,锻造"
 				this.main_proess_list = this._changeProcess();
-				
+
 				var final_main_process_arr = this._handleProess(main_process_arr);
 				this.main_proess_list = this._compared(this.main_proess_list, final_main_process_arr);
 				this.defaultProessSelected = main_process_arr;
 				this.main_proess_selse_list = main_process_arr;
-			}, 
+			},
+			changeStr(str, data, tar) {
+				var or;
+				if (str == '') {
+					or = [];
+				} else {
+					try {
+						or = (data[tar]).split(',');
+					} catch (e) {
+						or = [];
+					}
+				}
+				return or;
+			},
 			//处理主营产品
 			_handleProduct(arr) {
 				var nArr = [];
 				var tArr = [];
 				if (arr.length > 0) {
-					for (var i = 0; i < arr.length; i ++) {
+					for (var i = 0; i < arr.length; i++) {
 						if (arr[i].length > 0) {
 							var temp = arr[i].split('-');
 							nArr.push(temp[0]);
 							tArr.push({
-								lbmc:temp[1]
+								lbmc: temp[1]
 							});
 						}
 					}
@@ -310,7 +355,7 @@
 			_handleProess(arr) {
 				var nArr = [];
 				if (arr.length > 0) {
-					for (var i = 0; i < arr.length; i ++) {
+					for (var i = 0; i < arr.length; i++) {
 						if (arr[i].length > 0) {
 							nArr.push(arr[i]);
 						}
@@ -320,10 +365,10 @@
 			},
 			_compared(arr, f_arr) {
 				var nArr = [];
-				for (var i = 0; i < arr.length - 2; i ++) {
-					for (var j = 0; j < f_arr.length; j ++) {
+				for (var i = 0; i < arr.length - 2; i++) {
+					for (var j = 0; j < f_arr.length; j++) {
 						if (f_arr[j] == arr[i]) {
-							f_arr.splice(j , 1);
+							f_arr.splice(j, 1);
 						}
 					}
 				}
@@ -355,7 +400,7 @@
 			},
 			// 根据 行业类别 选 主营产品  
 			_changeProduct(val) {
-				this.category1Menus = [];  
+				this.category1Menus = [];
 				industryTypeTwo.forEach((item, index) => {
 					if (val == item.dh) {
 						this.category1Menus.push({
@@ -380,21 +425,35 @@
 					var num = (item.xldm).substring(0, 3);
 					if (num == this.baseInfoData.industry_category_1) {
 						this.main_list.push(item);
-					} 
+					}
 				});
 				this.main_proess_list = this._changeProcess();
 			},
 			//显示产品分类
 			onTabInp(num) {
-				switch(num) {
+				switch (num) {
 					case 1:
-					this.show = true;
-					break;
+						this.show = true;
+						break;
 					case 2:
-					this.showPress = true;
-					break;
+						this.showPress = true;
+						break;
+					case 3:
+						this.showIndividual = true;
+						break;
 				}
-				
+
+			},
+			//是否是个体
+			_isIndividual(num) {
+				switch (num) {
+					case 1:
+						return false;
+					case 2:
+						return false;
+					case 3:
+						return true;
+				}
 			},
 			//点击产品分类确定
 			mainSelectBtn(data) {
@@ -405,6 +464,32 @@
 			mainProessSelectBtn(data) {
 				this.main_proess_selse_list = data;
 				this.baseInfoData.main_process = data.map((el) => el).join(",");
+			},
+			//点击 个体 主要工序确定
+			mainIndividualSelectBtn(data) {
+				this.individual_select_list = data;
+				this.baseInfoData.main_products = data.map((el) => (el.xldm + '-' + el.lbmc)).join(",");
+				// for () {}
+				var first_ele = data[0];
+				this._changeIndividualCat(first_ele);
+			},
+			//获取个体 主要工序信息
+			_changeIndividualCat(ele) {
+				var str = '';
+				try{ 
+					str = ele.xldm.substring(0, 3);
+					this.baseInfoData.industry_category_1 = str;
+					this.baseInfoData.industry_category_zfl = ele.hylb;
+					this.baseInfoData.industry_category = ele.hylb;
+					qingong.forEach((item, index)=> {
+						if (str == item.zl) {
+							this.baseInfoData.industry_category_zfl = item.zfl;
+						}
+					});
+					
+				}catch(e){
+					//TODO handle the exception
+				}
 			},
 			onOther() {
 				this.isShowCancel = true;
@@ -681,9 +766,9 @@
 					if (arr.length == 0) {
 						arr = BuildOtherData;
 					}
-				}else {
-					data.forEach(item=> {
-						if (item.zfl ==  this.baseInfoData.industry_category_zfl) {
+				} else {
+					data.forEach(item => {
+						if (item.zfl == this.baseInfoData.industry_category_zfl) {
 							arr.push(item.process)
 						}
 					})
@@ -694,12 +779,12 @@
 				return arr;
 			},
 			//onDetermine 其他 主要工序
-			onDetermine(text) { 
+			onDetermine(text) {
 				console.log(text)
 				var flag = true;
 				if (flag) {
 					flag = false;
-					this.isShowCancel = false; 
+					this.isShowCancel = false;
 					this.main_proess_list.unshift(text);
 				}
 			},
@@ -710,16 +795,21 @@
 			onSubmit() {
 				var opts = this.baseInfoData;
 				opts.company_id = 2437;
-				opts.security_officer = this.security_officer + ',' + this.security_officer2;
-				this.$http.post("save", opts).then(res=> {
+				if (!this.isIndividual) {
+					opts.security_officer = (this.security_officer || '') + ',' + (this.security_officer2 || '');
+				}else {
+					opts.security_officer = '';
+				}
+				console.log(opts)
+				this.$http.post("save", opts).then(res => {
 					if (res.code == 200) {
 						uni.showToast({
-							title:"提交成功",
-							icon:'success',
+							title: res.msg,
+							icon: 'success',
 							success() {
-								setTimeout(()=> {
+								setTimeout(() => {
 									uni.navigateTo({
-										url:'./safety'
+										url: './safety'
 									})
 								}, 1500);
 							}
