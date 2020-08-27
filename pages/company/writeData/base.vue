@@ -802,8 +802,7 @@
 				}
 				console.log(opts)
 				this.$http.post("save", opts).then(res => {
-					if (res.code == 200) {
-						console.log('ok');
+					if (res.code == 200) { 
 						uni.showToast({
 							title: res.msg,
 							icon: 'success',
