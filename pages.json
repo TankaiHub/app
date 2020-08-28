@@ -119,7 +119,7 @@
 		},
 		{//首页 --企业风险信息填写 -- 个体  
 			"path": "pages/company/writeData/riskMainPage/individual" 
-		},
+		}, 
 		{
 			"path":"pages/test"
 		}

@@ -68,7 +68,7 @@
 							url:'../safety'
 						})
 					}else {
-						this.currentIndex --;//
+						this.currentIndex --;//上一步
 						this._initData();
 					}
 					
