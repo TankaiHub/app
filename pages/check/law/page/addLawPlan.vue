@@ -9,7 +9,7 @@
 				<button class="determine_btn half can_det_btn" @click="onDetermine" type="primary">确认</button>
 			</view>
 
-
+ 
 
 			<!-- 获取的方案内容 -->
 			<view class="a_l_pl_book_wrap" v-if="selectBookData.length > 0">

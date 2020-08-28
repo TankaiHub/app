@@ -11,7 +11,7 @@
 						 class="dis_inline_block vertical_align_top border_1px_all_ccc padding_5px border_radius_5" v-model="item.content"
 						 :style="{ width:(textWidth - 20)+'rpx' }" />
 						<view v-else class="dis_inline_block vertical_align_top" :style="{ width:textWidth+'rpx' }">{{item.content}}</view>
-
+ 
 						<image @click="onEditImg(item, index)" src="../../../../static/edit.png" class="img_size_40upx mar_left_5px vertical_align_bt"
 						 mode="aspectFill"></image>
 					</view>

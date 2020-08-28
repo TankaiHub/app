@@ -12,7 +12,7 @@
 							 placeholder="请输入企业名称" />
 							<lb-picker :props="companyProps" :list='companyData' ref="lb_com" @confirm="onCompanyItem"></lb-picker>
 						</view>
-					</uni-list-item>
+					</uni-list-item> 
 
 					<uni-list-item title="经营点：" :showArrow="false" v-if="isJyd">
 						<view class="n_ent_list_down_wrap" slot="right">

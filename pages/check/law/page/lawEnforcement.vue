@@ -7,7 +7,7 @@
 			<view class="l_enf_plan_wrap l_enf_common_wrap">
 				<view class="l_enf_pl_title l_enf_common_title color_blue_btb text_blod">检查方案</view>
 				<view class="l_enf_pl_content l_enf_common_content ">{{lawData.plan}}</view>
-			</view>
+			</view> 
 			<view class="l_enf_norm_wrap l_enf_common_wrap">
 				<view class="l_enf_no_title l_enf_common_title color_blue_btb text_blod">技术指导标准</view>
 				<view class="l_enf_no_content l_enf_common_content">{{lawData.normal}}</view>
@@ -43,7 +43,7 @@
 											 v-if="item['is_show_account_input' + index]" class="l_enf_l_i_common l_enf_l_i_inp_bd" type="text" v-model="item.accord" />
 											<view class="l_enf_l_i_common img_size_40upx mar_left_5px">
 												<image v-show="item['account_isRadio' + index]" @click="onEditImg(item['account_radio' + index], index)"
-												 class="img_size_40upx mar_left_5px" src="../../../../static/edit.png" mode="aspectFill"></image>
+												 class="img_size_40px mar_left_5px" src="../../../../static/edit.png" mode="aspectFill"></image>
 											</view>
 										</view>
 									</label>
@@ -59,7 +59,7 @@
 											 v-model="item.accord_n" />
 											<view class="l_enf_l_i_common img_size_40upx mar_left_5px">
 												<image v-if="item['account_n_isRadio' +index]" @click="onEditImg(item['accord_n_radio' + index], index)"
-												 class="img_size_40upx" src="../../../../static/edit.png" mode="aspectFill"></image>
+												 class="img_size_40px" src="../../../../static/edit.png" mode="aspectFill"></image>
 											</view>
 										</view>
 										<view class="clearfix"></view>

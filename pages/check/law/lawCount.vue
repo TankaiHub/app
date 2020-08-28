@@ -13,7 +13,7 @@
 					</view>
 					<app-picker-select class="half float_right" placeholder="请选择风险类别" :selectData="typeSerchData" @onSelectClear="onSelectClear('typeSerch')"
 					 @onSelectBtn="onSelectBtn($event, 'typeSerch')"></app-picker-select>
-				</view>
+				</view> 
 				<view class="a_l_c_top_s clearfix">
 					<app-picker-select class="half float_left" placeholder="查询范围" :selectData="selRangeData" @onSelectClear="onSelectClear('sel_range')"
 					 @onSelectBtn="onSelectBtn($event, 'sel_range')"></app-picker-select>

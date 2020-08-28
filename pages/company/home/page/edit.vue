@@ -3,7 +3,7 @@
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="编辑"></uni-nav-bar>
 		<view class="edit_wrapper padding_10px">
-			<uni-list class="n_ent_list_wrap">
+			<uni-list class="n_ent_list_wrap"> 
 				<uni-list-item title="生产经营状态：" :showArrow="false">
 					<view class="" slot="right">
 						<app-picker-select :isBorder="false" textAlign="right" placeholder="请选择生产经营状态" :selectValue="inptDataInfo.produce_state"

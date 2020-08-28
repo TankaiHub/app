@@ -14,7 +14,7 @@
 		data() {
 			return {
 				saveExcel:null
-			}
+			} 
 		},
 		mounted() { 
 			// document.addEventListener("plusready", this.onPlusReady, false);

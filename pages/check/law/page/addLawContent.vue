@@ -6,7 +6,7 @@
 			<view class="a_l_con_title">检查内容</view>
 			<view class="a_l_con_text_wrap">
 				<textarea class="a_l_con_text_area" v-model="content" placeholder="请输入内容" />
-				</view>
+				</view> 
 			<view class="a_l_con_switch_wrap clearfix">
 				<view @click="onSwitch(true, 1)" class="a_l_com_sw_fh a_l_com_sw_btn" :class="{ isActive:isActive }">符合</view>
 				<view @click="onSwitch(false, 2)" class="a_l_com_sw_bfh a_l_com_sw_btn" :class="{ isActive:!isActive }">不符合</view>

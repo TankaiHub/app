@@ -7,7 +7,7 @@
 			<text :class="{c_a_s_icon:true, is_reverse:isShowSelect}">V</text>
 		</view>
 		<view class="c_a_s_pagin_wrap" v-if="isShowSelect">
-			<view class="c_a_s_top"></view>
+			<view class="c_a_s_top"></view> 
 			<view class="c_a_s_item" :class="{ isActive:index == activeIndex }" @click="onItem(item, index)" v-for="(item, index) in paginationData" :key="index">{{item}}条/页</view>
 		</view>
 	</view>

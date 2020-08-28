@@ -10,7 +10,7 @@
 			<view class="l_task_inp_wrap">
 				<view class="l_task_inp_search">
 					<app-search @onSearch="onSearch"></app-search>
-				</view>
+				</view> 
 				<view class="l_task_inp_select">
 					<app-picker-select class="half" placeholder="请选择检查状态" :selectData="lawStateData" :selectValue="stateValue"
 					 @onSelectClear="onSelectClear('stateValue')" @onSelectBtn="onSelectBtn($event, 'stateValue')"></app-picker-select>

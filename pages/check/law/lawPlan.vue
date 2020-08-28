@@ -15,7 +15,7 @@
 				</view>
 				<view class="a_l_p_top_sel_tiem_wrap">
 					<view class="half a_l_p_btn_bz_plan" hover-class="primary" @click="onPreparationPlan">编制计划</view>
-				</view>
+				</view> 
 
 			</view>
 			<view class="a_l_p_table_wrap">

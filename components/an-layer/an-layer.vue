@@ -6,7 +6,7 @@
 		<view ref="popRef" class="an-message" v-show="msgShow" :style="_location">
 			<view v-if="an_direction == 'left' || an_direction == 'right'" style="width: 540upx; height: 60upx; background-color: #0081FF; line-height: 60upx; text-align: center; color: #FFFFFF;">
 				<text>{{an_title}}</text>
-			</view>
+			</view> 
 			<view class="scoll">
 				<slot v-if="line == 0"></slot>
 				<text v-if="line == 1">{{an_message}}</text>
