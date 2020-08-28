@@ -120,6 +120,9 @@
 		{//首页 --企业风险信息填写 -- 个体  
 			"path": "pages/company/writeData/riskMainPage/individual" 
 		}, 
+		{//首页 --企业风险信息填写 -- 轻工 -- 食品
+			"path": "pages/company/writeData/riskMainPage/food" 
+		}, 
 		{
 			"path":"pages/test"
 		}

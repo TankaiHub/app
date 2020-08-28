@@ -3,7 +3,7 @@
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar :left-icon="navIcon" fixed="true" @clickLeft="onNavBarLeft" :title="title"></uni-nav-bar>
 		<view class="home_wrapper padding_10px">
-			<!-- 选择登录企业 --> 
+			<!-- 选择登录企业 -->
 			<view class="h_login_first_mask_wrap border_1px_all_ccc border_radius_5" v-if="isShowCompanyMask">
 				<view class="h_l_f_m_top_title text_align_center border_1px">选择登录企业</view>
 				<view class="h_l_f_m_list_wrap">
@@ -232,8 +232,8 @@
 			onSelectMask() {
 				if (this.currentComId == "") {
 					uni.showToast({
-						title:"请选择登录企业",
-						icon:'none'
+						title: "请选择登录企业",
+						icon: 'none'
 					});
 					return;
 				}
@@ -281,7 +281,7 @@
 			},
 			_changePage1() {
 				uni.navigateTo({
-					url:"../writeData/base"
+					url: "../writeData/base"
 				})
 			},
 			_changePage2() {
@@ -293,7 +293,7 @@
 						success(res) {
 							if (res.confirm) {
 								uni.navigateTo({
-									url:'../writeData/base'
+									url: '../writeData/base'
 								})
 							} else if (res.cancel) {
 								console.log('用户点击取消');
@@ -302,7 +302,7 @@
 					});
 				} else {
 					uni.navigateTo({
-						url:'../writeData/safety'
+						url: '../writeData/safety'
 					})
 
 				}
@@ -312,12 +312,16 @@
 					if (this.companyBaseInfo.scale == 3) {
 						//个体
 						uni.navigateTo({
-							url:'../writeData/riskPage/specialWorkAndDevice'
+							url: '../writeData/riskMainPage/individual'
 						})
 					} else {
 						//非个体
-						
-					} 
+						var url = this._changeGoToPage(this.companyBaseInfo.industry_category_zfl);
+						console.log(url, "!!!!!!!!!!!!!!!!!")
+						uni.navigateTo({
+							url
+						})
+					}
 				} else {
 					uni.showModal({
 						title: '提示',
@@ -332,6 +336,37 @@
 					});
 				}
 			},
+			_changeGoToPage(name) {
+				console.log(name, "??????????????????")
+				switch (name) {
+					case '机械':
+						return 'industryMach1';
+					case '塑料':
+						return 'industryPlastic1';
+					case '纺织':
+						return 'industrySpin1';
+					case '食品':
+						return '../writeData/riskMainPage/food';
+					case '建材':
+						return 'industryBuilding1';
+					case '纸制品':
+						return 'industryPaper1';
+					case '商贸':
+						return '../writeData/riskMainPage/business';
+					case '轻工':
+						return 'industryFurniture1';
+					case '家具':
+						return 'industryFurniture1';
+					case '烟草':
+						return 'industryMach1';
+					case '冶金':
+						return 'industryMach1';
+					case '有色':
+						return 'industryMach1';
+					default:
+						return '';
+				}
+			}
 		}
 	}
 </script>

@@ -67,8 +67,8 @@
 									<text class="mar_left_10px float_left">名</text>
 								</view>
 							</uni-list-item>
-							
-							<block v-if="wordData.useDcSelect==1"> 
+
+							<block v-if="wordData.useDcSelect==1">
 								<uni-list-item title="承包方类型" :showArrow="false">
 									<view class="n_ent_list_down_wrap" slot="right">
 										<app-picker-select :selectData="checkValueArray" :selectValue="wordData.ydType" placeholder="请选择承包方类型"
@@ -76,38 +76,38 @@
 										 @onSelectBtn="onSelectBtn($event, 'ydType')"></app-picker-select>
 									</view>
 								</uni-list-item>
-								
+
 								<block v-if="wordData.ydType && wordData.useDcSelect==1">
 									<uni-list-item :title="wordData.ydType == 1 ? '单位名称' : '姓名'" :showArrow="false" class="list_border_1px">
 										<view class="n_ent_list_down_wrap clearfix" slot="right">
-											<input type="text" :placeholder="wordData.ydType == 1 ? '请输入单位名称' : '请输入姓名'" placeholder-style="color:#ccc" class="text_align_right float_left"
-											 v-model="wordData.ydName" /> 
+											<input type="text" :placeholder="wordData.ydType == 1 ? '请输入单位名称' : '请输入姓名'" placeholder-style="color:#ccc"
+											 class="text_align_right float_left" v-model="wordData.ydName" />
 										</view>
 									</uni-list-item>
 									<uni-list-item :title="wordData.ydType == 1 ? '信用代码' : '特种作业操作证编号'" :showArrow="false" class="list_border_1px">
 										<view class="n_ent_list_down_wrap clearfix" slot="right">
-											<input type="text" :placeholder="wordData.ydType == 1 ? '请输入信用代码' : '请输入特种作业操作证编号'" placeholder-style="color:#ccc" class="text_align_right float_left"
-											 v-model="wordData.ydCode" /> 
+											<input type="text" :placeholder="wordData.ydType == 1 ? '请输入信用代码' : '请输入特种作业操作证编号'" placeholder-style="color:#ccc"
+											 class="text_align_right float_left" v-model="wordData.ydCode" />
 										</view>
 									</uni-list-item>
 									<uni-list-item title="联系人" :showArrow="false" class="list_border_1px" v-if="wordData.ydType==1">
 										<view class="n_ent_list_down_wrap clearfix" slot="right">
 											<input type="text" placeholder="请输入联系人" placeholder-style="color:#ccc" class="text_align_right float_left"
-											 v-model="wordData.ydContact" /> 
+											 v-model="wordData.ydContact" />
 										</view>
 									</uni-list-item>
 									<uni-list-item title="联系电话" :showArrow="false" class="list_border_1px">
 										<view class="n_ent_list_down_wrap clearfix" slot="right">
 											<input type="number" placeholder="请输入联系电话" placeholder-style="color:#ccc" class="text_align_right float_left"
-											 v-model="wordData.ydPhone" /> 
+											 v-model="wordData.ydPhone" />
 										</view>
 									</uni-list-item>
-									
-									
+
+
 								</block>
-								
+
 							</block>
-							
+
 						</uni-list>
 					</view>
 				</app-item-input>
@@ -179,7 +179,11 @@
 	import appBtnAdd from "@/components/app-btn/app-btn-add"
 	import appBtnCheck from "@/components/app-btn/app-btn-check"
 	import appPickerSelect from '@/components/app-picker/app-picker-select'
-	import hFormAlert from '@/components/h-form-alert/h-form-alert.vue';
+	import hFormAlert from '@/components/h-form-alert/h-form-alert.vue'
+	
+	import { mapState, mapMutations } from 'vuex'
+	
+	
 	export default {
 		data() {
 			return {
@@ -199,13 +203,13 @@
 					dcNum: '', //电焊 -- 作业人员
 					highT: '', //电焊 --高温作业
 					highGround: '', //电焊 -- 高处作业
-					useDcSelect:'', //是否外包
-					ydType:'',//外包 -- 承包方类型
-					useDcNum:'',//外包--是否外包
-					ydName:'',//承包方 单位名称'/'姓名
-					ydCode:'',//承包方 信用代码 / 特种作业操作证编号
-					ydContact:'',//承包方 联系人
-					ydPhone:'',//承包方 联系电话
+					useDcSelect: '', //是否外包
+					ydType: '', //外包 -- 承包方类型
+					useDcNum: '', //外包--是否外包
+					ydName: '', //承包方 单位名称'/'姓名
+					ydCode: '', //承包方 信用代码 / 特种作业操作证编号
+					ydContact: '', //承包方 联系人
+					ydPhone: '', //承包方 联系电话
 					/////吊装转运st
 					trainCheck: false,
 					trainNum: '',
@@ -223,8 +227,15 @@
 					stressMan: '',
 					stoveCheck: false,
 					stoveNum: '',
-					stoveMan: ''
+					stoveMan: '',
 					///特种设备end
+					dhState: false,//电焊
+					gwState: false,
+					gcState: false,//
+					ydState: false,//用电
+					dzzyState: false,//吊装转运
+					tzsbState: false,//特种设备
+					state:false,//是否涉及
 				},
 				//吊装转运
 				hoistingData: [{
@@ -313,6 +324,9 @@
 				}],
 			}
 		},
+		computed:{
+			...mapState(['userInfo']),
+		},
 		components: {
 			appItemInput,
 			appBtnAdd,
@@ -321,14 +335,37 @@
 			hFormAlert
 		},
 		methods: {
-			checkboxChange(e) { 
+			checkboxChange(e) {
 				var arr = e.detail.value;
 				var checkVal = this.checkVal;
-				this.isNotInvolv = false;
-
+				this.isNotInvolv = false; 
+				this.wordData['dhState'] = false;
+				this.wordData['gcState'] = false;
+				this.wordData['gwState'] = false;
+				this.wordData['ydState'] = false;
+				this.wordData['dzzyState'] = false;
+				
 				for (var prop in this.checkVal) {
 					this.wordData[prop] = false;
 					for (var i = 0; i < arr.length; i++) {
+						if (arr[i] == 'cutCheck') {
+							this.wordData['dhState'] = true;
+						}
+						if (arr[i] == 'dcCheck') {
+							this.wordData['gcState'] = true;
+							this.wordData['gwState'] = true;
+						}
+						if (arr[i] == 'useDcSelect') {
+							this.wordData['ydState'] = true;
+						}
+						if (arr[i] == 'trainCheck' || arr[i] == 'forkliftCheck' || arr[i] == 'otherCheck') {
+							this.wordData['dzzyState'] = true;
+						}
+						for (var j = 0; j < this.deviceData.length; j ++) {
+							if (arr[i] == this.deviceData[j][prop]) {
+								this.wordData['tzsbState'] = true;
+							}
+						}
 						if (arr[i] == prop) {
 							this.wordData[prop] = true;
 						}
@@ -375,7 +412,12 @@
 			onChange(bool) {
 				this.isNotInvolv = bool;
 				if (bool) {
-					for (var prop in this.checkVal) { 
+					this.wordData['dhState'] = false;
+					this.wordData['gcState'] = false;
+					this.wordData['gwState'] = false;
+					this.wordData['ydState'] = false;
+					this.wordData['dzzyState'] = false;
+					for (var prop in this.checkVal) {
 						if (this.wordData[prop]) {
 							this.wordData[prop] = false;
 						}
@@ -384,7 +426,20 @@
 				}
 			},
 			getData() {
-				return this.wordData;
+				this.wordData.state = this.isNotInvolv;
+				var temp = {
+					workOne:{
+						...this.wordData,
+						deviceData: this.deviceData
+					}
+				}
+				var opts = {
+					company_id:this.userInfo.company_id,
+					content:JSON.stringify(temp),
+					state: this.isNotInvolv ? 2 : 1,
+					type:2,
+				};   
+				return opts;
 			},
 			//////select
 			onSelectBtn(e, key) {

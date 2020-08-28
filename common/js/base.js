@@ -1,6 +1,7 @@
 import data from './address.json'
+
 function changeTime(time, format) {
-	var type = typeof time; 
+	var type = typeof time;
 	if (time == null && time == undefined) return "无";
 	var date = new Date().getTime() + '';
 	if (type == 'number') {
@@ -26,7 +27,7 @@ function changeTime(time, format) {
 			return y + '/' + m + '/' + day;
 		case "yy/mm":
 			return y + '/' + m;
-	} 
+	}
 }
 
 function merge(target) {
@@ -45,6 +46,23 @@ function merge(target) {
 	return target;
 }
 
+function deepClone(origin, target) {
+	var target = target || {},
+		toStr = Object.prototype.toString,
+		arrStr = '[object Array]';
+	for (var prop in origin) {
+		if (origin.hasOwnProperty(prop)) {
+			if (origin[prop] !== 'null' && typeof(origin[prop]) == 'object') {
+				target[prop] = (toStr.call(origin[prop]) == arrStr) == arrStr ? [] : {};
+				this.deepClone(origin[prop], target[prop]);
+			} else {
+				target[prop] = origin[prop];
+			}
+		}
+	}
+	return target;
+}
+
 function DivideAthousandTime(time) {
 	if (time == '') {
 		return '';
@@ -53,33 +71,34 @@ function DivideAthousandTime(time) {
 	}
 }
 
-function flatData(data=[], arr, rank = 0, parentArr=[]) {
-	for (var i = 0; i < data.length; i ++) {
+function flatData(data = [], arr, rank = 0, parentArr = []) {
+	for (var i = 0; i < data.length; i++) {
 		var temp = data[i];
 		arr.push({
-			address:temp.address,
-			level:temp.level,
-			number:temp.number,
+			address: temp.address,
+			level: temp.level,
+			number: temp.number,
 			rank,
 			parentArr
 		});
 		if (Array.isArray(temp.option) && temp.option.length > 0) {
 			let parents = [...parentArr];
 			parents.push({
-				address:temp.address,
-				level:temp.level,
-				number:temp.number,
+				address: temp.address,
+				level: temp.level,
+				number: temp.number,
 			});
 			flatData(temp.option, arr, rank + 1, parents);
 		}
 	}
 	return arr;
 }
+
 function getAddress(number) {
 	var arr = [];
 	var all = flatData(data, arr);
 	var current;
-	for (var i = 0; i < all.length; i ++) {
+	for (var i = 0; i < all.length; i++) {
 		if (number == all[i].number) {
 			current = all[i];
 		}
@@ -94,5 +113,6 @@ export {
 	changeTime,
 	merge,
 	DivideAthousandTime,
-	getAddress
+	getAddress,
+	deepClone
 }

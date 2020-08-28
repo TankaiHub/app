@@ -25,6 +25,6 @@
 <style lang="less">
 	@import url("@/common/less/base.less");
 	.cmp_btn_add_container{
-		width:100px;   
+		// width:200px;   
 	}
 </style>
