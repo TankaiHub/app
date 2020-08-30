@@ -157,7 +157,7 @@
 					plan_id: this.admin_law_item_plan_info.plan_id
 				};
 				this.$http.post('contentList', opts).then(res => {
-					console.log(res)
+					this.log(res)
 					if (res.code == 200) {
 						var data = res.data;
 						var content = data.content;
@@ -240,7 +240,7 @@
 			//select star////////
 			onSelectBtn(e, key, index) {
 				if (e.flag) {
-					console.log(this['lawData']['content'])
+					this.log(this['lawData']['content'])
 					this['lawData']['content'][index][key] = e.value;
 				}
 			},
@@ -282,7 +282,7 @@
 							type: this.getType(item, index), //处理措施
 							content_id: item.content_id
 						};
-						console.log("befer", opts);
+						this.log("befer", opts);
 						this._submitBefterClear(opts, len, index); //提交前处理
 
 					});
@@ -314,7 +314,7 @@
 					plan_id: this.admin_law_item_plan_info.plan_id,
 				}, isShowLoading).then(res => {
 					if (res.code == 200) {
-						// console.log("clear success");
+						// this.log("clear success");
 						this._checkSubmit(opts, len, index);
 					}
 				})
@@ -328,7 +328,7 @@
 				}else {
 					isShowLoading = true;
 				}
-				console.log(len - 1 > index, '============', isShowLoading)
+				this.log(len - 1 > index, '============', isShowLoading)
 				this.$http.post('cSubmit', opts, isShowLoading).then(res => {
 					if (res.code == 200) {
 						if (len - 1 == index) {

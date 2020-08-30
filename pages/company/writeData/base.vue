@@ -301,11 +301,11 @@
 					dh: data.industry_category,
 					value: data.industry_category_1
 				};
-				console.log(temp)
+				this.log(temp)
 				this._changeLightIndustry(temp);
 
 				var final_main_products_arr = this._handleProduct(main_products_arr);
-				console.log(main_products_arr)
+				this.log(main_products_arr)
 				this.defaultSelected = final_main_products_arr.nArr;
 				this.main_selse_list = final_main_products_arr.tArr;
 				this.individual_select_list = this.main_selse_list;
@@ -781,7 +781,7 @@
 			},
 			//onDetermine 其他 主要工序
 			onDetermine(text) {
-				console.log(text)
+				this.log(text)
 				var flag = true;
 				if (flag) {
 					flag = false;
@@ -801,7 +801,7 @@
 				}else {
 					opts.security_officer = '';
 				}
-				console.log(opts)
+				this.log(opts)
 				this.$http.post("save", opts).then(res => {
 					if (res.code == 200) { 
 						uni.showToast({

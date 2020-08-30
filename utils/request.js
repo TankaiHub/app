@@ -1,4 +1,5 @@
 import allUrl from './url.js'
+import log from '../common/js/base.js'
 class Request {
 	// baseUrl = 'http://api.cqgmaq.com/'
 	baseUrl = 'http://spmsapi.cqxddwl.com/'
@@ -53,8 +54,8 @@ class Request {
 				})
 			})
 		} catch (e) {
-			console.log(e);
-			console.log("获取不到token");
+			log(e);
+			log("获取不到token");
 			if (isShowLoading) {
 				uni.hideLoading();
 			}

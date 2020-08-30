@@ -66,10 +66,10 @@
 						url: item.href,
 						success() {
 							_self.onUniDrawerClose();
-							console.log("success")
+							this.log("success")
 						},
 						fail(e) {
-							console.log("fail", e)
+							this.log("fail", e)
 						}
 					})
 				}
@@ -85,10 +85,10 @@
 						url: item.href,
 						success() {
 							_self.onUniDrawerClose();
-							console.log("success")
+							this.log("success")
 						},
 						fail(e) {
-							console.log("fail", e)
+							this.log("fail", e)
 						}
 					})
 				}
@@ -100,10 +100,10 @@
 						url: item.href,
 						success() {
 							_self.onUniDrawerClose();
-							console.log("success")
+							this.log("success")
 						},
 						fail(e) {
-							console.log("fail", e)
+							this.log("fail", e)
 						}
 					})
 				}

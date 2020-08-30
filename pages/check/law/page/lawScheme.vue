@@ -191,7 +191,7 @@
 					deadline: DivideAthousandTime(time),
 				};
 				this.$http.post('taskSubmit', opts, true, true).then(res => {
-					console.log(res)
+					this.log(res)
 					if (res.msg == 'deadline') {
 						this.$refs['date-time'].show();
 					} else if (res.code == 200) {

@@ -158,7 +158,7 @@
 				this.drawerVisible = bool;
 			},
 			_initData() {
-				console.log("?????????????????????????????????" , this.month , this.year )
+				this.log("?????????????????????????????????" , this.month , this.year )
 				if (this.month && this.year == "") {
 					uni.showToast({
 						title:"请选择年",
@@ -203,7 +203,7 @@
 			onSelectYear(obj) {
 				this.year = obj.value;
 				this.page = 1;
-				console.log(obj)
+				this.log(obj)
 				this._initData();
 			},
 			onSelectMonth(obj) {
@@ -228,7 +228,7 @@
 				}
 			},
 			onTableItem(obj) {
-				console.log(obj)
+				this.log(obj)
 			},
 			/////////////////分页///////////////////
 			onSelectItem(num) {
@@ -239,12 +239,12 @@
 			onPrev(page) {
 				this.page = page - 1;
 				this._initData();
-				console.log(this.page, "-------------++++++++++++++++++")
+				this.log(this.page, "-------------++++++++++++++++++")
 			},
 			onNext(page) {
 				this.page = page + 1;
 				this._initData();
-				console.log(this.page, "++++++++++++++++++")
+				this.log(this.page, "++++++++++++++++++")
 			},
 			 
 			/////////
@@ -255,17 +255,17 @@
 				uni.navigateTo({
 					url: './page/lawTask?state=' + state,
 					success() {
-						console.log('success')
+						this.log('success')
 					},
 					fail(err) {
-						console.log(err)
+						this.log(err)
 					}
 				})
 			},
 			//编制计划
 			onPreparationPlan(){ 
 				this.$store.commit("set_admin_law_add_company_select_info", {});
-				console.log(this.admin_law_add_company_select_info)
+				this.log(this.admin_law_add_company_select_info)
 				uni.navigateTo({
 					url:"./page/addCompany?s=m"
 				})

@@ -192,7 +192,7 @@
 				this.timeStr = e.replace(reg, "/");
 
 				var time = DivideAthousandTime(new Date(this.timeStr + '/01').getTime());
-				console.log(this.timeStr, time, new Date(this.timeStr + '/01'))
+				this.log(this.timeStr, time, new Date(this.timeStr + '/01'))
 				this.$store.commit({
 					type: 'set_admin_law_add_company_select_info',
 					val: time,
@@ -201,7 +201,7 @@
 				});
 			},
 			onCancel() {
-				console.log(this.source)
+				this.log(this.source)
 				if (this.source == 'm') {
 					uni.navigateTo({
 						url: '../lawPlan'
@@ -214,7 +214,7 @@
 
 			},
 			onDetermine() {
-				console.log(this.timeStr)
+				this.log(this.timeStr)
 				if (this.typeValue == '') {
 					uni.showToast({
 						title: '请选择检查类型',
@@ -242,7 +242,7 @@
 				} catch (e) {
 					time: 0
 				}
-				console.log(new Date(this.timeStr + '/01'), this.timeStr, this.admin_law_add_company_select_info)
+				this.log(new Date(this.timeStr + '/01'), this.timeStr, this.admin_law_add_company_select_info)
 				var opts = {
 					type: this.typeValue,
 					task_time: DivideAthousandTime(time),

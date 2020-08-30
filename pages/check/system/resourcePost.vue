@@ -176,18 +176,18 @@
 			onPrev(page) {
 				this.page = page - 1;
 				this._initData();
-				console.log(this.page, "++++++++++++++++++")
+				this.log(this.page, "++++++++++++++++++")
 			},
 			onNext(page) {
 				this.page = page + 1;
 				this._initData();
-				console.log(this.page, "-------------")
+				this.log(this.page, "-------------")
 			},
 		 
 			//////////////list////////////////////
 			// 文件单击时
 			fileClick(item) {
-				console.log(item)
+				this.log(item)
 				if (item.type == 1) {
 					this.pid = item.file_id
 					this._initData();

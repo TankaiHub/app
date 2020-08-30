@@ -43,10 +43,10 @@
 				uni.navigateTo({
 					url:'./systemPage/resetPassword',
 					success() {
-						console.log("success")
+						this.log("success")
 					},
 					fail(res) {
-						console.log("fail", res)
+						this.log("fail", res)
 					}
 				})
 			},

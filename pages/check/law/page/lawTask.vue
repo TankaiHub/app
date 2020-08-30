@@ -224,7 +224,7 @@
 						if (res.confirm) {
 							_self._deleteList(id);
 						} else if (res.cancel) {
-							console.log('用户点击取消');
+							this.log('用户点击取消');
 						}
 					}
 				});
@@ -253,13 +253,13 @@
 				this.page = page - 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "----------------");
+				this.log(this.page, "----------------");
 			},
 			onNext(page) {
 				this.page = page + 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "+++++++++++++");
+				this.log(this.page, "+++++++++++++");
 			},
 			
 			///////添加企业

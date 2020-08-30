@@ -97,7 +97,7 @@
 		},
 		methods: {
 			show(message, option) {
-				console.log(this.an_message)
+				this.log(this.an_message)
 				if(typeof(message) != "undefined"){
 					this.line = 1;
 					this.an_message = message;

@@ -119,7 +119,7 @@
 			//确定
 			async onDetermine() {
 				var treeData = this.$refs.tree.getData();
-				console.log(treeData)
+				this.log(treeData)
 				if (treeData.length == 0) {
 					uni.showToast({
 						title: '请选择方案！',
@@ -133,13 +133,13 @@
 				for (var i = 0; i < treeData.length; i++) {
 					if (treeData[i].level == 1) {
 						await this.getBook(treeData[i].label, "", "", false);
-						console.log("640  ==== 1")
+						this.log("640  ==== 1")
 					} else if (treeData[i].level == 2) {
 						await this.getBook('', treeData[i].label, "", false);
-						console.log("640  ==== 2")
+						this.log("640  ==== 2")
 					} else if (treeData[i].level == 3) {
 						await this.getBook('', "", treeData[i].label, false);
-						console.log("640  ==== 3")
+						this.log("640  ==== 3")
 					}
 				}
 				uni.hideLoading();

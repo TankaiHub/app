@@ -339,13 +339,13 @@
 				this.page = page - 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "----------------");
+				this.log(this.page, "----------------");
 			},
 			onNext(page) {
 				this.page = page + 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "+++++++++++++");
+				this.log(this.page, "+++++++++++++");
 			},
 
 			///////////////

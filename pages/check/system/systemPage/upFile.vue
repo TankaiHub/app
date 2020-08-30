@@ -38,10 +38,10 @@
 					url:'http://spmsapi.cqxddwl.com/index/Tool/uploadFile',
 					filePath:this.path, 
 					success(res) {
-						console.log(res)
+						this.log(res)
 					},
 					fail(err) {
-						console.log('err', err)
+						this.log('err', err)
 					}
 				})
 			}

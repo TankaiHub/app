@@ -54,11 +54,11 @@ export default{
 			}catch(e){
 				len = 0;
 			}
-			console.log(len, "len") ;
+			this.log(len, "len") ;
 			while(len --) {
 				if (len == 0) break;
 				// node = this.createNode(h, cmp, obj);
-				console.log(item)
+				this.log(item)
 			}
 			// return node;
 		}

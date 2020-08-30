@@ -146,7 +146,7 @@
 				this.onCancel();
 			},
 			_initData(data) {
-				// console.log("新增", data.name)
+				// this.log("新增", data.name)
 				// this.inptDataInfo['name'] = data.name;
 				// this.inptDataInfo['credit_code'] = data.credit_code;
 				// this.inptDataInfo['scale'] = data.scale;
@@ -188,7 +188,7 @@
 			onShowSelectOpenAddress() {
 
 				setTimeout(() => {
-					console.log(this.$refs, this.$refs.op_lb);
+					this.log(this.$refs, this.$refs.op_lb);
 					this.$refs.op_lb.show();
 				}, 200);
 			},
@@ -225,8 +225,8 @@
 				});
 			},
 			_getLatAndLon(str) {
-				console.log('执行', str)
-				console.log(str)
+				this.log('执行', str)
+				this.log(str)
 				return new Promise((resolve, reject) => {
 					plus.maps.Map.geocode(str, {
 						city: '023'
@@ -236,7 +236,7 @@
 						var coordType = event.coordType; // 转换后的坐标系类型 
 						resolve(point);
 					}, (e) => {
-						console.log("Failed:", e);
+						this.log("Failed:", e);
 						resolve();
 					});
 				});
@@ -319,7 +319,7 @@
 					str = data.openAddressStr;
 				}
 				this._getLatAndLon(this.inptDataInfo.regAddressStr).then(res => {
-					console.log(res)
+					this.log(res)
 					opts.lat = res.latitude;
 					opts.lng = res.longitude;
 					this.$http.post('save', opts).then(res => {

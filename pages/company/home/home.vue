@@ -155,7 +155,7 @@
 				var info_1_state = this.stepData.info_1_state == 1 ? true : false,
 					info_2_state = this.stepData.info_2_state == 1 ? true : false,
 					info_3_state = this.stepData.info_3_state == 1 ? true : false;
-				console.log(info_1_state, info_2_state, info_3_state, this.stepData)
+				this.log(info_1_state, info_2_state, info_3_state, this.stepData)
 				if (info_1_state) {
 					if (info_2_state) {
 						if (info_3_state) {
@@ -223,7 +223,7 @@
 			},
 			//选择登录企业
 			onListItem(item, index) {
-				console.log(item, index);
+				this.log(item, index);
 				this.currentIndex = index;
 				this.currentComId = item.company_id;
 
@@ -285,7 +285,7 @@
 				})
 			},
 			_changePage2() {
-				console.log("???????????  _changePage2 ---- 281", this.companyBaseInfo.industry_category_zfl)
+				this.log("???????????  _changePage2 ---- 281", this.companyBaseInfo.industry_category_zfl)
 				if (this.companyBaseInfo.industry_category_zfl == '' || this.companyBaseInfo.industry_category_zfl == null) {
 					uni.showModal({
 						title: '提示',
@@ -296,7 +296,7 @@
 									url: '../writeData/base'
 								})
 							} else if (res.cancel) {
-								console.log('用户点击取消');
+								this.log('用户点击取消');
 							}
 						}
 					});
@@ -317,7 +317,7 @@
 					} else {
 						//非个体
 						var url = this._changeGoToPage(this.companyBaseInfo.industry_category_zfl);
-						console.log(url, "!!!!!!!!!!!!!!!!!")
+						this.log(url, "!!!!!!!!!!!!!!!!!")
 						uni.navigateTo({
 							url
 						})
@@ -330,14 +330,14 @@
 							if (res.confirm) {
 								//
 							} else if (res.cancel) {
-								console.log('用户点击取消');
+								this.log('用户点击取消');
 							}
 						}
 					});
 				}
 			},
 			_changeGoToPage(name) {
-				console.log(name, "??????????????????")
+				this.log(name, "??????????????????")
 				switch (name) {
 					case '机械':
 						return 'industryMach1';

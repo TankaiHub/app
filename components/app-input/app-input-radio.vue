@@ -23,7 +23,7 @@
 			isRadio:[String, Number]
 		},
 		created() {
-			console.log(this.isRadio)
+			this.log(this.isRadio)
 		}
 	}
 </script>

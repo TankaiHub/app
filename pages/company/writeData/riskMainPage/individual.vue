@@ -59,7 +59,7 @@
 			onSubmit(bool) {
 				var _self = this;
 				if (bool) { // true下一步
-					console.log(this.currentIndex)
+					this.log(this.currentIndex)
 					switch (this.currentIndex) {
 						case 0:
 							this._changePage1();

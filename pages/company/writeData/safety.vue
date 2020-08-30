@@ -295,7 +295,8 @@
 			_getInfo() {
 				var opts = {
 					company_id: this.userInfo.company_id || 2244
-				};
+				}; 
+				this.log("11111111111111");
 				this.$http.post('info', opts).then(res => {
 					if (res.code == 200) {
 						var data = res.data;
@@ -349,14 +350,14 @@
 				this['energy3'] = allEnergy[2] || '';
 				this['energy4'] = allEnergy[3] || '';
 				this['energy4Unit'] = allEnergy[4] || '';
-				console.log(this['energy4Unit'], '111')
+				this.log(this['energy4Unit'], '111')
 				this['energy5'] = allEnergy[5] || '';
 				this.test = allEnergy[4] 
 				//获取到投保数据
 				this.insuredDefaultSelected = this._changeStr(data.insured, ',');
 				//投保默认值
 				this.insured_selse_list = this._changeArr(this.insuredDefaultSelected, this.insuredArray);
-				console.log(this['energy4Unit'], '222')
+				this.log(this['energy4Unit'], '222')
 
 			},
 			//处理数组 把value相同的提出

@@ -197,7 +197,7 @@
 			appTable
 		},
 		onShow() {
-			console.log(111)
+			this.log(111)
 
 			var _self = this;
 			uni.getSystemInfo({

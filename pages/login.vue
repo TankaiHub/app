@@ -95,7 +95,7 @@
 					password
 				};
 				this.$http.post("login", opts).then(res => {
-					console.log(res)
+					this.log(res)
 					if (res.code == 200) { 
 						this.$store.commit("set_userInfo", res.data)
 						var token = res.data.jwt;
@@ -103,7 +103,7 @@
 						uni.reLaunch({
 							url: './company/home/home',
 							fail(err) {
-								console.log('err', err)
+								this.log('err', err)
 							}
 						});
 					}

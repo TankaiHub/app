@@ -128,7 +128,7 @@
 					this.addressInfoText = obj.str;
 					this.$emit("onAddressBtn", obj);
 				}
-				console.log(obj)
+				this.log(obj)
 
 			},
 			onMask() {

@@ -209,11 +209,11 @@
 						d: 4
 					}],
 					success: function(res) {
-						console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
-						console.log(res)
+						this.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+						this.log(res)
 					},
 					fail: function(res) {
-						console.log(res.errMsg);
+						this.log(res.errMsg);
 					}
 				});
 			},

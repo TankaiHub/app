@@ -1,5 +1,5 @@
 <template>
-	<view class="cmp_app_picker_time c_t_sel">
+	<view class="cmp_app_picker_time c_t_sel padding_5px">
 		<view class="t_s_title_wrap c_t_wrap">
 			<view class="t_s_title_bd c_t_bd">
 				<text class="t_text_bd" @click="onPickerSelectTitle" :class="{ isActive:currentSelectText == '请选择' }">{{currentSelectText}}{{text}}</text>
@@ -144,7 +144,7 @@
 		methods: {
 			bindChange(e) {
 				const val = e.detail.value;
-				console.log(this.currentSelectText, val)
+				this.log(this.currentSelectText, val)
 				this.value = val;
 				this.currentSelectText = this.currentData[val];
 				
@@ -154,12 +154,12 @@
 				var obj = {};
 				if (this.currentSelectText == '请选择') { 
 					this.currentSelectText = this.currentData[this.value];
-					console.log(this.value, this.currentSelectText)
+					this.log(this.value, this.currentSelectText)
 				}
 				var currntVal = this.currentSelectText;
 				obj.value = this.currentSelectText;
 				obj.flag = flag;
-				console.log(obj, this.isModel)
+				this.log(obj, this.isModel)
 				if (flag) {
 					this.currentSelectText = currntVal;
 					if (this.isModel) {

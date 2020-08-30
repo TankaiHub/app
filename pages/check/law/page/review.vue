@@ -93,7 +93,7 @@
 			},
 			radioChange(e, item, index) {
 				var val = e.detail.value;
-				console.log(val);
+				this.log(val);
 				if (val == 'check') {
 					item['check'+index] = true;
 					item['check_n' + index] = false;

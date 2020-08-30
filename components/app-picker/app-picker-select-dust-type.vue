@@ -1,11 +1,11 @@
 <template>
-	<view class="cmp_picker_select_dust_type_container c_t_sel border_1px_all_ccc">
+	<view class="cmp_picker_select_dust_type_container c_t_sel" :class="{ border_1px_all_ccc:isBorder, padding_5px:isPadding }">
 		<view class="cmp_p_s_d_t_wrap ">
 			<view class="c_t_wrap">
 				<view class="c_t_bd">
-					<input class=""
-					 placeholder-style="color:#ccc" type="text" v-model="selectVal" disabled placeholder="选择粉尘类别" @click="onInp" />
-					<view class="c_t_close_btn" @click="onClose">X</view>
+					<input class="" placeholder-style="color:#ccc" type="text" v-model="selectVal" disabled placeholder="选择粉尘类别"
+					 @click="onInp" :style="{ textAlign:textAlign }" />
+					<view class="c_t_close_btn" @click="onClose" v-if="isShowClose">X</view>
 				</view>
 			</view>
 			<view class="app_picker_select_wrap_bd" v-if="isShowPickerSelect">
@@ -22,6 +22,7 @@
 							</view>
 						</picker-view-column>
 					</picker-view>
+					
 				</view>
 			</view>
 		</view>
@@ -32,7 +33,27 @@
 	export default {
 		props: {
 			industry_category: String,
-			initVal:[String, Number]
+			initVal: [String, Number], 
+			textAlign: {
+				type: String,
+				default: 'left'
+			},
+			isBorder: {
+				type: Boolean,
+				default: true
+			},
+			isShowClose: {
+				type: Boolean,
+				default: true
+			},
+			isPadding: {
+				type: Boolean,
+				default: true
+			},
+			isShowNot: {
+				type: Boolean,
+				default: false
+			}
 		},
 
 		data() {
@@ -47,7 +68,7 @@
 				indicatorStyle: `height: ${Math.round(uni.getSystemInfoSync().screenWidth/(750/100))}px;`,
 			}
 		},
-		watch:{
+		watch: {
 			industry_category(nv) {
 				if (nv == '') {
 					this.onClose();
@@ -58,6 +79,7 @@
 			},
 		},
 		computed: {
+
 			//粉尘类别
 			dustTypeData() {
 				switch (this.industry_category) {
@@ -97,13 +119,14 @@
 						return [];
 				}
 			},
+			 
 		},
 		methods: {
 			onInp() {
 				this.visible = true;
 				this.isShowPickerSelect = true;
 			},
-			bindChange(e) {
+			bindChange(e) { 
 				this.value = e.detail.value;
 			},
 			onBtn(bool) {
@@ -131,17 +154,14 @@
 	@import url("@/common/less/base.less");
 
 	.cmp_picker_select_dust_type_container {
+
 		// width: 100%;
 		.cmp_p_s_d_t_wrap {
 			.cmp_psdt_inp_close {
-			 
-				.cmp_psdt_inp_bd {
-					 
-				}
 
-				.cmp_psdt_close {
-					 
-				}
+				.cmp_psdt_inp_bd {}
+
+				.cmp_psdt_close {}
 			}
 
 			.app_picker_select_wrap_bd {

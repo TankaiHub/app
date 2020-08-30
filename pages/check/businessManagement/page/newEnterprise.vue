@@ -224,7 +224,7 @@
 				this.isShowCode = false;
 
 			} else if (opts.state == 'ed') {
-				console.log("load")
+				this.log("load")
 				this.isDisable = true;
 				this.isShowCode = true;
 				this.handleData(this.admin_item_company_info);
@@ -316,7 +316,7 @@
 			onShowSelectOpenAddress() {
 
 				setTimeout(() => {
-					console.log(this.$refs, this.$refs.op_lb);
+					this.log(this.$refs, this.$refs.op_lb);
 					this.$refs.op_lb.show();
 				}, 200);
 			},
@@ -371,19 +371,19 @@
 				if (this.current_state == 'ed') return;
 				clearTimeout(this.timer);
 				this.timer = setTimeout(() => {
-					console.log(val)
+					this.log(val)
 					this.getRecycleBin(val);
 				}, 1000);
 			},
 			//点击回收站的数据
 			onCompanyItem(item) {
-				console.log(item, "新增===============");
+				this.log(item, "新增===============");
 				if (item == null) return;
 				this._assignment(item.item);
 			},
 			//处理数据
 			_assignment(data) {
-				console.log("新增", data.name)
+				this.log("新增", data.name)
 				this.inptDataInfo['name'] = data.name;
 				this.inptDataInfo['credit_code'] = data.credit_code;
 				this.inptDataInfo['scale'] = data.scale;
@@ -418,7 +418,7 @@
 					this.inptDataInfo.openAddressStr = this.openAddressStr;
 					this.inptDataInfo.open_detail_address = pro_arr.detail;
 				}
-				console.log("新增", this.inptDataInfo)
+				this.log("新增", this.inptDataInfo)
 			},
 			//提交
 			onSubmit() {
@@ -547,7 +547,7 @@
 					opts.produce_address = data.openAddressStr + data.open_detail_address; //生产经营地址 
 					this._sendCompanyAddOPS(opts);
 				}
-				console.log(data, opts, 'create')
+				this.log(data, opts, 'create')
 			},
 			//编辑企业
 			_editEnterprise(data, opts) {
@@ -573,7 +573,7 @@
 					opts.street = data.openStreet;
 					opts.produce_address = data.openAddressStr + data.open_detail_address; //生产经营地址  
 				}
-				console.log(data, opts, "edit")
+				this.log(data, opts, "edit")
 				this.$http.post('companyEdit', opts).then(res => {
 					if (res.code == 200) {
 						uni.showToast({
@@ -730,13 +730,13 @@
 					str_f_bd = first_str[0];
 					first_number = this.changeNumber(str_f_bd);
 					f_str = str.replace(str_f_bd, "");
-					// console.log("去掉 --- 省|市|自治区|自治州|县|区 =得到", f_str) 
+					// this.log("去掉 --- 省|市|自治区|自治州|县|区 =得到", f_str) 
 					second_reg = /.+?(区|县)/g;
 					second_str = second_reg.exec(f_str);
 					str_s_bd = second_str[0];
 					second_number = this.changeNumber(str_s_bd);
 					s_str = f_str.replace(str_s_bd, "");
-					// console.log("去掉 --- 区|县 =得到", s_str)
+					// this.log("去掉 --- 区|县 =得到", s_str)
 
 					
 
@@ -746,24 +746,24 @@
 						str_t_bd = third_str[0];
 						third_number = this.changeNumber(str_t_bd);
 						t_str = s_str.replace(str_t_bd, "");
-						// console.log( "去掉 --- 街道|镇 =得到", t_str);
+						// this.log( "去掉 --- 街道|镇 =得到", t_str);
 
 						fourth_reg = /.+?(社区|村)/g;
 						fourth_str = fourth_reg.exec(t_str);
 						str_fo_bd = fourth_str[0];
 						fourth_number = this.changeNumber(str_fo_bd);
 						fo_str = t_str.replace(str_fo_bd, "");
-						// console.log( "去掉 ---  社区|村 =得到", fo_str);
+						// this.log( "去掉 ---  社区|村 =得到", fo_str);
 					} catch (e) {
 						try {
 							arr = reg.exec(s_str);
-							// console.log(arr, "1111");
+							// this.log(arr, "1111");
 							if (arr == null) {
 								arr = reg1.exec(s_str);
-								// console.log(arr, "2222");
+								// this.log(arr, "2222");
 								if (arr == null) {
 									arr = reg2.exec(s_str);
-									// console.log(arr, "33333333");
+									// this.log(arr, "33333333");
 								}
 							}
 							str_t_bd = arr[0];
@@ -771,7 +771,7 @@
 							third_number = this.changeNumber(str_t_bd)
 							fourth_number = this.changeNumber(str_fo_bd, true);
 							fo_str = s_str.replace(str_fo_bd + str_t_bd, "");
-							// console.log("去掉 --- 三峡商圈|西站|民防办 =得到", fo_str);
+							// this.log("去掉 --- 三峡商圈|西站|民防办 =得到", fo_str);
 						} catch (e) {
 							str_t_bd = "";
 							str_fo_bd = '';
@@ -785,13 +785,13 @@
 				} catch (e) {
 					fo_str = str;
 				} 
-				// console.log( "最终得到：", str_t_bd, str_t_bd, third_number, fourth_number, fo_str)
+				// this.log( "最终得到：", str_t_bd, str_t_bd, third_number, fourth_number, fo_str)
 
 
-				// console.log(fourth_number ,third_number, second_number, first_number,str_fo_bd)
+				// this.log(fourth_number ,third_number, second_number, first_number,str_fo_bd)
 				textArray = [str_f_bd, str_s_bd, str_t_bd, str_fo_bd];
 				numberArray = [first_number, second_number, third_number, fourth_number];
-				// console.log( "最终得到：", textArray, numberArray, fo_str)
+				// this.log( "最终得到：", textArray, numberArray, fo_str)
 				return {
 					textArray,
 					numberArray,

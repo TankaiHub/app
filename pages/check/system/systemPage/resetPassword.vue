@@ -52,7 +52,7 @@
 			},
 			validation() {
 				var flag = true;
-				console.log(this.oldPsd == '')
+				this.log(this.oldPsd == '')
 				if (this.oldPsd == '') {
 					this.flag = false;
 					uni.showToast({
@@ -99,7 +99,7 @@
 				};
 				thi.$http.post('editPwd', thi.editform).then(res => {
 					if (res.code == 200) {
-						console.log('success')
+						this.log('success')
 					}
 				})
 			},

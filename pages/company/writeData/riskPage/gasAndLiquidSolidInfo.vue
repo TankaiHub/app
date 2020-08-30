@@ -1,5 +1,7 @@
 <template>
 	<view class="app_gas_and_liquid_solid_container">
+		<!-- 危险化学品 信息填写 -->
+		
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="信息填写"></uni-nav-bar>
 		<scroll-view scroll-y="true" :style="{ height:screenHeight * 2 + 'upx'}"> 

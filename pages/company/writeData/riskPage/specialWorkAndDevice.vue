@@ -441,6 +441,14 @@
 				};   
 				return opts;
 			},
+			submit() {
+				var opts = this.getData();
+				this.$http.post('riskSave', opts).then(res=> {
+					if (res.code == 200) {
+						this.log(res)
+					}
+				});
+			},
 			//////select
 			onSelectBtn(e, key) {
 				if (e.flag) {

@@ -28,27 +28,27 @@
 				this.saveExcel = function(urls) {
 					//private
 					plus.io.requestFileSystem(plus.io.PRIVATE_DOC, function(fs) {
-						console.log("requestFileSystem");
+						this.log("requestFileSystem");
 						// 创建文件夹
 						fs.root.getDirectory('testDir', {
 							create: true
 						}, function(dirEntry) {
-							console.log("getDirectory");
+							this.log("getDirectory");
 							// 创建文件
 							dirEntry.getFile('testExcel.xls', {
 								create: true
 							}, function(fileEntry) {
-								console.log("getFile");
+								this.log("getFile");
 								fileEntry.createWriter(function(writer) {
-									console.log("createWriter");
+									this.log("createWriter");
 									writer.onwrite = function(e) {
-										console.log("Write data success!");
+										this.log("Write data success!");
 									};
 									// 写入内容;
 									writer.write(urls);
 									writer.onwriteend = function(e) {} 
 								}, function(e) {
-									console.log(e.message);
+									this.log(e.message);
 								});
 							});
 						});

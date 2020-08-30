@@ -96,7 +96,7 @@
 				for (var i = 0; i < this.selectData.length; i ++) {
 					if (newVal == this.selectData[i].value) {
 						this.curVal = this.selectData[i].label;
-						console.log(this.curVal)
+						this.log(this.curVal)
 					}
 				}
 			},
@@ -133,7 +133,7 @@
 				this.$emit("onSelectClear"); 
 		},
 		breakClick(variable, str) {
-			console.log(variable, str)
+			this.log(variable, str)
 			if (variable == str) {
 				return true;
 			} else {

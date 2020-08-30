@@ -138,7 +138,7 @@
 			} ,
 			
 			getData(obj) {
-				console.log(obj)
+				this.log(obj)
 				return this.admin_law_add_law_plan_arr;
 			}, 
 			onUnfold(item){
@@ -146,7 +146,7 @@
 				let id = item.id;
 				if(item.lastRank === true){
 					//点击最后一级时触发事件
-					console.log("?????????????")
+					this.log("?????????????")
 					this.$emit('treeItemClick', item);
 					return;
 				}
@@ -191,12 +191,12 @@
 					}
 					this._changeData(node, false);
 				}
-				console.log(obj)
+				this.log(obj)
 				// this.$emit('onChange', obj);
 			},
 			
 			_changeData(data, bool) { 
-				// console.log(data)
+				// this.log(data)
 				
 				var id = data.id;
 				var list = this.treeList;
@@ -232,7 +232,7 @@
 			},
 			
 			addLawPlan(childItem) {
-				console.log(childItem)
+				this.log(childItem)
 				if (childItem.isChild && childItem.rank > 0) return;
 				this.$store.commit("set_admin_law_add_law_plan_arr", {
 					label: childItem,
@@ -263,7 +263,7 @@
 			// 		} else {
 
 			// 			if (data[i].checked && i == len - 1) {
-			// 				console.log(i, len - 1)
+			// 				this.log(i, len - 1)
 			// 				return true;
 			// 			} else if (!data[i].checked) {
 			// 				return false;
@@ -276,7 +276,7 @@
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].children) {
 						data[i].checked = false;
-						console.log(data[i].checked)
+						this.log(data[i].checked)
 						this._initTreeData(data[i].children);
 					} else {
 						data[i].checked = false;
@@ -380,7 +380,7 @@
 									}
 									var c2 = c1[j].children;
 									if (c2 && c2.length > 0) {
-										console.log(33)
+										this.log(33)
 										for (var m = 0; m < c2.length; m++) {
 											c2[m].disabled = true;
 											if (c2[m].label == "电工作业") {
@@ -411,7 +411,7 @@
 					if (res.code == 200) {
 						var datas = res.data;
 						for (let i = 0; i < datas.length; i++) {
-							console.log(datas[i].type, "=+++++++++++++=")
+							this.log(datas[i].type, "=+++++++++++++=")
 							if (datas[i].type == 1) {
 								if (datas[i].state == 1) {
 									this.spaceData.state = true
@@ -470,7 +470,7 @@
 							}
 							if (datas[i].type == 5) {
 								this.furnaceState = datas[i].state
-								console.log(arr[4].children[2].label, "arr[4].children[2].children[0]  arr[4].children[2]")
+								this.log(arr[4].children[2].label, "arr[4].children[2].children[0]  arr[4].children[2]")
 								if (this.furnaceState == 1) {
 									arr[4].children[2].disabled = false;
 								}
@@ -481,7 +481,7 @@
 					}
 
 				})
-				console.log("data========================727", arr)
+				this.log("data========================727", arr)
 			},
 			workNum() {
 				this.work1 = false
@@ -503,7 +503,7 @@
 				if (this.work1) {
 					lawData[3].children[0].disabled = true;
 				}
-				console.log('判断企业规模', this.work1, this.work10max, this.work10min)
+				this.log('判断企业规模', this.work1, this.work10max, this.work10min)
 			}
 		}
 	}

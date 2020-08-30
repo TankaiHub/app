@@ -297,7 +297,7 @@
 		methods: {
 			...mapMutations(['set_admin_index_addrInfo']),
 			onNavBarLeft() {
-				console.log("??")
+				this.log("??")
 				this.drawerVisible = true;
 			},
 			_initData() {
@@ -320,7 +320,7 @@
 				var val = []; //八大行业占比
 				var scaleVal = []; ///工贸企业规模
 				this.$http.post("index", opts).then(res => {
-					console.log(res)
+					this.log(res)
 					var data = res.data;
 					var scale = data.scale;
 					this.isShowChart1 = true;
@@ -569,7 +569,7 @@
 					this.cityType = this.addressInfo.finalLevel;
 					this.cityNumber = this.addressInfo.finalNumber;
 					this._initData();
-					console.log(e)
+					this.log(e)
 				}
 			},
 			onAddrClear() {
@@ -593,7 +593,7 @@
 			////////////////////////////////////
 			onPickerSelectTitle() {
 				this.isShowPickerSelect = true;
-				console.log("????????????/")
+				this.log("????????????/")
 			},
 			onSelectBtn(e) {
 				this.isShowPickerSelect = false;
@@ -642,15 +642,15 @@
 			/////////跳转企业管理/////////
 			onManage(approval_status, bzh) {
 				// var str = `city=${this.addressInfo.finalAddress || this.addressInfo.str}&cityNumber=${this.cityNumber}&cityType=${this.cityType}&status=${approval_status}&bzh=${bzh}`;
-				// console.log(str, this.addressInfo) 
+				// this.log(str, this.addressInfo) 
 				this.$store.commit("set_admin_index_addrInfo", this.addressInfo);
 				uni.navigateTo({
 					url: '../businessManagement/businessManagement?status=' + approval_status + "&bzh=" + bzh,
 					success() {
-						console.log('scu')
+						this.log('scu')
 					},
 					fail(res) {
-						console.log(res)
+						this.log(res)
 					}
 				})
 			},
@@ -660,10 +660,10 @@
 				uni.navigateTo({
 					url: '../law/lawCount',
 					success() {
-						console.log('scu')
+						this.log('scu')
 					},
 					fail(res) {
-						console.log(res)
+						this.log(res)
 					}
 				})
 			},

@@ -50,15 +50,15 @@
 		computed: {
 			//
 			beginDay() {
-				console.log(new Date(this.year, this.month - 1, 1).getDay())
+				this.log(new Date(this.year, this.month - 1, 1).getDay())
 				return new Date(this.year, this.month - 1, 1).getDay();
 			},
 			curDays() {
-				console.log(new Date(this.year, this.month, 0).getDate())
+				this.log(new Date(this.year, this.month, 0).getDate())
 				return new Date(this.year, this.month, 0).getDate();
 			},
 			prevDays() {
-				console.log(new Date(this.year, this.month - 1, 0).getDate())
+				this.log(new Date(this.year, this.month - 1, 0).getDate())
 				return new Date(this.year, this.month - 1, 0).getDate();
 			}
 		},
@@ -159,7 +159,7 @@
 				this.computedDay(this.month);
 			},
 			handleChooseDay(e, year, month, day) {
-				console.log(e)
+				this.log(e)
 				this.day = day;
 				if (this.index == 2) {
 					this.clearData();
@@ -210,7 +210,7 @@
 
 			bindChange(e) {
 				const val = e.detail.value;
-				console.log(this.currentSelectText, val)
+				this.log(this.currentSelectText, val)
 				this.value = val;
 			},
 			onBtn(flag) { // 回调函数 取消或确定 
@@ -226,7 +226,7 @@
 				obj.endTimeArr = [this.nextYear, this.nextMonth, this.nextDay];
 				obj.prevTimeLapse = this.prevTimeLapse;
 				obj.nextTimeLapse = this.nextTimeLapse;
-				console.log(obj)
+				this.log(obj)
 				var currntVal = this.currentSelectText;
 				if (flag) {
 					this.currentSelectText = currntVal;

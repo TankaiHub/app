@@ -261,7 +261,7 @@
 					number: _this.admin_number,
 					sel_range: this.sel_range
 				};
-				// console.log(obj, "lawCountPreviewData")
+				// this.log(obj, "lawCountPreviewData")
 				// this.$store.commit('lawCountPreviewData', obj);
 				// this.$router.push({
 				// 	name: 'LawPreview'
@@ -271,7 +271,7 @@
 
 			// //选择地址
 			// selectAddress(data) {
-			// 	console.log(data)
+			// 	this.log(data)
 			// 	this.admin_level = data.type
 			// 	this.admin_number = data.number
 			// 	if (!data.number) {
@@ -296,7 +296,7 @@
 				this.sonData = value.data
 				this.sonDataTotal = value.Total;
 				this.sonVisible = true
-				console.log(value)
+				this.log(value)
 
 			},
 			//检查类企业列表
@@ -412,7 +412,7 @@
 				}
 			},
 			onSelectClear(str) {
-				console.log(str, "??????????????????????????????/");
+				this.log(str, "??????????????????????????????/");
 				this[str] = "";
 				this._initData();
 			},

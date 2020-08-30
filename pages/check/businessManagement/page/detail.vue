@@ -60,9 +60,9 @@
 				uni.navigateTo({
 					url:'./newEnterprise?title=新增经营点&state=jyd',
 					success() {
-						console.log("success")
+						this.log("success")
 					},fail(res) {
-						console.log(res)
+						this.log(res)
 					}
 				})
 			},

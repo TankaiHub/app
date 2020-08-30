@@ -80,7 +80,7 @@
 			},
 			//状态改变提示
 			changeMessage(id, who) {
-				console.log(id)
+				this.log(id)
 				var heeh = '该'
 				if (id.length > 1) {
 					heeh = '这些'

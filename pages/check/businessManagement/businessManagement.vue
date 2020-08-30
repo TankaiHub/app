@@ -442,7 +442,7 @@
 		},
 		onShow() {
 			this._initData();
-			console.log(this.admin_index_addrInfo)
+			this.log(this.admin_index_addrInfo)
 		},
 		methods: {
 			...mapMutations(['set_admin_item_company_info', 'set_admin_index_addrInfo']),
@@ -467,7 +467,7 @@
 				var fxlb = opts.fxlb;
 				//企业规模
 				var scale = opts.scale;
-				console.log(opts)
+				this.log(opts)
 				if (status != "") {
 					this.approval_status = status;
 				}
@@ -495,7 +495,7 @@
 				if (scale != "") {
 					this.scale = scale;
 				}
-				// console.log(status != "",bzh != '',in_cat != '',r_type != '',lb != '' )
+				// this.log(status != "",bzh != '',in_cat != '',r_type != '',lb != '' )
 				if (this.admin_index_addrInfo && this.admin_index_addrInfo != null) {
 					this.addressInfo = this.admin_index_addrInfo;
 					this.cityType = this.addressInfo.finalLevel || "";
@@ -524,7 +524,7 @@
 					bzh: this.bzh,
 					approval_status: this.approval_status,
 				};
-				// console.log(opts)
+				// this.log(opts)
 				this.getCompanyList(opts);
 			},
 			getCompanyList(opts) {
@@ -611,13 +611,13 @@
 				this.page = page - 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "----------------");
+				this.log(this.page, "----------------");
 			},
 			onNext(page) {
 				this.page = page + 1;
 				this.changeState = false;
 				this._initData();
-				console.log(this.page, "+++++++++++++");
+				this.log(this.page, "+++++++++++++");
 			},
 			//////////表格/////////////////
 			//状态改变提示  删除
@@ -638,7 +638,7 @@
 						if (res.confirm) {
 							_self.submitState(id, state);
 						} else if (res.cancel) {
-							console.log('用户点击取消');
+							this.log('用户点击取消');
 						}
 					}
 				});
@@ -649,7 +649,7 @@
 					id: id,
 					state: state,
 				}
-				console.log(por)
+				this.log(por)
 				this.$http.post('qeditState', por).then(res => {
 					if (res.code == 200) {
 						this.changeState = false;
@@ -659,7 +659,7 @@
 			},
 			//x详情
 			qyDetails(row) {
-				console.log(row.company_id);
+				this.log(row.company_id);
 				uni.navigateTo({
 					url: './page/detail'
 				})
@@ -686,7 +686,7 @@
 
 				//是经营点查询账号
 				if (row.operating_point == 2 || showType == 2) {
-					console.log("????????????")
+					this.log("????????????")
 					this.$http.post(showType == 1 ? 'jydaccountGet' : 'jydaccount', opts).then(res => {
 						editdata.account = res.data.account || '未获取到账号'
 						this._changeNav(bool, editdata);
@@ -743,7 +743,7 @@
 					bzh: this.bzh,
 					approval_status: this.approval_status,
 				};
-				console.log('点击') 
+				this.log('点击') 
 				this.$http.post('companyListNExcel', opts).then(res => {
 					if (res.code == 200) {
 						var url = 'http://api.cqgmaq.com/excel/20200823/1598176627沙坪坝区企业名单.xlsx';
@@ -752,14 +752,14 @@
 							url, //仅为示例，并非真实的资源
 							success: (res) => {
 								if (res.statusCode === 200) {
-									console.log('下载成功');
+									this.log('下载成功');
 								}
 								let that = this;
 								uni.saveFile({
 									tempFilePath: res.tempFilePath,
 									success: function(red) {
 										a = red.savedFilePath
-										console.log(red, a)
+										this.log(red, a)
 										uni.showToast({
 											title: "下载完成",
 											icon: 'none'
@@ -770,9 +770,9 @@
 						});
 
 						downloadTask.onProgressUpdate((res) => {
-							console.log('下载进度' + res.progress);
-							console.log('已经下载的数据长度' + res.totalBytesWritten);
-							console.log('预期需要下载的数据总长度' + res.totalBytesExpectedToWrite);
+							this.log('下载进度' + res.progress);
+							this.log('已经下载的数据长度' + res.totalBytesWritten);
+							this.log('预期需要下载的数据总长度' + res.totalBytesExpectedToWrite);
 						});
 					}
 				});
