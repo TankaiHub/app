@@ -350,7 +350,8 @@
 				};
 				this.$http.post('riskSave', opts).then(res=> {
 					if (res.code == 200) {
-						this.log(res)
+						this.log(res);
+						this.$emit("changeNext", true);
 					}
 				});
 			},

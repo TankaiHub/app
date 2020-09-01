@@ -1,7 +1,7 @@
 <template>
 	<view class="app_nav_container">
 		<view class="nav_wrapp">
-			<scroll-view scroll-x="true" class="nv_list_wrap clearfix line_height_30px">
+			<scroll-view scroll-x="true" class="nv_list_wrap clearfix line_height_30px" :scroll-left="s_left">
 				<block v-for="(item, index) in data"
 				 :key="index">
 					<text class="nv_l_item padding_bt_5px line_height_30px" :class="{ border_2px_409eff:index == active, border_2px:index == active, mar_right_10px:index < data.length - 1 }">{{index + 1}}.{{item}}</text>
@@ -16,6 +16,11 @@
 		props: {
 			data: Array,
 			active:Number
+		},
+		computed:{
+			s_left() {
+				return (50 * this.active);
+			}
 		}
 	}
 </script>

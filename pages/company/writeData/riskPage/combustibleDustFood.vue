@@ -138,6 +138,10 @@
 	import LbPicker from '@/components/lb-picker'
 	import appPickerSelect from '@/components/app-picker/app-picker-select'
 	import multipleSelect from "@/components/momo-multipleSelect/momo-multipleSelect"
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -311,6 +315,7 @@
 			multipleSelect
 		},
 		computed: {
+			...mapState(['userInfo']),
 			com_dustTypeData() {
 				switch (this.dustType) {
 					case '机械':
@@ -679,7 +684,10 @@
 					type: 3
 				};
 				this.$http.post("riskSave", opts).then(res => {
-					this.log(res)
+					if (res.code == 200) {
+						this.log(res);
+						this.$emit("changeNext", true);
+					}
 				});
 			}
 		}

@@ -123,6 +123,9 @@
 		{//首页 --企业风险信息填写 -- 轻工 -- 食品
 			"path": "pages/company/writeData/riskMainPage/food" 
 		}, 
+		{//首页 --企业info -table
+			"path": "pages/company/companyTable/companyTable" 
+		}, 
 		{
 			"path":"pages/test"
 		}

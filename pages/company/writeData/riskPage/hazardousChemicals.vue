@@ -328,9 +328,17 @@
 					state: this.isNotInvolv ? 2 : 1,
 					type: 4,
 					content: JSON.stringify(temp)
-				}
-				console.log(opts)
+				} 
 				return opts;
+			},
+			submit() {
+				var opts = this.getData();
+				this.$http.post('riskSave', opts).then(res=> {
+					if (res.code == 200) {
+						this.log(res);
+						this.$emit("changeNext", true);
+					}
+				});
 			},
 		}
 	}
