@@ -96,7 +96,7 @@ var comNavData = [{
 	},
 	{
 		text: '企业信息',
-		href: ''
+		href: '/pages/company/companyTable/companyTable'
 	},
 	{
 		text: '安全技术要求',

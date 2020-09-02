@@ -38,7 +38,10 @@
 			},
 			_initData() {
 				var opts = {
-					company_id:this.userInfo.company_id || 2282
+					company_id:this.userInfo.company_id || 2433,
+					//2478,
+					// 2433, 食品
+					// 2282
 				};
 				this._getInfo(opts);
 				this._getRiskInfo(opts);

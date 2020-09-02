@@ -795,7 +795,7 @@
 			//提交数据  下一步
 			onSubmit() {
 				var opts = this.baseInfoData;
-				opts.company_id = 2437;
+				opts.company_id = this.userInfo.company_id;
 				if (!this.isIndividual) {
 					opts.security_officer = (this.security_officer || '') + ',' + (this.security_officer2 || '');
 				}else {

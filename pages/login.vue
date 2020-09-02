@@ -94,6 +94,7 @@
 					account,
 					password
 				};
+				var _self = this;
 				this.$http.post("login", opts).then(res => {
 					this.log(res)
 					if (res.code == 200) { 
@@ -103,7 +104,7 @@
 						uni.reLaunch({
 							url: './company/home/home',
 							fail(err) {
-								this.log('err', err)
+								_self.log('err', err)
 							}
 						});
 					}
