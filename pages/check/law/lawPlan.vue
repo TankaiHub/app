@@ -19,8 +19,50 @@
 
 			</view>
 			<view class="a_l_p_table_wrap">
-
-				<app-table :tableData="listData" :isClickBar="isClickBar" :pageSize="pageSize" :page="page" v-model="changeState">
+				<app-table-new  :tableData="listData" textAlign="left" :isClickBar="isClickBar" :headerArray="headerArray" :isShowExpand='isShowExpand' :showContent="showContent" :isShowCell="true">
+					<block slot="content"  slot-scope="props">
+						<view class="table_hide_total_container" v-if="props.data">
+							<view class="table_hide_info_wrap">
+								<view class="a_t_li clearfix" @click="onLaw('quantity', props.data)">
+									<label>企业数量</label>
+									<view class="clearfix info_bd">
+										{{props.data.company_count}}
+										<i class=" right_icon el-icon-arrow-right"></i>
+									</view>
+								</view>
+								<view class="a_t_li clearfix" @click="onLaw('then', props.data)">
+									<label>已检查</label>
+									<view class="clearfix info_bd">
+										{{props.data.complete_count}}
+										<i class="right_icon el-icon-arrow-right"></i>
+									</view>
+								</view>
+								<view class="a_t_li clearfix" @click="onLaw('not', props.data)">
+									<label>未检查</label>
+									<view class="clearfix info_bd">
+										{{ props.data.company_count - props.data.complete_count >= 0 ? props.data.company_count - props.data.complete_count : 0}}
+										<i class="right_icon el-icon-arrow-right"></i>
+									</view>
+								</view>
+								<view class="a_t_li clearfix" @click="onLaw('complete', props.data)">
+									<label>整改完成</label>
+									<view class="clearfix info_bd">
+										{{props.data.zgwc_count}}
+										<i class="right_icon el-icon-arrow-right"></i>
+									</view>
+								</view>
+								<view class="a_t_li clearfix" @click="onLaw('in', props.data)">
+									<label>整改中</label>
+									<view class="clearfix info_bd">
+										{{props.data.zgz_count}}
+										<i class="right_icon el-icon-arrow-right"></i>
+									</view>
+								</view>
+							</view>
+						</view>
+					</block>
+				</app-table-new>
+				<!-- <app-table :tableData="listData" :isClickBar="isClickBar" :pageSize="pageSize" :page="page" v-model="changeState">
 					<app-table-column type="expand" width="30"></app-table-column>
 					<app-table-column label="检查时间" type="time-yy-mm" prop="task_time" width="100"></app-table-column>
 					<app-table-column label="检查类型" prop="type" width="200" center></app-table-column>
@@ -66,7 +108,7 @@
 						</view>
 					</template>
 				</app-table>
-
+ -->
 				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
 				 @onNext="onNext"></app-pagination>
 			</view>
@@ -81,14 +123,15 @@
 	import appPagination from '@/components/app-table/app-pagination'
 	import appTable from '@/components/app-table/app-table'
 	import appTableColumn from "@/components/app-table/app-table-column"
-
+	
+	import appTableNew from "@/components/app-table/app-table-new"
 	import {
 		mapState,
 		mapMutations
 	} from "vuex"
 	import {
 		changeTime
-	} from "@/utils/utils.js"
+	} from "@/common/js/base.js"
 	export default {
 
 		data() {
@@ -98,8 +141,27 @@
 			return {
 				changeState: false,
 				isClickBar: true,
-				tableData: [],
-				changeTime,
+				isShowExpand: true, //表格是否展开
+				headerArray: [
+					{
+						key:'检查时间', 
+						width:100,	 
+					},
+					{
+						key:'检查类型', 
+						width:100
+					}
+				],
+				showContent:[{
+					key:'task_time',
+					isInWidth:false,
+					width:100,  
+				},{
+					key:'type',
+					isInWidth:false,
+					width:100, 
+				}],
+				tableData: [], 
 				page: 1,
 				pageSize: 10,
 				total: 0,
@@ -143,7 +205,8 @@
 			appPickerTime,
 			appPagination,
 			appTable,
-			appTableColumn
+			appTableColumn,
+			appTableNew
 		},
 		onShow() {
 			this._initData();
@@ -179,6 +242,7 @@
 				this.$http.post('taskListC', opts).then(res => {
 					var data = res.data;
 					for (var i = 0; i < data.length; i ++) {
+						data[i]['task_time'] = changeTime(data[i]['task_time'], 'yy-mm');
 						if (data[i].type == 1) {
 							data[i].type = '计划检查'
 						}else {

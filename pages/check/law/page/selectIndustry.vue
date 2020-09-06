@@ -26,8 +26,26 @@
 			</view>
 			<view class="sel_ind_table_wrap app_table_wrap">
 
-
-				<app-table :tableData="tableData" ref="table" :pageSize="pageSize" :page="page" :isShowExpand="isShowExpand" v-model="changeState"
+				<app-table-new :tableData="tableData" :headerArray="headerArray" :showContent="showContent" ref="table" :isShowIndex="true" :isShowExpand="isShowExpand" :isShowCheckbox="isShowCheck">
+					<block slot="content" slot-scope="props">
+						<view class="table_hide_total_container" v-if="props.data">
+							<view class="a_t_ul table_hide_info_wrap"> 
+								<view class="a_t_li reg_addr clearfix">
+									<label>社信代码</label>
+									<view class="info_bd">{{props.data.credit_code}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>生产经营状态</label>
+									<view class="info_bd">
+										{{ (props.data.produce_state == "" || props.data.produce_state == null) ? "" : produce_stateTo[props.data.produce_state]}}
+									</view>
+								</view>
+							</view>
+						</view>
+					
+					</block>
+				</app-table-new>
+				<!-- <app-table :tableData="tableData" ref="table" :pageSize="pageSize" :page="page" :isShowExpand="isShowExpand" v-model="changeState"
 				 :isShowCheck="isShowCheck">
 					<app-table-column type="expand"></app-table-column>
 					<app-table-column type="check"></app-table-column>
@@ -53,7 +71,7 @@
 						</view>
 
 					</template>
-				</app-table>
+				</app-table> -->
 				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
 				 @onNext="onNext"></app-pagination>
 
@@ -76,11 +94,30 @@
 	import appTableBody from "@/components/app-table/app-table-body"
 	import appTableColumn from "@/components/app-table/app-table-column"
 	
+	import appTableNew from "@/components/app-table/app-table-new"
+	
 	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
 				drawerVisible: false,
+				headerArray: [
+					{
+						key:'序号', 
+						width:40,	
+						isInWidth:false,
+					},
+					{
+						key:'企业名称',
+						isInWidth:true,
+						width:0
+					}
+				],
+				showContent:[{
+					key:'name',
+					isInWidth:true,
+					width:0,
+				}],
 				searchVal: '',
 				industry_category: '0',
 				industryCategorySelectData: [{
@@ -271,6 +308,7 @@
 			appTable,
 			appTableBody,
 			appTableColumn,
+			appTableNew
 		},
 		computed:{
 			...mapState(['admin_law_add_company']),
@@ -361,7 +399,7 @@
 				})
 			},
 			onDetermine() {
-				var tableData = this.$refs.table.getTableData();
+				var tableData = this.$refs.table.getCheckItem();
 				if (tableData.length == 0) {
 					uni.showToast({
 						title:"请选择企业",

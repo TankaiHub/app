@@ -21,7 +21,29 @@
 				</uni-list-item>
 			</uni-list>
 			<view class="a_com_table_wrap" v-if="isShowTable">
-				<app-table :tableData="tableData" :isShowExpand="isShowExpand" v-model="changeState" :isClickBar="isClickBar">
+				<app-table-new  :tableData="tableData":headerArray="headerArray" :showContent="showContent" :isShowIndex="true" :isShowExpand="isShowExpand" :isClickBar="isClickBar">
+					<block slot="content" slot-scope="props" v-if="props.data">
+						<view class="table_hide_total_container">
+							<view class="a_t_ul table_hide_info_wrap">
+					
+								<view class="a_t_li reg_addr clearfix">
+									<label>社信代码</label>
+									<view class="info_bd">{{props.data.credit_code}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>生产经营状态</label>
+									<view class="info_bd">
+										{{ (props.data.produce_state == "" || props.data.produce_state == null) ? "" : produce_stateTo[props.data.produce_state]}}
+									</view>
+								</view>
+								<view class="tb_hide_btn_wrap">
+									<button type="warn" @click="onDelete(props.data)" class="btn_tb">删除</button>
+								</view>
+							</view>
+						</view> 
+					</block>
+				</app-table-new>
+				<!-- <app-table :tableData="tableData" :isShowExpand="isShowExpand" v-model="changeState" :isClickBar="isClickBar">
 					<app-table-column type="expand"></app-table-column>
 					<app-table-column type="index" label="序号" width="40">
 					</app-table-column>
@@ -48,7 +70,7 @@
 						</view>
 
 					</template>
-				</app-table>
+				</app-table> -->
 				<view class="cancel_determine_btn_wrap">
 					<button class="cancel_btn half can_det_btn" @click="onCancel" type="default">取消</button>
 					<button class="determine_btn half can_det_btn" @click="onDetermine" type="primary">确认</button>
@@ -70,7 +92,8 @@
 	import appTable from '@/components/app-table/app-table'
 	import appTableBody from "@/components/app-table/app-table-body"
 	import appTableColumn from "@/components/app-table/app-table-column"
-
+	
+	import appTableNew from "@/components/app-table/app-table-new"
 	import {
 		mapState,
 		mapMutations
@@ -85,6 +108,23 @@
 				isClickBar: true,
 				isShowTable: false,
 				drawerVisible: false,
+				headerArray: [
+					{
+						key:'序号', 
+						width:40,	
+						isInWidth:false,
+					},
+					{
+						key:'企业名称',
+						isInWidth:true,
+						width:0
+					}
+				],
+				showContent:[{
+					key:'name',
+					isInWidth:true,
+					width:0,
+				}],
 				typeValue: '',
 				typeData: [{
 					label: "计划检查",
@@ -122,6 +162,7 @@
 			appTable,
 			// appTableBody,
 			appTableColumn,
+			appTableNew
 		},
 		computed: {
 			...mapState(['admin_law_add_company', 'admin_law_plan_info', "admin_law_add_company_select_info"]),
@@ -202,6 +243,10 @@
 			},
 			onCancel() {
 				this.log(this.source)
+				this.$store.commit("set_admin_law_add_company", []);
+				this.$store.commit("set_admin_law_add_company_select_info", {});
+				this.typeValue = "";
+				this.timeStr = "";
 				if (this.source == 'm') {
 					uni.navigateTo({
 						url: '../lawPlan'

@@ -55,12 +55,47 @@
 				<button class="app_bm_btn" @click="onNewEnterprise" type="primary">新增企业</button>
 				<button class="app_bm_btn" @click="onExportExcel" type="primary">导出excel</button>
 			</view>
-			<view class="app_table_wrap">
+			<view class="app_table_wrap"> 
+				<!-- isShowExpand 是否可以展开 -->
+				<app-table-new :tableData="tableData" :isShowExpand="isShowExpand"  :headerArray='headerArray' :showContent="showContent" :isShowIndex="true"> 
+					<block class="" slot="content" slot-scope="props">
+						<view class="table_hide_total_container" v-if="props.data">
+							<view class="a_t_ul table_hide_info_wrap"> 
+								<view class="a_t_li reg_addr clearfix">
+									<label>企业地址</label>
+									<view class="info_bd">{{props.data.produce_address || props.data.reg_address || "无"}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>生产经营状态</label>
+									<view class="info_bd">
+										{{ (props.data.produce_state == "" || props.data.produce_state == null) ? "" : produce_stateTo[props.data.produce_state]}}
+									</view>
+								</view>
+								<view class="a_t_li">
+									<label>审核状态</label>
+									<view class="info_bd">
+										{{props.data.approval_status==''?'审核状态':approvalStatusTo[props.data.approval_status]}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>企业规模</label>
+									<view class="info_bd">{{props.data.scale}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>从业人数</label>
+									<view class="info_bd">{{props.data.number_of_employees || 0}}人</view>
+								</view>
+							</view>
+							<view class="tb_hide_btn_wrap">
+								<button type="warn" @click="changeMes(props.data.id,0)" class="btn_tb">删除</button>
+								<button @click="editShow(props.data, 1, false)" size="small" type="primary" class="btn_tb" v-if="props.data.approval_status!=3">详情</button>
+								<button size="small" type="info" v-if="props.data.approval_status==3" class="btn_tb" style="color: #C0C4CC">详情</button>
+								<button @click="editShow(props.data,1, true)" size="small" type="primary" class="btn_tb">编辑</button>
+							</view>
+						</view> 
+					</block>
+				</app-table-new>
 
-
-
-
-				<app-table :tableData="tableData" :pageSize="pageSize" :page="page" :headerArray='headerArray' :isShowExpand="isShowExpand"
+				<!-- <app-table :tableData="tableData" :pageSize="pageSize" :page="page" :headerArray='headerArray' :isShowExpand="isShowExpand"
 				 v-model="changeState">
 					<app-table-column type="expand"></app-table-column>
 
@@ -102,10 +137,11 @@
 								<button size="small" type="info" v-if="props.data.approval_status==3" class="btn_tb" style="color: #C0C4CC">详情</button>
 								<button @click="editShow(props.data,1, true)" size="small" type="primary" class="btn_tb">编辑</button>
 							</view>
-						</view>
-
+						</view> 
 					</template>
-				</app-table>
+				</app-table> -->
+				
+				
 				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
 				 @onNext="onNext"></app-pagination>
 			</view>
@@ -126,6 +162,10 @@
 	import appTable from '@/components/app-table/app-table'
 	import appTableBody from "@/components/app-table/app-table-body"
 	import appTableColumn from "@/components/app-table/app-table-column"
+	
+	import appTableNew from "@/components/app-table/app-table-new"
+	
+	
 
 	import {
 		mapState,
@@ -141,7 +181,23 @@
 			return {
 				changeState: false,
 				isShowExpand: true, //表格是否展开
-				headerArray: ['序号', '企业名称'],
+				headerArray: [
+					{
+						key:'序号', 
+						width:40,	
+						isInWidth:false,
+					},
+					{
+						key:'企业名称',
+						isInWidth:true,
+						width:0
+					}
+				],
+				showContent:[{
+					key:'name',
+					isInWidth:true,
+					width:0,
+				}],
 				page: 1,
 				pageSize: 10,
 				total: 0,
@@ -152,7 +208,7 @@
 				cityType: '', //城镇类型 
 				addressInfo: {},
 				industry_category: '0',
-
+				
 
 
 				//地址选择 默认值
@@ -433,6 +489,7 @@
 			appTable,
 			appTableBody,
 			appTableColumn,
+			appTableNew
 		},
 		onLoad(opts) {
 			this._parsingData(opts);

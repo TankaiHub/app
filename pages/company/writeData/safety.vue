@@ -12,7 +12,7 @@
 					</view>
 				</uni-list-item>
 
-				<block v-if="!isIndividual"> 
+				<block v-if="!isIndividual">
 					<uni-list-item title="房屋产权证" :showArrow="false">
 						<view class="n_ent_list_down_wrap" slot="right">
 							<app-picker-select :selectData="propertyCertArray" :selectValue="safetyData.property_cert" placeholder="请选择房屋产权证"
@@ -49,7 +49,7 @@
 						<view class="n_ent_list_down_wrap" slot="right">
 							<input type="text" placeholder="请输入其他投保情况" placeholder-style="color:#ccc" class="text_align_right" v-model="safetyData.insuredOther" />
 						</view>
-					</uni-list-item> 
+					</uni-list-item>
 				</block>
 
 
@@ -271,12 +271,12 @@
 					value: "3",
 					show: true,
 				}],
-				test:''
+				test: ''
 			}
 		},
 		computed: {
 			...mapState(["userInfo"]),
-		}, 
+		},
 		components: {
 			appPickerSelect,
 			multipleSelect,
@@ -295,7 +295,7 @@
 			_getInfo() {
 				var opts = {
 					company_id: this.userInfo.company_id || 2244
-				}; 
+				};
 				this.log("11111111111111");
 				this.$http.post('info', opts).then(res => {
 					if (res.code == 200) {
@@ -346,13 +346,13 @@
 				this['energy2'] = allEnergy[1] || '';
 				if (this['energy2'] == 2) {
 					this.isShowCannedMode = true;
-				} 
+				}
 				this['energy3'] = allEnergy[2] || '';
 				this['energy4'] = allEnergy[3] || '';
 				this['energy4Unit'] = allEnergy[4] || '';
 				this.log(this['energy4Unit'], '111')
 				this['energy5'] = allEnergy[5] || '';
-				this.test = allEnergy[4] 
+				this.test = allEnergy[4]
 				//获取到投保数据
 				this.insuredDefaultSelected = this._changeStr(data.insured, ',');
 				//投保默认值
@@ -412,7 +412,7 @@
 						this.energy2 = "";
 						this.energy3 = "";
 						this.energy4 = "";
-						this.energy4Unit = ""; 
+						this.energy4Unit = "";
 					}
 				}
 			},
@@ -434,7 +434,7 @@
 				this.safetyData.insured = data.map((el) => {
 					if (el.value == "3") {
 						this.isShowInsuredOther = true;
-					}else if (el.value == '0') {
+					} else if (el.value == '0') {
 						this.safetyData.insuredOther = '';
 					}
 					return el.value;
@@ -457,7 +457,7 @@
 					this.energy2 = "";
 					this.energy3 = "";
 					this.energy4 = "";
-					this.energy4Unit = ""; 
+					this.energy4Unit = "";
 				}
 				if (!this.isShowPowerDistributionRoom) {
 					this.energy5 = '';
@@ -475,12 +475,11 @@
 					this.$http.post('safeInfoSave', opts).then(res => {
 						if (res.code == 200) {
 							var url = '';
-							if (this.isIndividual) {//个体
+							if (this.isIndividual) { //个体
 								url = './riskMainPage/individual';
-							}else {
-								
-							}
-
+							} else {
+								url = this._changeUrl();
+							} 
 							uni.showToast({
 								title: res.msg,
 								icon: "success",
@@ -490,6 +489,9 @@
 											url
 										})
 									}, 1500);
+								},
+								fail(err) {
+									console.log(err)
 								}
 							})
 						}
@@ -499,6 +501,37 @@
 					uni.navigateTo({
 						url: './base'
 					})
+				}
+			},
+			_changeUrl() {
+				var name = this.safetyData.industry_category_zfl;
+				switch (name) { 
+					case '塑料':
+						return './riskMainPage/plastic';
+					case '纺织':
+						return './riskMainPage/textile';
+					case '食品':
+						return './riskMainPage/food';
+					case '建材':
+						return './riskMainPage/buildingMaterials';
+					case '纸制品':
+						return './riskMainPage/paperProducts';
+					case '商贸':
+						return './riskMainPage/business';
+					case '轻工':
+						return './riskMainPage/industryFurniture'; //comm
+					case '家具':
+						return './riskMainPage/industryFurniture'; //comm
+					case '机械':
+						return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '烟草':
+						return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '冶金':
+						return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '有色':
+						return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					default:
+						return '';
 				}
 			},
 		}

@@ -46,7 +46,7 @@
 								</td>
 								<td :colspan="ele.col" v-if="ele.value != null && ele.show" class="border_1px_all_409eff padding_8px border_right_none border_bottom_none"
 								 :class="{ border_top_none:index == 0 }">
-									{{ele.value}}
+									<text>{{ele.value}}</text>
 								</td>
 							</block>
 						</tr>
@@ -84,6 +84,56 @@
 				baseData: [],
 				safetyData: [],
 				riskData: [],
+				commonCol:3,//跨行
+				//特殊作业
+				hoistingData: [{
+						checkName: '行车',
+						checkValue: 'trainCheck',
+						num: 'trainNum',
+						numProp: 'trainNum',
+						man: 'trainMan',
+						manProp: 'trainMan'
+					},
+					{
+						checkName: '叉车',
+						checkValue: 'forkliftCheck',
+						num: 'forkliftNum',
+						numProp: 'forkliftNum',
+						man: 'forkliftMan',
+						manProp: 'forkliftMan'
+					},
+					{
+						checkName: '其他',
+						checkValue: 'otherCheck',
+						num: 'otherNum',
+						numProp: 'otherNum',
+						man: 'otherMan',
+						manProp: 'otherMan'
+					},
+				],
+				dhData: [{
+						checkName: '气焊(割)',
+						checkValue: 'cutCheck',
+						num: 'cutNum',
+						out: 'cutOut',
+						name: 'cutName',
+						code: 'cutCode',
+						type: 'cutType',
+						contact: 'cutContact',
+						phone: 'cutPhone'
+					},
+					{
+						checkName: '电焊',
+						checkValue: 'dcCheck',
+						num: 'dcNum',
+						out: 'dcOut',
+						name: 'dcName',
+						code: 'dcCode',
+						type: 'dcType',
+						contact: 'dcContact',
+						phone: 'dcPhone'
+					},
+				],
 			}
 		},
 		components: {
@@ -134,10 +184,7 @@
 				}
 			},
 		},
-		created() {
-
-
-		},
+		created() {},
 		methods: {
 			//基本信息
 			_getBaseInfo(nv) {
@@ -240,12 +287,31 @@
 				} catch (e) {
 					this.log(e)
 				}
-
+				var space = [];
+				var dust = [];
 				switch (type) {
 					case 1:
-
+						if (obj.space) {
+							var opts = obj.space;
+							all.push(...this._changeSpace1(opts));
+						} else if (obj.space2) {
+							var opts = obj.space2;
+							all.push(...this._changeSpace2(opts));
+						} else if (obj.space3) {
+							var opts = obj.space3;
+							var list = obj.infoData;
+							all.push(...this._changeSpace3(opts, list));
+						}
 						break;
 					case 2:
+						if (obj.workOne != undefined) {
+							var opts = obj.workOne;
+							all.push(...this._changeSpecialJob1(opts));
+						} else if (obj.workTwo != undefined) {
+							var opts = obj.workTwo;
+							this._changeSpecialJob2(opts);
+							all.push(...this._changeSpecialJob2(opts));
+						}
 						break;
 					case 3:
 						if (obj.dustOne != undefined) {
@@ -268,6 +334,257 @@
 						break;
 				}
 				return all;
+			},
+			//特殊作业及特种设备 1
+			_changeSpecialJob1(opts) {
+				this.log(opts, '特殊作业及特种设备 1');
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var all = [];
+				var devicTempArr = [ [this._changeTabelValue('吊装转运', null, w, keyW)] ]; //吊装转运
+				var hoistingArr = this._comparedCommon(opts, this.hoistingData, false, 'ts');
+				var hoistTempArr = [
+					[this._changeTabelValue('动火作业', null, w, keyW)]
+				]; //动火作业
+				this._commonSpecialJob(all, opts, w, keyW, devicTempArr);
+				this._specialFillArr(hoistTempArr, hoistingArr);
+				hoistTempArr[0][0]['row'] = hoistTempArr.length;
+				   
+				if (hoistTempArr.length > 1) {
+					all.push(...hoistTempArr);
+				}
+				if (devicTempArr.length > 1) {
+					all.push(...devicTempArr);
+				}
+				all[0][0]['row'] = all.length;
+				return all;
+			},
+			//特殊作业及特种设备 2
+			_changeSpecialJob2(opts) {
+				this.log(opts, "特殊作业及特种设备 2");
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var all = [];
+				
+				var fireTempArr = [ [ this._changeTabelValue('动火作业', null, w, keyW) ] ];
+				var devicTempArr = [ [this._changeTabelValue('吊装转运', null, w, keyW)] ]; //吊装转运
+				var electricityArr = [ [ this._changeTabelValue('电工作业', null, w, keyW) ] ];
+				var fireArr = this._comparedCommon(opts, this.dhData, true); 
+				this._commonSpecialJob(all, opts, w, keyW, devicTempArr);
+				this._fillArr(fireTempArr, fireArr, w, keyW, true, 'ts');
+				
+				electricityArr.push([  
+					this._changeTabelValue('', `${opts.uniqueSelect == 1 ? '有' : '无'}专用变电站/配电房(室)`, w, keyW, this.commonCol)
+				]);
+				if (opts.uniqueSelect == 1) {
+					electricityArr.push([  
+						this._changeTabelValue('',  opts.uniqueWork == 1 ? '自有电工作业' : '外包电工作业', w, keyW),
+						this._changeTabelValue('',  `作业人员${opts.uniqueWorkNum}名`, w, keyW, this.commonCol - 1),
+					]);
+				}
+				
+				fireTempArr[0][0]['row'] = fireTempArr.length;  
+				electricityArr[0][0]['row'] = electricityArr.length;
+				all.push(...electricityArr); 
+				if (fireTempArr.length > 1) {
+					all.push(...fireTempArr);
+				}
+				if (devicTempArr.length > 1) {
+					all.push(...devicTempArr);
+				}
+				all[0][0]['row'] = all.length;
+				return all;
+			},
+			_commonSpecialJob(all, opts, w, keyW, devicTempArr) { 
+				var deviceData = opts.deviceData;
+				var devicegArr = this._comparedCommon(opts, deviceData, false, 'ts');
+				
+				all.push([this._changeTabelValue("特殊作业", null, w, keyW)]);
+
+				this._specialFillArr(devicTempArr, devicegArr);
+
+				devicTempArr[0][0]['row'] = devicTempArr.length;
+
+			},
+			//特殊作业 填充arr
+			_specialFillArr(arr, sourceArr, w, keyW) {
+				var temp = [];
+				for (var i = 0; i < sourceArr.length; i++) {
+					temp.push([this._changeTabelValue(sourceArr[i]['name'], null, w, keyW),
+						this._changeTabelValue("", '数量' + sourceArr[i]['value'] + '台', w, keyW),
+						this._changeTabelValue("", '作业人员' + sourceArr[i]['man'] + '名', w, keyW)
+					]);
+				}
+				arr.push(...temp);
+			},
+			//有限空间 -- Space1
+			_changeSpace1(opts) {
+				this.log(opts)
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var all = [];
+				var list = opts.listData;
+				var listArr = this._comparedCommon(opts, list, true);
+				all.push([this._changeTabelValue("有限空间", null, w, keyW)]);
+				this._fillArr(all, listArr, w, keyW, true);
+				console.log(listArr, '1111111111')
+				all[0][0].row = all.length;
+				return all;
+			},
+			//有限空间 -- Space2
+			_changeSpace2(opts) {
+				this.log(opts, "有限空间 -- Space2");
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var leftData = opts.leftData;
+				var rightBotData = opts.rightBotData;
+				var rightTopData = opts.rightTopData;
+				var leftArr = this._comparedCommon(opts, leftData);
+				var rightBotArr = this._comparedCommon(opts, rightBotData);
+				var rightTopArr = this._comparedCommon(opts, rightTopData);
+				console.log(leftArr, rightBotArr, rightTopArr);
+				var all = [];
+				all.push([this._changeTabelValue("有限空间", null, w, keyW)]);
+				this._fillArr(all, leftArr, w, keyW);
+				this._fillArr(all, rightBotArr, w, keyW);
+				this._fillArr(all, rightTopArr, w, keyW);
+				all[0][0].row = all.length;
+				return all;
+			},
+			//有限空间 -- Space3
+			_changeSpace3(opts, list) {
+				this.log(opts, list)
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var all = [];
+				var listArr = this._comparedCommon(opts, list, true);
+				all.push([this._changeTabelValue("有限空间", null, w, keyW)]);
+				this._fillArr(all, listArr, w, keyW, true);
+				all[0][0].row = all.length;
+				return all;
+			},
+			//填充 有限空间 -- Space 数组  从0开始的异世界
+			_fillArr(all, arr, w, keyW, out = false, state) {
+				var len = arr.length;
+				var temp = [];
+				var outTo = {
+						1: '是',
+						2: '不是'
+					},
+					typeTo = {
+						1: '企业',
+						2: '个人'
+					};
+				for (var i = 0; i < len; i++) {
+					if (out) {
+						var str = ``;
+						if (arr[i]['out'] == '1') {
+							str =
+								`${ outTo[arr[i]['out']] }外包作业；
+									  承包方类型：${ typeTo[arr[i]['out']] }；
+									  ${ arr[i]['type'] == 1 ? '信用代码' : '特种作业操作证编号' }：${ arr[i]['code'] }；
+									  ${ arr[i]['type'] == 1 ?  '联系人：' + arr[i]['contact'] : '' }
+									  联系电话：${ arr[i]['phone'] }`;
+						} else {
+							str = `${ outTo[arr[i]['out']] }外包作业；`;
+						}
+
+						
+						if (state == 'ts') {
+							console.log(arr[i], "================")
+							temp.push([
+								this._changeTabelValue(arr[i]['name'], null, w, keyW),
+								this._changeTabelValue("", '作业人员' + arr[i]['num'] + '名', w, keyW) ,
+								this._changeTabelValue('', str, w, keyW, 2)
+								]) 
+						}else { 
+							temp.push([this._changeTabelValue(arr[i]['name'], arr[i]['value'] + '个', w, keyW),
+								this._changeTabelValue('', str, w, keyW, 2)])
+						}
+
+					} else {
+
+						temp.push(this._changeTabelValue(arr[i]['name'], arr[i]['value'] + '个', w, keyW))
+					}
+				}
+				if (out) {
+					all.push(...temp)
+				} else {
+					var originArr = [];
+					this.handleArr(temp, originArr, 2);
+					all.push(...originArr);
+				}
+
+			},
+			//数组 拆分 根据num拆分 最终返回新数组
+			/**
+			 * @param {Object} arr 源数组
+			 * @param {Object} oarr 新数组
+			 * @param {Object} num 每次拆分的个数
+			 */
+			handleArr(arr, oarr, num) {
+				if (arr.length == 0) {
+					return oarr;
+				} else {
+					oarr.push(arr.splice(0, num));
+					for (var i = 0; i < oarr.length; i++) {
+						if (oarr[i].length == 1) {
+							oarr[i][0]['col'] = 3;
+						}
+						console.log(oarr)
+					}
+					this.handleArr(arr, oarr, num);
+				}
+			},
+			//对比对象和数组中相同 再将相同的返回 
+			_comparedCommon(opts, arr, out = false, state) {
+				var narr = [];
+				for (var prop in opts) {
+					for (var i = 0; i < arr.length; i++) {
+						var temp = arr[i];
+						if (prop == temp['checkValue']) {
+							if (opts[temp['checkValue']]) {
+								if (out) {
+									narr.push({
+										name: temp['checkName'],
+										value: opts[temp['num']],
+										out: opts[temp['out']], //是否外包作业
+										type: opts[temp['type']], //承包方类型
+										unitOrCompanyName: opts[temp['name']], //'单位名称'  '个人姓名'
+										code: opts[temp['code']], //'信用代码'  '特种作业操作证编号'
+										phone: opts[temp['phone']], //联系电话
+										contact: opts[temp['contact']] || '', //联系人
+										num:opts[temp['num']] || '', //作业人数
+									});
+								} else {
+									if (state == 'ts') { //特殊作业
+										narr.push({
+											name: temp['checkName'],
+											value: opts[temp['num']],
+											man: opts[temp['man']], //作业人数
+										});
+									} else {
+										narr.push({
+											name: temp['checkName'],
+											value: opts[temp['num']]
+										});
+									}
+								}
+							}
+						}
+					}
+				}
+				return narr;
 			},
 			//  //可燃性粉尘
 			_changeDustOne(opts) {
@@ -307,7 +624,7 @@
 				var contentW = this.s_width - 20 - 4 - 70;
 				var half = contentW / 2 - 70;
 				var keyW = 70;
-				var all = []; 
+				var all = [];
 				this._changeCommonDust(opts, all, w, keyW);
 				var mode = [this._changeTabelValue('清灰方式', dustClearTo[opts.dustClear], w, keyW)];
 				if (opts.dustClear != 3) {
@@ -358,21 +675,28 @@
 				var all = [];
 				this._changeCommonDust(opts, all, w, keyW);
 				var temp = [];
-				if (opts.dustOut == 1) { 
-					all.push([this._changeTabelValue('出尘设备', opts.dustEqui + '套', w, keyW), this._changeTabelValue('作业人数', opts.workNum, w, keyW)]); 
+				if (opts.dustOut == 1) {
+					temp.push(this._changeTabelValue('出尘设备', opts.dustEqui + '套', w, keyW), this._changeTabelValue('作业人数', opts.workNum,
+						w, keyW));
 				} else if (opts.dustOut == 2) {
-					all.push([this._changeTabelValue('集尘方式', setDustTo[opts.setDust], w, keyW)]); 
+					temp.push(this._changeTabelValue('集尘方式', setDustTo[opts.setDust], w, keyW));
 					if (opts.setDust == 1) {
-						all.push([this._changeTabelValue('主要尘降设施', dustLandTo[opts.dustLand], w, keyW), 
-								  this._changeTabelValue('防爆设施', this._changeArray2Str(opts.preventExp), w, keyW)]); 
+						all.push([this._changeTabelValue('主要尘降设施', dustLandTo[opts.dustLand], w, keyW),
+							this._changeTabelValue('防爆设施', this._changeArray2Str(opts.preventExp), w, keyW)
+						]);
 					} else if (opts.setDust == 2) {
-						all.push([this._changeTabelValue('集尘设施', dustFaciTo[opts.dustFaci], w, keyW)]); 
+						temp.push(this._changeTabelValue('集尘设施', dustFaciTo[opts.dustFaci], w, keyW));
 					} else if (opts.setDust == 3) {
-						all.push([this._changeTabelValue('工位', opts.postNum + '个', w, keyW)]); 
+						temp.push(this._changeTabelValue('工位', opts.postNum + '个', w, keyW));
 					}
 				}
-				all.push([this._changeTabelValue('粉尘清洗频次',`每天${opts.dustRinseNum || 0}次`, w, keyW, 3)]); 
-				
+				if (temp.length == 1) {
+					temp.push(this._changeTabelValue('粉尘清洗频次', `每天${opts.dustRinseNum || 0}次`, w, keyW));
+				} else {
+					all.push([this._changeTabelValue('粉尘清洗频次', `每天${opts.dustRinseNum || 0}次`, w, keyW, 3)]);
+				}
+				all.push(temp);
+
 				all[0][0].row = all.length;
 				return all;
 			},
@@ -440,11 +764,12 @@
 				}
 				if (listData.length > 4) {
 					for (var i = 4; i < listData.length; i++) {
-						if (dataS[listData[i].checkValue]) {
+						var snap = listData[i];
+						if (dataS[snap['checkValue']]) {
 							temp.push([
-								this._changeTabelValue("", listData[i].checkName, w, keyW),
-								this._changeTabelValue("", `${dataS[listData[i].num]}个`, w, keyW),
-								this._changeTabelValue("", `${listData[i].specName}:${dataS[listData[i].specNum]}`, w, keyW, 2)
+								this._changeTabelValue("", snap['checkName'], w, keyW),
+								this._changeTabelValue("", `${ dataS[snap['num']] }个`, w, keyW),
+								this._changeTabelValue("", `${ snap['specName'] }:${ dataS[snap['specNum']] }`, w, keyW, 2)
 							])
 						}
 					}

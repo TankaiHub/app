@@ -1,6 +1,6 @@
 export default {
 	props: {
-		data: Object
+		data: Object 
 	},
 	computed: {
 		owner() {
@@ -12,20 +12,16 @@ export default {
 		},
 	},
 	render: function(h) {
-		let _content = this.owner.$scopedSlots.content();
+		let col = this.owner.$scopedSlots.col();
 		return h(
 			'uni-view', // 标签名称 - 第一个参数 
 			[
-				this.owner.$slots.default,
+				this.owner.$slots.default, 
 				h(
-					'uni-view', {
-						'class': {
-							'slotsWrap': true
-						}
-					},
-					[h('uni-view', _content, this.data)]
+					'uni-view',
+					[h('uni-view', col, this.data)]
 				)
-			]
+			]  
 		)
 	}
 };

@@ -2,7 +2,7 @@
 	<view class="app_table_header_container">
 		<view class="a_t_h_hearder_wrap">
 			<view class="">
-				<view class="a_t_h_h_item_wrap"  v-for="(item, index) in headerArray" >
+				<view class="a_t_h_h_item_wrap"  v-for="(item, index) in headerArray" :key="index">
 					 <view class="a_p_h_item check_box" v-if="isShowCheck && item.type=='check'">
 					 	<checkbox-group @change="onChangeBox">
 					 		<label>

@@ -93,6 +93,10 @@
 		},
 		methods: {
 			_initData(newVal) {
+				if (newVal == '') {
+					this.curVal = '';
+					return;
+				}
 				for (var i = 0; i < this.selectData.length; i ++) {
 					if (newVal == this.selectData[i].value) {
 						this.curVal = this.selectData[i].label;

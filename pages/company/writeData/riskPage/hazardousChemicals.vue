@@ -1,8 +1,7 @@
 <template>
 	<!-- 危险化学品 -->
 	<view class="app_hazardous_chemicals_container">
-		<view class="hazardous_chemicals_wrap">
-
+		<view class="hazardous_chemicals_wrap"> 
 			<!-- 气体类 -->
 			<view class="h_c_gas_wrap">
 				<app-item-input title="气体类">

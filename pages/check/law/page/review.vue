@@ -12,7 +12,7 @@
 						 :style="{ width:(textWidth - 20)+'rpx' }" />
 						<view v-else class="dis_inline_block vertical_align_top" :style="{ width:textWidth+'rpx' }">{{item.content}}</view>
  
-						<image @click="onEditImg(item, index)" src="../../../../static/edit.png" class="img_size_40upx mar_left_5px vertical_align_bt"
+						<image @click="onEditImg(item, index)" src="../../../../static/edit.png" class="img_size_40px mar_left_5px vertical_align_bt"
 						 mode="aspectFill"></image>
 					</view>
 					<radio-group @change="radioChange($event, item, index)" class="clearfix mar_top_10px">

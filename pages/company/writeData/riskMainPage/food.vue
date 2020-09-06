@@ -1,11 +1,10 @@
 <template>
 	<view class="app_food_container">
-		<!-- 轻工 食品 -->
-		<!-- 个体 -->
+		<!-- 轻工 食品 --> 
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="风险信息"></uni-nav-bar>
 		<view class="food_wrapper padding_10px">
-			<app-nav :data='navData' :active="currentIndex"></app-nav>
+			<app-in-nav :data='navData' :active="currentIndex"></app-in-nav>
 			<!-- 有限空间 -->
 			<limited-space v-if="currentIndex == 0" ref="page0" @changeNext="changeNext"></limited-space>
 			<!-- 特殊作业及特种设备 -->
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-	import appNav from '../riskPage/nav.vue'
+	import appInNav from '../riskPage/nav.vue'
 	import limitedSpace from '../riskPage/limitedSpace.vue'
 	import specialWorkAndDevice from '../riskPage/specialWorkAndDevice.vue'
 	import combustibleDustFood from '../riskPage/combustibleDustFood.vue'
@@ -40,7 +39,7 @@
 		data() {
 			return {
 				drawerVisible: false,
-				currentIndex:4 ,
+				currentIndex:0,
 				navData: ['有限空间', '特殊作业及特种设备', '可燃性粉尘', '危险化学品', '冷库'],
 				spaceData:{},
 				workAndDevicData:{},
@@ -50,7 +49,7 @@
 			}
 		},
 		components: {
-			appNav,
+			appInNav,
 			limitedSpace,
 			specialWorkAndDevice,
 			combustibleDustFood,

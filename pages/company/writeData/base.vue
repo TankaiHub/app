@@ -274,6 +274,7 @@
 				this.baseInfoData['sp_principal_phone'] = data.sp_principal_phone;
 				this.baseInfoData['industry_category'] = data.industry_category;
 				this.baseInfoData['industry_category_1'] = data.industry_category_1;
+				
 				this.baseInfoData['main_process'] = data.main_process;
 				this.baseInfoData['main_products'] = data.main_products;
 				//安全员专职&兼职
@@ -290,11 +291,11 @@
 				// 	security_officer_arr = [];
 				// 	main_products_arr = [];
 				// 	main_process_arr = [];
-				// }
-
+				// } 
 				this.security_officer = security_officer_arr[0];
 				this.security_officer2 = security_officer_arr[1];
 				this._changeProduct(data.industry_category);
+				
 				//主营产品 
 				// this.baseInfoData['main_products'] = data.main_products;
 				var temp = {
@@ -313,7 +314,6 @@
 				// this.baseInfoData['main_process'] = data.main_process;
 				// main_process: "普通机加（钻铣磨冲剪压焊）,熔炼,锻造"
 				this.main_proess_list = this._changeProcess();
-
 				var final_main_process_arr = this._handleProess(main_process_arr);
 				this.main_proess_list = this._compared(this.main_proess_list, final_main_process_arr);
 				this.defaultProessSelected = main_process_arr;
@@ -392,7 +392,7 @@
 			_changeSelect(key, e) {
 				switch (key) {
 					case 'industry_category':
-						this._changeProduct(e.value);
+						this._changeProduct(e.value, 'change');
 						return;
 					case 'industry_category_1':
 						this._changeLightIndustry(e);
@@ -400,8 +400,14 @@
 				}
 			},
 			// 根据 行业类别 选 主营产品  
-			_changeProduct(val) {
+			_changeProduct(val, state) {
 				this.category1Menus = [];
+				if (state == 'change') {
+					this.main_proess_list = [];
+					this.main_list = [];
+					this.main_proess_selse_list = [];
+					this.onSelectClear('industry_category_1'); 
+				}
 				industryTypeTwo.forEach((item, index) => {
 					if (val == item.dh) {
 						this.category1Menus.push({

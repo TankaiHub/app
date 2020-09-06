@@ -27,6 +27,8 @@ function changeTime(time, format) {
 			return y + '/' + m + '/' + day;
 		case "yy/mm":
 			return y + '/' + m;
+		case "yy-mm":
+			return y + '-' + m;
 	}
 }
 

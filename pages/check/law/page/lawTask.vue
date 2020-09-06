@@ -24,7 +24,45 @@
 			</view>
 			<!-- ///////////////table////////////////// -->
 			<view class="l_task_table_wrap app_table_wrap">
-				<app-table :tableData="tableData" :pageSize="pageSize" :page="page" :isShowExpand="isShowExpand" :isClickBar="isClickBar" v-model="changeState">
+				<app-table-new :tableData="tableData" :headerArray="headerArray" :showContent="showContent"  :isShowExpand="isShowExpand" :isClickBar="isClickBar">
+					<block slot="content" slot-scope="props" v-if="props.data">
+						<view class="table_hide_total_container">
+							<view class="a_t_ul table_hide_info_wrap">
+						
+								<view class="a_t_li reg_addr clearfix">
+									<label>检查状态</label>
+									<view class="info_bd">{{stateTo[props.data.state]}}</view>
+								</view>
+								<view class="a_t_li">
+									<label>整改状态</label>
+									<view class="info_bd">
+										{{zStateTo[props.data.z_state]}}
+									</view>
+								</view>
+								<view class="a_t_li">
+									<label>限期整改时间</label>
+									<view class="info_bd">
+										{{changeTime(props.data.deadline, "yy-mm-dd")}}
+									</view>
+								</view>
+								<view class="a_t_li">
+									<label>从业人数</label>
+									<view class="info_bd">{{props.data.number_of_employees || 0}}人</view>
+								</view>
+								<view class="a_t_li">
+									<label>上年产值</label>
+									<view class="info_bd">{{props.data.lastyear_value}}万元</view>
+								</view>
+							</view>
+							<view class="tb_hide_btn_wrap">
+								<button type="warn" @click="changeMessage(props.data.task_id)" class="btn_tb">删除</button>
+								<button @click="onLookDetail(props.data)" size="small" type="primary" class="btn_tb">查看详情</button>
+							</view>
+						</view>
+						
+					</block>
+				</app-table-new>
+				<!-- <app-table :tableData="tableData" :pageSize="pageSize" :page="page" :isShowExpand="isShowExpand" :isClickBar="isClickBar" v-model="changeState">
 					<app-table-column type="expand"></app-table-column>
 					<app-table-column label="任务时间" prop="task_time" type="time-yy-mm" width="100">
 					</app-table-column>
@@ -66,7 +104,7 @@
 						</view>
 
 					</template>
-				</app-table>
+				</app-table> -->
 				
 				
 				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
@@ -85,6 +123,7 @@
 	import appPagination from '@/components/app-table/app-pagination'
 	import appTableColumn from "@/components/app-table/app-table-column"
 	
+	import appTableNew from "@/components/app-table/app-table-new"
 	
 	
 	import {
@@ -98,6 +137,24 @@
 			return {
 				changeTime,
 				drawerVisible: false,
+				headerArray: [
+				{
+					key:'任务时间', 
+					width:100,	 
+				},
+				{
+					key:'企业名称', 
+					isInWidth:true,
+				}
+				],
+				showContent:[{
+					key:'task_time',
+					isInWidth:false,
+					width:100,  
+				},{
+					key:'name',
+					isInWidth:true,
+				}],
 				searchVal: '',
 				stateValue: '',
 				lawStateData: [{
@@ -161,7 +218,8 @@
 			appSearch,
 			appTable,
 			appTableColumn,
-			appPagination
+			appPagination,
+			appTableNew
 		},
 
 		onLoad() {
@@ -189,6 +247,11 @@
 				this.$http.post('taskList', opts).then((res)=> {
 					if (res.code == 200) {
 						this.total = res.Total;
+						var data = res.data;
+						for (var i = 0; i < data.length; i ++) {
+							// task_time
+							data[i]['task_time'] = this.changeTime(data[i]['task_time'], 'yy-mm');
+						}
 						this.tableData = res.data;
 					}
 				})

@@ -4,7 +4,7 @@
 		<app-nav v-model="drawerVisible" currentNav="company"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="风险信息"></uni-nav-bar>
 		<view class="individual_wrapper padding_10px">
-			<app-nav :data='navData' :active="currentIndex"></app-nav>
+			<app-in-nav :data='navData' :active="currentIndex"></app-in-nav>
 			<!-- 特殊作业及特种设备 -->
 			<special-work-and-device v-if="currentIndex == 0" ref="sp_word_dev"></special-work-and-device>
 			<!-- 危险化学品 -->
@@ -22,7 +22,7 @@
 <script>
 	import specialWorkAndDevice from '../riskPage/specialWorkAndDevice.vue'
 	import hazardousChemicals from '../riskPage/hazardousChemicals.vue'
-	import appNav from '../riskPage/nav.vue'
+	import appInNav from '../riskPage/nav.vue'
 	export default {
 		data() {
 			return {
@@ -44,7 +44,7 @@
 		components: {
 			specialWorkAndDevice,
 			hazardousChemicals,
-			appNav
+			appInNav
 		},
 		methods: {
 			onNavBarLeft() {

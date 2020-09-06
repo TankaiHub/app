@@ -120,8 +120,29 @@
 		{//首页 --企业风险信息填写 -- 个体  
 			"path": "pages/company/writeData/riskMainPage/individual" 
 		}, 
-		{//首页 --企业风险信息填写 -- 轻工 -- 食品
+		{//首页 --企业风险信息填写 -- 食品
 			"path": "pages/company/writeData/riskMainPage/food" 
+		}, 
+		{//首页 --企业风险信息填写 -- 轻工 -- 家具
+			"path": "pages/company/writeData/riskMainPage/industryFurniture" 
+		}, 
+		{//首页 --企业风险信息填写 -- 建材
+			"path": "pages/company/writeData/riskMainPage/buildingMaterials" 
+		}, 
+		{//首页 --企业风险信息填写 -- 商贸
+			"path": "pages/company/writeData/riskMainPage/business" 
+		}, 
+		{//首页 --企业风险信息填写 -- 机械 烟草 冶金 有色 
+			"path": "pages/company/writeData/riskMainPage/machineryTobaccoMetallurgyAndColored" 
+		}, 
+		{//首页 --企业风险信息填写 --  塑料
+			"path": "pages/company/writeData/riskMainPage/plastic" 
+		},  
+		{//首页 --企业风险信息填写 --  纺织
+			"path": "pages/company/writeData/riskMainPage/textile" 
+		}, 
+		{//首页 --企业风险信息填写 --  纸制品
+			"path": "pages/company/writeData/riskMainPage/paperProducts" 
 		}, 
 		{//首页 --企业info -table
 			"path": "pages/company/companyTable/companyTable" 

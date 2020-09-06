@@ -73,6 +73,8 @@
 			position: relative;
 			border:1px solid #ccc;
 			border-radius: 5px;
+			z-index: 999;
+			background-color: #fff;
 			.c_a_s_top{
 				position: absolute;
 				top:-15px;

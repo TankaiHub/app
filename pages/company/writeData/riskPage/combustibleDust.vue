@@ -1,6 +1,6 @@
 <template>
+	<!--  可燃性粉尘 -->
 	<view class="app_combustible_dust_container">
-		<!-- 可燃性粉尘  食物-->
 		<view class="combustible_dust_wrap">
 			<uni-list>
 				<uni-list-item title="粉尘类别" :showArrow="false" class="list_border_1px">
@@ -28,10 +28,6 @@
 								<multiple-select v-model="otherShow" :data="dustOtherArray" :default-selected="otherDefaultSelected" @confirm="otherSelectBtn"
 								 label-name="label" value-name="value" :checkAll="true" :isPlural="true">
 								</multiple-select>
-
-								<!-- <app-picker-select placeholder="请选择其他粉尘类别" :selectValue="comData.dustOther" :selectData="dustOtherArray"
-								 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustOther')"
-								 @onSelectBtn="onSelectBtn($event, 'dustOther')"></app-picker-select> -->
 							</view>
 						</uni-list-item>
 					</block>
@@ -60,23 +56,21 @@
 								 @onSelectBtn="onSelectBtn($event, 'dustOut')"></app-picker-select>
 							</view>
 						</uni-list-item>
-						<block v-if="isShowWordDev">
-							<uni-list-item title="作业人数" :showArrow="false" class="list_border_1px">
-								<view class="clearfix" slot='right'>
-									<input type="text" class="float_left width100px text_align_right" v-model="comData.workNum" placeholder-style="color:#ccc"
-									 placeholder="请输入作业人数" />
-									<text class="mar_left_10px float_left">名</text>
+						<block> 
+							<uni-list-item title="除尘方式" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<view class="n_show_list_wrap" @click="onTabShow('dustModeShow')">
+										<text class="color_ccc" v-if="dustMode_select_list && dustMode_select_list.length == 0">请选择粉尘类别</text>
+										<view class="n_show_item text_align_right" v-for="(item, index) in dustMode_select_list" :key="index">{{item.label}}</view>
+									</view>
+									<multiple-select v-model="dustModeShow" :data="dustModeArray" :default-selected="dustModeDefaultSelected" @confirm="dustModeSelectBtn"
+									 label-name="label" value-name="value" :checkAll="true" :isPlural="true">
+									</multiple-select>
+									<!-- <app-picker-select placeholder="请选择除尘方式" :selectValue="comData.dustMode" :selectData="dustModeArray" :isBorder="false"
+									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustMode')"
+									 @onSelectBtn="onSelectBtn($event, 'dustMode')"></app-picker-select> -->
 								</view>
 							</uni-list-item>
-							<uni-list-item title="出尘设备" :showArrow="false" class="list_border_1px">
-								<view class="clearfix" slot='right'>
-									<input type="text" class="float_left width100px text_align_right" v-model="comData.dustEqui" placeholder-style="color:#ccc"
-									 placeholder="请输入出尘设备" />
-									<text class="mar_left_10px float_left">套</text>
-								</view>
-							</uni-list-item>
-						</block>
-						<block v-if="d_mode">
 							<uni-list-item title="主要集尘方式" :showArrow="false" class="list_border_1px">
 								<view class="" slot='right'>
 									<app-picker-select placeholder="请选择主要集尘方式" :selectValue="comData.setDust" :selectData="setDustArray" :isBorder="false"
@@ -84,49 +78,65 @@
 									 @onSelectBtn="onSelectBtn($event, 'setDust')"></app-picker-select>
 								</view>
 							</uni-list-item>
-							<block v-if="isShowFacility">
-								<uni-list-item title="主要尘降设施" :showArrow="false" class="list_border_1px">
-									<view class="" slot='right'>
-										<app-picker-select placeholder="请选择主要尘降设施" :selectValue="comData.dustLand" :selectData="dustModeArray"
-										 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustLand')"
-										 @onSelectBtn="onSelectBtn($event, 'dustLand')"></app-picker-select>
+							<uni-list-item title="其他集尘方式" :showArrow="false" class="list_border_1px">
+								<view class="clearfix" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="comData.setDustOther"
+									 placeholder-style="color:#ccc" placeholder="请输入其他集尘方式" /> 
+								</view>
+							</uni-list-item>
+							<uni-list-item title="数量" :showArrow="false" class="list_border_1px">
+								<view class="clearfix" slot='right'>
+									<input type="number" class="float_left width100px text_align_right" v-model="comData.postNum"
+									 placeholder-style="color:#ccc" placeholder="请输入数量" /> 
+									 <text class="mar_left_10px float_left">套</text>
+								</view>
+							</uni-list-item>
+							<uni-list-item title="主要集尘方式" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<app-picker-select placeholder="请选择主要集尘方式" :selectValue="comData.suckDust" :selectData="suckDustArray" :isBorder="false"
+									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('suckDust')"
+									 @onSelectBtn="onSelectBtn($event, 'suckDust')"></app-picker-select>
+								</view>
+							</uni-list-item>
+							<uni-list-item title="防爆设施" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<view class="n_show_list_wrap" @click="onTabShow('poomShow')">
+										<text class="color_ccc" v-if="poom_select_list && poom_select_list.length == 0">请选择粉尘类别</text>
+										<view class="n_show_item text_align_right" v-for="(item, index) in poom_select_list" :key="index">{{item.label}}</view>
 									</view>
-								</uni-list-item>
-								<uni-list-item title="防爆设施" :showArrow="false" class="list_border_1px">
-									<view class="" slot='right'>
-										<app-picker-select placeholder="请选择防爆设施" :selectValue="comData.preventExp" :selectData="poomArray" :isBorder="false"
-										 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('preventExp', false)"
-										 @onSelectBtn="onSelectBtn($event, 'preventExp', false)"></app-picker-select>
-									</view>
-								</uni-list-item>
-							</block>
-							<block v-if="isShowJFacility">
-								<uni-list-item title="集尘设施" :showArrow="false" class="list_border_1px">
-									<view class="" slot='right'>
-										<app-picker-select placeholder="请选集尘设施" :selectValue="comData.dustFaci" :selectData="dustLandArray" :isBorder="false"
-										 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustFaci')"
-										 @onSelectBtn="onSelectBtn($event, 'dustFaci')"></app-picker-select>
-									</view>
-								</uni-list-item>
-							</block>
-							<block v-if="isShowPost">
-								<uni-list-item title="工位" :showArrow="false" class="list_border_1px">
-									<view class="clearfix" slot='right'>
-										<input type="number" class="float_left width100px text_align_right" v-model="comData.postNum"
-										 placeholder-style="color:#ccc" placeholder="请输入工位个数" />
-										<text class="mar_left_10px float_left">个</text>
-									</view>
-								</uni-list-item>
-							</block>
+									 <multiple-select v-model="poomShow" :data="poomArray" :default-selected="poomDefaultSelected" @confirm="poomSelectBtn"
+									  label-name="label" value-name="value" :checkAll="true" :isPlural="true">
+									 </multiple-select>
+								</view>
+							</uni-list-item>
+							<uni-list-item title="其他防爆设施" :showArrow="false" class="list_border_1px">
+								<view class="clearfix" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="comData.poomOther"
+									 placeholder-style="color:#ccc" placeholder="请输入其他防爆设施" /> 
+								</view>
+							</uni-list-item>
+							<uni-list-item title="车间通风方式" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<app-picker-select placeholder="请选择车间通风方式" :selectValue="comData.wind" :selectData="windArray" :isBorder="false"
+									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('wind')"
+									 @onSelectBtn="onSelectBtn($event, 'wind')"></app-picker-select>
+								</view>
+							</uni-list-item>
+							<uni-list-item title="清灰方式" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<app-picker-select placeholder="请选择清灰方式" :selectValue="comData.dustClear" :selectData="dustClearArray" :isBorder="false"
+									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustClear')"
+									 @onSelectBtn="onSelectBtn($event, 'dustClear')"></app-picker-select>
+								</view>
+							</uni-list-item>
+							<uni-list-item title="清灰次数" :showArrow="false" class="list_border_1px">
+								<view class="clearfix" slot='right'>
+									<input type="number" class="float_left width100px text_align_right" v-model="comData.dustNum"
+									 placeholder-style="color:#ccc" placeholder="请输入清灰次数" /> 
+									 <text class="mar_left_10px float_left">次/天</text>
+								</view>
+							</uni-list-item>
 						</block>
-						<uni-list-item title="粉尘清洗频次" :showArrow="false" class="list_border_1px">
-							<view class="clearfix" slot='right'>
-								<input type="number" class="float_left width100px text_align_right" v-model="comData.dustRinseNum"
-								 placeholder-style="color:#ccc" placeholder="请输入粉尘清洗频次" />
-								<text class="mar_left_10px float_left">次/天</text>
-							</view>
-						</uni-list-item>
-
 					</block>
 				</block>
 			</uni-list>
@@ -135,7 +145,6 @@
 </template>
 
 <script>
-	import appPickerSelectDustType from "@/components/app-picker/app-picker-select-dust-type"
 	import LbPicker from '@/components/lb-picker'
 	import appPickerSelect from '@/components/app-picker/app-picker-select'
 	import multipleSelect from "@/components/momo-multipleSelect/momo-multipleSelect"
@@ -146,21 +155,44 @@
 	export default {
 		data() {
 			return {
-				isShowWordDev: false,
-				d_mode: false,
-				isShowFacility: false,
-				isShowJFacility: false,
-				isShowPost: false,
-				dustType: '食品',
+				dustType: '建材',
 				comData: {
 					dustType: [], //粉尘类别
 					dustOther: [],
 					homeStru: [], //厂房结构
-					maxNum: '', //涉尘车间最多作业人数
-					preventExp: [], //防爆设施
+					maxNum: '', //涉尘车间最多作业人数 
+					dustOut:'',//除尘类型
+					dustMode:'',//除尘方式
+					setDust:'',//主要集尘方式
+					setDustOther:'',//其他集尘方式
+					postNum:'',//数量
+					suckDust:'',//吸尘方式
+					poom:'',//防爆设施
+					poomOther:'',//其他防爆设施
+					wind:'',//车间通风方式
+					dustClear:'',// 清灰方式
+					dustNum:'',//清灰次数
 				},
+
 				homeStruTemp: '', //厂房结构
 				preventExp: '', //防爆设施
+				dust_select_list: [],
+
+				hSleVal: [], //厂房结构 默认
+				dustDefaultSelected: [],
+				dustShow: false,
+				dust_select_list: [],
+				other_select_list: [],
+				otherShow: false,
+				otherDefaultSelected: [],
+				poomShow:false,
+				poomDefaultSelected:[],
+				poom_select_list:[],
+				dustModeShow:false,
+				dustModeDefaultSelected:[],
+				dustMode_select_list:[],
+
+
 				homeStruList: [{
 					value: '单层',
 					label: '单层',
@@ -233,7 +265,33 @@
 					label: "干式除尘",
 					value: "2",
 					show: true,
+				}, {
+					label: "不除尘",
+					value: "3",
+					show: true,
 				}],
+				dustModeArray:[//除尘方式
+					{
+						label: "沉降室",
+						value: "沉降室",
+						show: true,
+					},
+					{
+						label: "旋风除尘",
+						value: "旋风除尘",
+						show: true,
+					},
+					{
+						label: "布袋除尘",
+						value: "布袋除尘",
+						show: true,
+					},
+					{
+						label: "其他",
+						value: "其他",
+						show: true,
+					},
+				],
 				//主要集尘方式
 				setDustArray: [{
 					label: "中央集尘",
@@ -244,72 +302,90 @@
 					value: "2",
 					show: true,
 				}, {
-					label: "不集尘",
+					label: "其他",
 					value: "3",
 					show: true,
 				}],
-				// 主要尘降设施
-				dustModeArray: [{
-						label: "尘降室",
+				suckDustArray:[//吸尘方式
+					{
+						label: "正压吹送",
 						value: "1",
 						show: true,
-					},
+					}, 
 					{
-						label: "集尘器",
+						label: "负压吸尘",
 						value: "2",
 						show: true,
+					}, 
+				],
+				poomArray:[//防爆设施
+					
+					{
+						label: '火花探测+自动灭火装置',
+						value: "火花探测+自动灭火装置", 
 					},
 					{
-						label: "布袋",
-						value: "3",
-						show: true,
+						label: "泄爆片/口",
+						value: "泄爆片/口", 
+					},
+					{
+						label: '隔爆阀/门',
+						value: "隔爆阀/门", 
+					},
+					{
+						label: '气体惰化',
+						value: "气体惰化", 
+					},
+					{
+						label: '灰斗锁气卸灰装置',
+						value: "灰斗锁气卸灰装置", 
+					},
+					{
+						label: '其他',
+						value: "其他", 
+					},
+					{
+						label: '无',
+						value: "无", 
 					}
 				],
-				//防爆设施
-				poomArray: [{
-						label: '火花探测+自动灭火装置',
-						value: "火花探测+自动灭火装置",
-						show: true,
-					},
+				windArray:[//车间通风方式
 					{
-						label: "泄爆装置",
-						value: "泄爆装置",
-						show: true,
-					},
-					{
-						label: '锁气闭灰',
-						value: "锁气闭灰",
-						show: true,
-					},
-				],
-				//集尘设施
-				dustLandArray: [{
-						label: "布袋",
+						label: "机械通风",
 						value: "1",
 						show: true,
-					},
+					}, 
 					{
-						label: "过滤器",
+						label: "自然通风",
 						value: "2",
 						show: true,
-					},
+					}, 
+				],
+				dustClearArray:[//清灰方式
 					{
-						label: "旋风除尘",
+						label: "人工",
+						value: "1",
+						show: true,
+					}, 
+					{
+						label: "机器",
+						value: "2",
+						show: true,
+					}, 
+					{
+						label: "人工和机器",
 						value: "3",
 						show: true,
-					},
-				],
-				hSleVal: [], //厂房结构 默认
-				dustDefaultSelected: [],
-				dustShow: false,
-				dust_select_list: [],
-				other_select_list: [],
-				otherShow: false,
-				otherDefaultSelected: []
+					}, 
+					{
+						label: "不清灰",
+						value: "4",
+						show: true,
+					}, 
+				]
 			}
 		},
 		components: {
-			appPickerSelectDustType,
 			appPickerSelect,
 			LbPicker,
 			multipleSelect
@@ -423,7 +499,7 @@
 						}, {
 							"value": "其他",
 							"label": "其他"
-						},{
+						}, {
 							"value": "无",
 							"label": "无"
 						}];
@@ -572,24 +648,31 @@
 						return [];
 				}
 			}
+
 		},
 		methods: {
-			/////////////////////select////////////////////////////
-			// onSelectDustTypeBtn(val, key) { 
-			// 	if (val == '无') {
-			// 		this['comData'][key] = '无';
-			// 	}else {
-			// 		this['comData'][key] = val['value'];
-			// 	}
-			// },
-			// onSelectDustTypeClose(type) {
-			// 	this['comData'][type] = "";
-			// },
+			onShowSelectHome() {
+				this.$refs.lb.show();
+			},
 			dustSelectBtn(data) {
 				this.dust_select_list = data;
 				this.comData.dustType = [];
 				for (var i = 0; i < data.length; i++) {
 					this.comData.dustType.push(data[i]['value']);
+				}
+			},
+			dustModeSelectBtn(data) {
+				this.dustMode_select_list = data;
+				this.comData.dustMode = [];
+				for (var i = 0; i < data.length; i++) {
+					this.comData.dustMode.push(data[i]['value']);
+				}
+			},
+			poomSelectBtn(data) {
+				this.poom_select_list = data;
+				this.comData.poom = [];
+				for (var i = 0; i < data.length; i++) {
+					this.comData.poom.push(data[i]['value']);
 				}
 			},
 			otherSelectBtn(data) {
@@ -599,56 +682,8 @@
 					this.comData.dustOther.push(data[i]['value']);
 				}
 			},
-			onSelectBtn(e, key, bool = true) {
-				if (e.flag) {
-					if (bool) {
-						this['comData'][key] = e.value;
-					} else {
-						this[key] = e.value;
-						this['comData'][key][0] = e.value;
-					}
-					this._changeKey(key);
-				}
-			},
-			_changeKey(key) {
-				var data = this.comData;
-				switch (key) {
-					case 'dustOut':
-						if (data.dustOut == 1) {
-							this.isShowWordDev = true;
-						} else {
-							this.isShowWordDev = false
-						}
-						if (data.dustOut == 2) {
-							this.d_mode = true;
-						} else {
-							this.d_mode = false;
-						}
-						break;
-					case 'setDust':
-						if (data.setDust == 1) {
-							this.isShowFacility = true;
-						} else {
-							this.isShowFacility = false;
-						}
-						if (data.setDust == 2) {
-							this.isShowJFacility = true;
-						} else {
-							this.isShowJFacility = false;
-						}
-						if (data.setDust == 3) {
-							this.isShowPost = true;
-						} else {
-							this.isShowPost = false;
-						}
-						break;
-				}
-			},
-			onSelectClear(str) {
-				this['comData'][str] = "";
-			},
-			onShowSelectHome() {
-				this.$refs.lb.show();
+			onTabShow(key) {
+				this[key] = true;
 			},
 			onSelectHome(opts) {
 				var item = opts.item;
@@ -665,35 +700,23 @@
 				this.comData.homeStru = opts.value;
 				this.homeStruTemp = str;
 			},
-			onTabShow(key) {
-				this[key] = true;
+			onSelectClear(str) {
+				this['comData'][str] = "";
 			},
-			/////////////////////////end///////////////////////////////
-			submit() {
-				var special = ''
-				if (this.comData.dustType.indexOf('无') === -1) {
-					if (this.comData.dustType.indexOf('其他') === -1) {
-						special = this.comData.dustType.join(',')
+			onSelectBtn(e, key, bool = true) {
+				if (e.flag) {
+					if (bool) {
+						this['comData'][key] = e.value;
 					} else {
-						special = [...this.comData.dustType, ...this.comData.dustOther].join(',')
+						this[key] = e.value;
+						this['comData'][key][0] = e.value;
 					}
+					this._changeKey(key);
 				}
-				var opts = {
-					company_id: 2282,
-					content: JSON.stringify({
-						dustTwo: this.comData
-					}),
-					special,
-					state: this.comData.dustType.indexOf('无') === -1 ? 1 : 2,
-					type: 3
-				};
-				this.$http.post("riskSave", opts).then(res => {
-					if (res.code == 200) {
-						this.log(res);
-						this.$emit("changeNext", true);
-					}
-				});
-			}
+			},
+			_changeKey(key) {
+				
+			},
 		}
 	}
 </script>
