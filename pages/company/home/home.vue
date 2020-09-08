@@ -174,6 +174,9 @@
 		onLoad() {
 			this._initData();
 		},
+		onShow() {
+			this._initData();
+		},
 		methods: {
 			...mapMutations(['set_userInfo', 'set_home_login_lock', 'set_userHomeInfoData']),
 			//导航
@@ -317,7 +320,7 @@
 					} else {
 						//非个体
 						var url = this._changeGoToPage(this.companyBaseInfo.industry_category_zfl);
-						this.log(url, "!!!!!!!!!!!!!!!!!")
+						
 						uni.navigateTo({
 							url
 						})
@@ -338,31 +341,31 @@
 			},
 			_changeGoToPage(name) {
 				this.log(name, "??????????????????")
-				switch (name) {
-					case '机械':
-						return 'industryMach1';
+				switch (name) {  
 					case '塑料':
-						return 'industryPlastic1';
+						return '../writeData/riskMainPage/plastic';
 					case '纺织':
-						return 'industrySpin1';
+						return '../writeData/riskMainPage/textile';
 					case '食品':
 						return '../writeData/riskMainPage/food';
 					case '建材':
-						return 'industryBuilding1';
+						return '../writeData/riskMainPage/buildingMaterials';
 					case '纸制品':
-						return 'industryPaper1';
+						return '../writeData/riskMainPage/paperProducts';
 					case '商贸':
 						return '../writeData/riskMainPage/business';
 					case '轻工':
-						return 'industryFurniture1';
+						return '../writeData/riskMainPage/industryFurniture'; //comm
 					case '家具':
-						return 'industryFurniture1';
+						return '../writeData/riskMainPage/industryFurniture'; //comm
+					case '机械':
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
 					case '烟草':
-						return 'industryMach1';
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
 					case '冶金':
-						return 'industryMach1';
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
 					case '有色':
-						return 'industryMach1';
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
 					default:
 						return '';
 				}

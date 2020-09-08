@@ -3,16 +3,116 @@
 		<!-- 有限空间 -->
 		<view class="limited_space_t_wrap">
 			<view class="l_spt_wrap">
+				<uni-list v-for="(item, index) in allData" :key="index">
+					<uni-list-item :showArrow="false" class="list_border_1px">
+						<view class="">
+							<checkbox-group @change="onCheckBox($event, item, index)">
+								<label>
+									<checkbox :value="checkValue" :checked="inSpaceData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+								</label>
+							</checkbox-group>
+						</view>
+					</uni-list-item>
+					<uni-list-item title="数量" :showArrow="false" class="list_border_1px">
+						<view class="" slot='right'>
+							<input type="number" class="float_left width100px text_align_right" v-model="inSpaceData[item.num]"
+							 placeholder-style="color:#ccc" placeholder="请输入数量" />
+							<text class="mar_left_10px float_left">个</text>
+						</view>
+					</uni-list-item>
+					<uni-list-item title="是否外包作业" :showArrow="false" class="list_border_1px">
+						<view class="" slot='right'>
+							<app-picker-select placeholder="请选择是否外包作业" :selectValue="inSpaceData[item.out]" :selectData="outArray" :isBorder="false"
+							 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear(item.out)" @onSelectBtn="onSelectBtn($event, item.out)"></app-picker-select>
+						</view>
+					</uni-list-item>
+					<block v-if="inSpaceData[item.out] == '1'">
+						<uni-list-item title="承包方类型" :showArrow="false" class="list_border_1px">
+							<view class="" slot='right'>
+								<app-picker-select placeholder="请选择除尘类型" :selectValue="inSpaceData[item.type]" :selectData="typeArray"
+								 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear(item.type)"
+								 @onSelectBtn="onSelectBtn($event, item.type)"></app-picker-select>
+							</view>
+						</uni-list-item>
+						<block v-if="inSpaceData[item.type]">
+							<uni-list-item :title="inSpaceData[item.type]=='1'?'单位名称':'姓名'" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="inSpaceData[item.name]"
+									 placeholder-style="color:#ccc" :placeholder="inSpaceData[item.type]=='1'?'请输入单位名称':'请输入姓名'" />
+								</view>
+							</uni-list-item>
+							<uni-list-item :title="inSpaceData[item.type]=='1'?'信用代码':'特种作业操作证编号'" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="inSpaceData[item.code]"
+									 placeholder-style="color:#ccc" :placeholder="inSpaceData[item.type]=='1'?'请输入信用代码':'请输入特种作业操作证编号'" />
+								</view>
+							</uni-list-item>
 
+							<uni-list-item title="联系人" :showArrow="false" class="list_border_1px" v-if="inSpaceData[item.type]=='1'">
+								<view class="" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="inSpaceData[item.contact]"
+									 placeholder-style="color:#ccc" placeholder="请输入联系人" />
+								</view>
+							</uni-list-item>
+							<uni-list-item title="联系电话" :showArrow="false" class="list_border_1px">
+								<view class="" slot='right'>
+									<input type="text" class="float_left width100px text_align_right" v-model="inSpaceData[item.phone]"
+									 placeholder-style="color:#ccc" placeholder="请输入联系电话" />
+								</view>
+							</uni-list-item>
+						</block>
+					</block>
+				</uni-list>
 			</view>
+			<app-btn-check text="不涉及有限空间" @change="onChange" :check="isNotInvolv"></app-btn-check>
 		</view>
 	</view>
 </template>
 
 <script>
+	import appPickerSelect from '@/components/app-picker/app-picker-select'
+	import appBtnCheck from "@/components/app-btn/app-btn-check"
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	export default {
+		props: {
+			spaceData: Object
+		},
 		data() {
 			return {
+				inSpaceData: {
+					state:false
+				},
+				allData: [],
+				checkValue: 'cb',
+				isShowOut: false, //
+				isShowConcat: false,
+				isShowTypeItem: false,
+				isNotInvolv:false,//不涉及
+				outArray: [{
+						label: '是',
+						value: '1',
+						show: true,
+					},
+					{
+						label: '否',
+						value: '2',
+						show: true,
+					}
+				],
+				typeArray: [{
+						label: '企业',
+						value: '1',
+						show: true,
+					},
+					{
+						label: '个人',
+						value: '2',
+						show: true,
+					}
+				],
 				// 水泥
 				oneData: [{
 						checkName: '料',
@@ -449,9 +549,98 @@
 
 				]
 			}
+		},
+		computed: {
+			...mapState(['userInfo']),
+		},
+		components: {
+			appPickerSelect,
+			appBtnCheck
+		},
+		watch: {
+			
+		},
+		created() {
+			this._initData();
+		},
+		methods: {
+			_initData() {
+				this.allData = [...this.oneData, ...this.twoData, ...this.threeData, ...this.fourData, ...this.fiveData, ...this.sixData,
+					...this.sevenData
+				];
+				this._clearCommon(this.allData, 'checkName');
+			},
+			_clearCommon(arr, check) {
+				for (var i = 0; i < arr.length; i++) {
+					for (var j = 0; j < arr.length; j++) {
+						if (arr[i][check] == arr[j][check] && i != j) {
+							arr.splice(j, 1);
+						} else {
+							var obj = {
+								out: 'out' + j,
+								name: 'outName' + j,
+								code: 'outCode' + j,
+								type: 'outType' + j,
+								contact: 'outContact' + j,
+								phone: 'outPhone' + j
+							};
+							arr[j] = Object.assign(arr[j], obj);
+						}
+					}
+				}
+			},
+			onCheckBox(e, item, index) {
+				var val = e.detail.value;
+				this.isNotInvolv = false; 
+				if (val.length > 0) {
+					this.$set(this.inSpaceData, item.checkValue, true); 
+				}else {
+					this.$set(this.inSpaceData, item.checkValue, false); 
+				} 
+			},
+			onSelectBtn(e, key, bool = true) { 
+				if (e.flag) {
+					this.$set(this.inSpaceData, key, e.value);  
+				}
+			},
+			onSelectClear(str) {
+				this.$set(this.inSpaceData, str, ''); 
+			},
+			//不涉及
+			onChange(bool) {
+				this.isNotInvolv = bool; 
+				if (bool) { 
+					var reg = /Check/g;
+					for (var prop in this.inSpaceData) {
+						if (prop.match(reg) != null && prop.match(reg).length > 0) {
+							this.inSpaceData[prop] = false;
+						}
+					}
+				}
+			},
+			submit() {
+				this.inSpaceData.state = this.isNotInvolv;
+				var content = {
+					infoData:this.allData,
+					space3:this.inSpaceData
+				};
+				var opts = {
+					company_id: this.userInfo.company_id,
+					type: 1,
+					state: this.isNotInvolv ? 2 : 1, 
+					content: JSON.stringify(content)
+				};
+				console.log(opts)
+				this.$http.post('riskSave', opts).then(res=>{
+					if (res.code == 200) {
+						this.$emit("changeNext", true);
+					}
+				});
+			},
 		}
 	}
 </script>
 
-<style>
+<style lang="less">
+	@import url("@/common/less/base.less");
 </style>

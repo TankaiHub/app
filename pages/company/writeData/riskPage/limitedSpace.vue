@@ -335,6 +335,7 @@
 				}
 			},
 			submit() {
+				this.limitedSpaceData.state = this.isNotInvolv;
 				var base = {
 					...this.limitedSpaceData,
 					state: this.isNotInvolv,

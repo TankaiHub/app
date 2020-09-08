@@ -30,7 +30,7 @@
 			...mapState(['userInfo']),
 		},
 		onLoad() {
-			this._initData();
+			// this._initData();
 		},
 		methods:{
 			onNavBarLeft() {

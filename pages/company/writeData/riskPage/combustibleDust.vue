@@ -56,19 +56,16 @@
 								 @onSelectBtn="onSelectBtn($event, 'dustOut')"></app-picker-select>
 							</view>
 						</uni-list-item>
-						<block> 
-							<uni-list-item title="除尘方式" :showArrow="false" class="list_border_1px">
+						<block v-if="isShowDustMode">
+							<uni-list-item title="除尘方式" :showArrow="false" class="list_border_1px" v-if="isShowMode">
 								<view class="" slot='right'>
 									<view class="n_show_list_wrap" @click="onTabShow('dustModeShow')">
 										<text class="color_ccc" v-if="dustMode_select_list && dustMode_select_list.length == 0">请选择粉尘类别</text>
 										<view class="n_show_item text_align_right" v-for="(item, index) in dustMode_select_list" :key="index">{{item.label}}</view>
 									</view>
-									<multiple-select v-model="dustModeShow" :data="dustModeArray" :default-selected="dustModeDefaultSelected" @confirm="dustModeSelectBtn"
-									 label-name="label" value-name="value" :checkAll="true" :isPlural="true">
+									<multiple-select v-model="dustModeShow" :data="dustModeArray" :default-selected="dustModeDefaultSelected"
+									 @confirm="dustModeSelectBtn" label-name="label" value-name="value" :checkAll="true" :isPlural="true">
 									</multiple-select>
-									<!-- <app-picker-select placeholder="请选择除尘方式" :selectValue="comData.dustMode" :selectData="dustModeArray" :isBorder="false"
-									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustMode')"
-									 @onSelectBtn="onSelectBtn($event, 'dustMode')"></app-picker-select> -->
 								</view>
 							</uni-list-item>
 							<uni-list-item title="主要集尘方式" :showArrow="false" class="list_border_1px">
@@ -78,23 +75,23 @@
 									 @onSelectBtn="onSelectBtn($event, 'setDust')"></app-picker-select>
 								</view>
 							</uni-list-item>
-							<uni-list-item title="其他集尘方式" :showArrow="false" class="list_border_1px">
+							<uni-list-item title="其他集尘方式" :showArrow="false" class="list_border_1px" v-if="isShowOtherDust">
 								<view class="clearfix" slot='right'>
 									<input type="text" class="float_left width100px text_align_right" v-model="comData.setDustOther"
-									 placeholder-style="color:#ccc" placeholder="请输入其他集尘方式" /> 
+									 placeholder-style="color:#ccc" placeholder="请输入其他集尘方式" />
 								</view>
 							</uni-list-item>
 							<uni-list-item title="数量" :showArrow="false" class="list_border_1px">
 								<view class="clearfix" slot='right'>
 									<input type="number" class="float_left width100px text_align_right" v-model="comData.postNum"
-									 placeholder-style="color:#ccc" placeholder="请输入数量" /> 
-									 <text class="mar_left_10px float_left">套</text>
+									 placeholder-style="color:#ccc" placeholder="请输入数量" />
+									<text class="mar_left_10px float_left">套</text>
 								</view>
 							</uni-list-item>
 							<uni-list-item title="主要集尘方式" :showArrow="false" class="list_border_1px">
 								<view class="" slot='right'>
-									<app-picker-select placeholder="请选择主要集尘方式" :selectValue="comData.suckDust" :selectData="suckDustArray" :isBorder="false"
-									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('suckDust')"
+									<app-picker-select placeholder="请选择主要集尘方式" :selectValue="comData.suckDust" :selectData="suckDustArray"
+									 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('suckDust')"
 									 @onSelectBtn="onSelectBtn($event, 'suckDust')"></app-picker-select>
 								</view>
 							</uni-list-item>
@@ -104,39 +101,39 @@
 										<text class="color_ccc" v-if="poom_select_list && poom_select_list.length == 0">请选择粉尘类别</text>
 										<view class="n_show_item text_align_right" v-for="(item, index) in poom_select_list" :key="index">{{item.label}}</view>
 									</view>
-									 <multiple-select v-model="poomShow" :data="poomArray" :default-selected="poomDefaultSelected" @confirm="poomSelectBtn"
-									  label-name="label" value-name="value" :checkAll="true" :isPlural="true">
-									 </multiple-select>
+									<multiple-select v-model="poomShow" :data="poomArray" :default-selected="poomDefaultSelected" @confirm="poomSelectBtn"
+									 label-name="label" value-name="value" :checkAll="true" :isPlural="true">
+									</multiple-select>
 								</view>
 							</uni-list-item>
-							<uni-list-item title="其他防爆设施" :showArrow="false" class="list_border_1px">
+							<uni-list-item title="其他防爆设施" :showArrow="false" class="list_border_1px" v-if="isShowOtherPoom">
 								<view class="clearfix" slot='right'>
 									<input type="text" class="float_left width100px text_align_right" v-model="comData.poomOther"
-									 placeholder-style="color:#ccc" placeholder="请输入其他防爆设施" /> 
-								</view>
-							</uni-list-item>
-							<uni-list-item title="车间通风方式" :showArrow="false" class="list_border_1px">
-								<view class="" slot='right'>
-									<app-picker-select placeholder="请选择车间通风方式" :selectValue="comData.wind" :selectData="windArray" :isBorder="false"
-									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('wind')"
-									 @onSelectBtn="onSelectBtn($event, 'wind')"></app-picker-select>
-								</view>
-							</uni-list-item>
-							<uni-list-item title="清灰方式" :showArrow="false" class="list_border_1px">
-								<view class="" slot='right'>
-									<app-picker-select placeholder="请选择清灰方式" :selectValue="comData.dustClear" :selectData="dustClearArray" :isBorder="false"
-									 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustClear')"
-									 @onSelectBtn="onSelectBtn($event, 'dustClear')"></app-picker-select>
-								</view>
-							</uni-list-item>
-							<uni-list-item title="清灰次数" :showArrow="false" class="list_border_1px">
-								<view class="clearfix" slot='right'>
-									<input type="number" class="float_left width100px text_align_right" v-model="comData.dustNum"
-									 placeholder-style="color:#ccc" placeholder="请输入清灰次数" /> 
-									 <text class="mar_left_10px float_left">次/天</text>
+									 placeholder-style="color:#ccc" placeholder="请输入其他防爆设施" />
 								</view>
 							</uni-list-item>
 						</block>
+						<uni-list-item title="车间通风方式" :showArrow="false" class="list_border_1px" v-if="isShowWinMode">
+							<view class="" slot='right'>
+								<app-picker-select placeholder="请选择车间通风方式" :selectValue="comData.wind" :selectData="windArray" :isBorder="false"
+								 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('wind')" @onSelectBtn="onSelectBtn($event, 'wind')"></app-picker-select>
+							</view>
+						</uni-list-item>
+						<uni-list-item title="清灰方式" :showArrow="false" class="list_border_1px">
+							<view class="" slot='right'>
+								<app-picker-select placeholder="请选择清灰方式" :selectValue="comData.dustClear" :selectData="dustClearArray"
+								 :isBorder="false" textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('dustClear')"
+								 @onSelectBtn="onSelectBtn($event, 'dustClear')"></app-picker-select>
+							</view>
+						</uni-list-item>
+						<uni-list-item title="清灰次数" :showArrow="false" class="list_border_1px" v-if="isShowClearNum">
+							<view class="clearfix" slot='right'>
+								<input type="number" class="float_left width100px text_align_right" v-model="comData.dustNum" placeholder-style="color:#ccc"
+								 placeholder="请输入清灰次数" />
+								<text class="mar_left_10px float_left">次/天</text>
+							</view>
+						</uni-list-item>
+
 					</block>
 				</block>
 			</uni-list>
@@ -161,17 +158,17 @@
 					dustOther: [],
 					homeStru: [], //厂房结构
 					maxNum: '', //涉尘车间最多作业人数 
-					dustOut:'',//除尘类型
-					dustMode:'',//除尘方式
-					setDust:'',//主要集尘方式
-					setDustOther:'',//其他集尘方式
-					postNum:'',//数量
-					suckDust:'',//吸尘方式
-					poom:'',//防爆设施
-					poomOther:'',//其他防爆设施
-					wind:'',//车间通风方式
-					dustClear:'',// 清灰方式
-					dustNum:'',//清灰次数
+					dustOut: '', //除尘类型
+					dustMode: [], //除尘方式
+					setDust: '', //主要集尘方式
+					setDustOther: '', //其他集尘方式
+					postNum: '', //数量
+					suckDust: '', //吸尘方式
+					poom: [], //防爆设施
+					poomOther: '', //其他防爆设施
+					wind: '', //车间通风方式
+					dustClear: '', // 清灰方式
+					dustNum: '', //清灰次数
 				},
 
 				homeStruTemp: '', //厂房结构
@@ -185,13 +182,21 @@
 				other_select_list: [],
 				otherShow: false,
 				otherDefaultSelected: [],
-				poomShow:false,
-				poomDefaultSelected:[],
-				poom_select_list:[],
-				dustModeShow:false,
-				dustModeDefaultSelected:[],
-				dustMode_select_list:[],
+				poomShow: false,
+				poomDefaultSelected: [],
+				poom_select_list: [],
+				dustModeShow: false,
+				dustModeDefaultSelected: [],
+				dustMode_select_list: [],
 
+
+
+				isShowDustMode: false,
+				isShowMode: false, //除尘方式
+				isShowOtherDust: false, //其他除尘方式
+				isShowOtherPoom: false, //其他防爆
+				isShowWinMode: false, //通风方式
+				isShowClearNum: false, //清灰次数
 
 				homeStruList: [{
 					value: '单层',
@@ -270,7 +275,7 @@
 					value: "3",
 					show: true,
 				}],
-				dustModeArray:[//除尘方式
+				dustModeArray: [ //除尘方式
 					{
 						label: "沉降室",
 						value: "沉降室",
@@ -306,82 +311,82 @@
 					value: "3",
 					show: true,
 				}],
-				suckDustArray:[//吸尘方式
+				suckDustArray: [ //吸尘方式
 					{
 						label: "正压吹送",
 						value: "1",
 						show: true,
-					}, 
+					},
 					{
 						label: "负压吸尘",
 						value: "2",
 						show: true,
-					}, 
+					},
 				],
-				poomArray:[//防爆设施
-					
+				poomArray: [ //防爆设施
+
 					{
 						label: '火花探测+自动灭火装置',
-						value: "火花探测+自动灭火装置", 
+						value: "火花探测+自动灭火装置",
 					},
 					{
 						label: "泄爆片/口",
-						value: "泄爆片/口", 
+						value: "泄爆片/口",
 					},
 					{
 						label: '隔爆阀/门',
-						value: "隔爆阀/门", 
+						value: "隔爆阀/门",
 					},
 					{
 						label: '气体惰化',
-						value: "气体惰化", 
+						value: "气体惰化",
 					},
 					{
 						label: '灰斗锁气卸灰装置',
-						value: "灰斗锁气卸灰装置", 
+						value: "灰斗锁气卸灰装置",
 					},
 					{
 						label: '其他',
-						value: "其他", 
+						value: "其他",
 					},
 					{
 						label: '无',
-						value: "无", 
+						value: "无",
 					}
 				],
-				windArray:[//车间通风方式
+				windArray: [ //车间通风方式
 					{
 						label: "机械通风",
 						value: "1",
 						show: true,
-					}, 
+					},
 					{
 						label: "自然通风",
 						value: "2",
 						show: true,
-					}, 
+					},
 				],
-				dustClearArray:[//清灰方式
+				dustClearArray: [ //清灰方式
 					{
 						label: "人工",
 						value: "1",
 						show: true,
-					}, 
+					},
 					{
 						label: "机器",
 						value: "2",
 						show: true,
-					}, 
+					},
 					{
 						label: "人工和机器",
 						value: "3",
 						show: true,
-					}, 
+					},
 					{
 						label: "不清灰",
 						value: "4",
 						show: true,
-					}, 
+					},
 				]
 			}
 		},
@@ -674,6 +679,7 @@
 				for (var i = 0; i < data.length; i++) {
 					this.comData.poom.push(data[i]['value']);
 				}
+				this._changeKey('poom');
 			},
 			otherSelectBtn(data) {
 				this.other_select_list = data;
@@ -715,8 +721,66 @@
 				}
 			},
 			_changeKey(key) {
-				
+				switch (key) {
+					case 'dustOut':
+						this.log(this['comData'][key], "dustOut")
+						if (this['comData'][key] == 1 || this['comData'][key] == 2) {
+							this.isShowDustMode = true;
+							if (this['comData'][key] == 2) {
+								this.isShowMode = true;
+							}
+						} else if (this['comData'][key] == 3) {
+							this.isShowWinMode = true;
+							this.isShowDustMode = false;
+							this.isShowMode = false;
+						}
+						break;
+					case 'setDust':
+						if (this['comData'][key] == 3) {
+							this.isShowOtherDust = true;
+						}
+						break;
+					case 'poom':
+						for (var i = 0; i < this['comData'][key].length; i++) {
+							var temp = this['comData'][key][i];
+							if (temp == '其他') {
+								this.isShowOtherPoom = true;
+							} else if (temp == "无") {
+								this.isShowOtherPoom = false;
+							}
+						}
+						break;
+					case 'dustClear':
+						if (this['comData'][key] != 4) {
+							this.isShowClearNum = true;
+						}
+						break;
+				}
 			},
+			submit() {
+				var special = '';
+				if (this.comData.dustType.indexOf('无') === -1) {
+					if (this.comData.dustType.indexOf('其他') === -1) {
+						special = this.comData.dustType.join(',')
+					} else {
+						special = [...this.comData.dustType, ...this.comData.dustOther].join(',')
+					}
+				}
+				var opts = {
+					company_id: this.userInfo.company_id,
+					type: 3,
+					special: special,
+					state: this.comData.dustType.indexOf('无') === -1 ? 1 : 2,
+					content: JSON.stringify({
+						dustOne: this.comData
+					})
+				};
+				this.$http.post('riskSave', opts).then(res=> {
+					if (res.code == 200) {
+						this.$emit("changeNext", true);
+					}
+				});
+			}
 		}
 	}
 </script>

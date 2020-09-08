@@ -46,6 +46,8 @@
 				dustData:{},
 				hazardousChemicalsData:{},
 				coldData:{},
+				highData:{},
+				gasData:{},
 			}
 		},
 		components: {
@@ -104,11 +106,14 @@
 					case 4://危险化学品
 						this.hazardousChemicalsData = content;
 					break;
-					case 5:
-						// this.coldData = content;
+					case 5://高温熔融
+						this.highData = content;
 					break; 
 					case 6://冷库
 						this.coldData = content;
+					break; 
+					case 7://煤气
+						this.gasData = content;
 					break; 
 				}
 			},

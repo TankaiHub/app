@@ -2,7 +2,7 @@
 	<view class="cmp_btn_check_container mar_top_10px mar_bottom_10px">
 		<checkbox-group @change="onChange">
 			<label>
-				<checkbox :value="value" :checked="check" /><text class="font_weight_bold">{{text}}</text>
+				<checkbox :value="value" :checked="check" /><text class="font_weight_bold vertical_align_center">{{text}}</text>
 			</label>
 		</checkbox-group>
 	</view>

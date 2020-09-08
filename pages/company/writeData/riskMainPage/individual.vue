@@ -27,8 +27,15 @@
 		data() {
 			return {
 				drawerVisible: false,
-				currentIndex: 1,
+				currentIndex: 0,
 				navData: ['特殊作业及特种设备', '危险化学品'],
+				spaceData:{},
+				workAndDevicData:{},
+				dustData:{},
+				hazardousChemicalsData:{},
+				coldData:{},
+				highData:{},
+				gasData:{}, 
 			}
 		},
 		onLoad() {

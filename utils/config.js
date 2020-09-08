@@ -1,4 +1,4 @@
-const isOpenLog = true;//是否显示log
+const isOpenLog = false;//是否显示log
 
 
 export{

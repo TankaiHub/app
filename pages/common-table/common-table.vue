@@ -61,30 +61,19 @@
 	import appTitle from "@/components/app-title/app-title"
 	import cell from "./cell.js"
 	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
+	import {
 		produceTo
 	} from "@/common/js/change.js"
 	export default {
-		props: {
-			baseAndSafetyInfoData: {
-				type: Object,
-				default: () => {
-					return {};
-				}
-			},
-			riskInfoData: {
-				type: [Array, Object],
-				default: () => {
-					return [];
-				}
-			},
-
-		},
 		data() {
 			return {
-				baseData: [],
-				safetyData: [],
-				riskData: [],
-				commonCol:3,//跨行
+				baseAndSafetyInfoData: {},
+				riskInfoData: [],
+				// riskData: [],
+				commonCol: 3, //跨行
 				//特殊作业
 				hoistingData: [{
 						checkName: '行车',
@@ -134,23 +123,66 @@
 						phone: 'dcPhone'
 					},
 				],
+				listData: [{
+						title: '熔炉装置',
+						data: [{
+								checkName: '中频炉',
+								checkValue: 'midCheck',
+								num: 'midNum',
+								maxNum: 'midMaxNum'
+							},
+							{
+								checkName: '熔铝炉',
+								checkValue: 'meltCheck',
+								num: 'miltNum',
+								maxNum: 'miltMaxNum'
+							},
+							{
+								checkName: '冲天炉',
+								checkValue: 'dayCheck',
+								num: 'dayNum',
+								maxNum: 'dayMaxNum'
+							},
+						]
+					},
+					{
+						title: '炼钢炉',
+						data: [{
+								checkName: '平炉',
+								checkValue: 'flatCheck',
+								num: 'flatNum',
+								maxNum: 'flatMaxNum'
+							},
+							{
+								checkName: '转炉',
+								checkValue: 'turnCheck',
+								num: 'turnNum',
+								maxNum: 'turnMaxNum'
+							},
+							{
+								checkName: '电炉',
+								checkValue: 'dcCheck',
+								num: 'dcNum',
+								maxNum: 'dcMaxNum'
+							},
+						]
+					},
+				],
+				spaceFinalData: [],
+				workFinalData: [],
+				dustFinalData: [],
+				dangerFinalData: [],
+				highFinalData: [],
+				clodFinalData: [],
+				gasFinalData: []
 			}
 		},
 		components: {
 			appTitle,
 			cell
-		},
-		watch: {
-			// 
-			baseAndSafetyInfoData(nv) {
-				this.baseData = this._getBaseInfo(nv);
-				this.safetyData = this._changeSafetyInfo(nv);
-			},
-			riskInfoData(nv) {
-				this.riskData = this._changeRiskInfo(nv);
-			}
-		},
+		}, 
 		computed: {
+			...mapState(['userInfo']),
 			s_width() {
 				return uni.getSystemInfoSync().windowWidth - 20 || 320;
 			},
@@ -183,12 +215,58 @@
 						return '';
 				}
 			},
+			baseData() {
+				return this._getBaseInfo(this.baseAndSafetyInfoData);
+			},
+			safetyData() {
+				return this._changeSafetyInfo(this.baseAndSafetyInfoData);
+			},
+			riskData() {
+				var all = [];
+				this._changeRiskInfo(this.riskInfoData);
+				all.push(...this.dustFinalData);
+				all.push(...this.spaceFinalData);
+				all.push(...this.highFinalData);
+				all.push(...this.gasFinalData);
+				all.push(...this.workFinalData);
+				all.push(...this.dangerFinalData);
+
+				all.push(...this.clodFinalData);
+				return all;
+			},
 		},
-		created() {},
+		created() {
+			this._initData();
+		},
 		methods: {
+			_initData() {
+				var opts = {
+					company_id: 2433 || this.userInfo.company_id,
+					//2478,
+					// 2433, 食品
+					// 2282
+				};
+				this._getInfo(opts);
+				this._getRiskInfo(opts);
+			},
+			_getInfo(opts) {
+				this.$http.post('info', opts).then(res => {
+					if (res.code == 200) {
+						this.baseAndSafetyInfoData = res.data;
+					}
+				});
+			},
+			_getRiskInfo(opts) {
+				this.$http.post('riskInfo', opts).then(res => {
+					if (res.code == 200) {
+						this.riskInfoData = res.data;
+					}
+				});
+			},
 			//基本信息
 			_getBaseInfo(nv) {
 				var base = nv;
+				this.log(nv)
 				var w = this.s_width;
 				var contentW = this.s_width - 20 - 4 - 70;
 				var half = contentW / 2 - 70;
@@ -267,72 +345,215 @@
 			//风险信息
 			_changeRiskInfo(nv) {
 				var all = [];
+
 				for (var i = 0; i < nv.length; i++) {
 					var temp = nv[i];
 					var state = temp.state;
+
 					if (state == 1) {
 						var type = temp.type;
 						var content = temp.content;
-						this._changeType(type, content, all);
+
+						if (content == "" || content == undefined || content == null || content == "{}") return;
+						var obj = {};
+						try {
+							obj = JSON.parse(content);
+						} catch (e) {
+							this.log(e)
+						}
+						if (type == 1 && this.industry.indexOf('有限空间') !== -1) {
+							if (obj.space) {
+								var opts = obj.space;
+								this.spaceFinalData = this._changeSpace1(opts)
+								// all.push(...this._changeSpace1(opts));
+							} else if (obj.space2) {
+								var opts = obj.space2;
+								// all.push(...this._changeSpace2(opts));
+								this.spaceFinalData = this._changeSpace2(opts)
+							} else if (obj.space3) {
+								var opts = obj.space3;
+								var list = obj.infoData;
+								// all.push(...this._changeSpace3(opts, list));
+								this.spaceFinalData = this._changeSpace3(opts, list)
+							}
+							this.log("循环 有限空间 风险信息", this.spaceFinalData)
+						}
+						if (type == 2 && this.industry.indexOf('特殊作业及特种设备') !== -1) {
+							this.log(obj)
+							if (obj.workOne != undefined) {
+								var opts = obj.workOne;
+								// all.push(...this._changeSpecialJob1(opts));
+								this.workFinalData = this._changeSpecialJob1(opts);
+							} else if (obj.workTwo != undefined) {
+								var opts = obj.workTwo;
+								// all.push(...this._changeSpecialJob2(opts));
+								this.workFinalData = this._changeSpecialJob2(opts);
+							}
+							this.log("循环 特殊作业及特种设备 风险信息", this.workFinalData)
+						}
+						if (type == 3 && this.industry.indexOf('可燃性粉尘') !== -1) {
+							if (obj.dustOne != undefined) {
+								var opts = obj.dustOne;
+								// all.push(...this._changeDustOne(opts));
+								this.dangerFinalData = this._changeDustOne(opts);
+							} else if (obj.dustTwo != undefined) {
+								var opts = obj.dustTwo;
+								// all.push(...this._changeDustTwo(opts));
+								this.dangerFinalData = this._changeDustOne(opts);
+							}
+							this.log("循环 可燃性粉尘 风险信息", this.dangerFinalData)
+						}
+						if (type == 4 && this.industry.indexOf('危险化学品') !== -1) {
+							var left = obj.leftData;
+							var right = obj.rightData;
+							this.dangerFinalData = this._changeDanger(left, right);
+						}
+						if (type == 5 && this.industry.indexOf('高温熔融') !== -1) {
+							this.highFinalData = this._changeHigh(obj);
+							this.log("循环 高温熔融 风险信息", this.highFinalData)
+						}
+						if (type == 6 && this.industry.indexOf('冷库') !== -1) {
+							// all.push(this._changeColdStorage(obj));
+							this.clodFinalData = this._changeColdStorage(obj);
+							this.log("循环 冷库 风险信息", this.clodFinalData)
+						}
+						if (type == 7 && this.industry.indexOf('煤气作业') !== -1) {
+							// all.push(...this._changeGasWork(obj));
+							this.gasFinalData = this._changeGasWork(obj);
+							this.log("循环 煤气作业 风险信息", this.gasFinalData)
+						}
+
 					}
 				}
-				return all;
 			},
-			//风险信息 -- 根据type判断风险类别
-			_changeType(type, content, all) {
-				if (content == "" || content == undefined || content == null || content == "{}") return;
-				var obj = {};
-				try {
-					obj = JSON.parse(content);
-				} catch (e) {
-					this.log(e)
+			//危险化学品
+			_changeDanger(leftArr, rightArr) {
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var left = this._changeDangerArray(leftArr, "气体类",  w, keyW);
+				// var right = this._changeDangerArray(rightArr,  '液体类/固体类', w, keyW);
+				var right = [];
+				var all = [];
+				left[0][0].row = left.length || 0;
+				right[0][0].row = right.length || 0;
+				all.push([this._changeTabelValue("危险化学品", null, w, keyW)]);
+				all.push(...left, ...right);
+				
+				this.log(...left, "????????????????????")
+				all[0][0].row = all.length;
+				// return all;
+			},
+			_changeDangerArray(arr, str, w, keyW) {
+				var narr = [];
+				var specialTo = {
+					1: '有专用库房存放',
+					2: '无专用库房存放'
+				};
+				var purposeTo = {
+					1: '制冷',
+					2: '其他'
+				};
+				var saveTo = {
+					1: '瓶',
+					2: '罐',
+					3: '箱'
+				};
+				var sinUnitTo = {
+					1: 'm³',
+					2: '㎏',
+					3: 'L'
+				};
+				var _self = this;
+				narr.push([this._changeTabelValue(str, null, w, keyW)]);
+				var index = 0;
+				for (var i = 0; i < arr.length; i++) {
+					
 				}
-				var space = [];
-				var dust = [];
-				switch (type) {
-					case 1:
-						if (obj.space) {
-							var opts = obj.space;
-							all.push(...this._changeSpace1(opts));
-						} else if (obj.space2) {
-							var opts = obj.space2;
-							all.push(...this._changeSpace2(opts));
-						} else if (obj.space3) {
-							var opts = obj.space3;
-							var list = obj.infoData;
-							all.push(...this._changeSpace3(opts, list));
-						}
-						break;
-					case 2:
-						if (obj.workOne != undefined) {
-							var opts = obj.workOne;
-							all.push(...this._changeSpecialJob1(opts));
-						} else if (obj.workTwo != undefined) {
-							var opts = obj.workTwo;
-							this._changeSpecialJob2(opts);
-							all.push(...this._changeSpecialJob2(opts));
-						}
-						break;
-					case 3:
-						if (obj.dustOne != undefined) {
-							var opts = obj.dustOne;
-							all.push(...this._changeDustOne(opts));
-						} else if (obj.dustTwo != undefined) {
-							var opts = obj.dustTwo;
-							all.push(...this._changeDustTwo(opts));
-						}
-						break;
-					case 4:
-						break;
-					case 5:
-						break;
-					case 6:
-						all.push(this._changeColdStorage(obj));
-						break;
-					case 7:
-						all.push(...this._changeGasWork(obj));
-						break;
+				// for (var i = 0; i < arr.length; i++) {
+					// var temp = arr[i];
+					// if (temp['value']) {
+					// 	var cur = temp.data;
+					// 	ele[index] = []
+					// 	ele[index].push([
+					// 		[ this._changeTabelValue(temp['name'], null, w, keyW) ],
+					// 				 [ this._changeTabelValue('', '存储方式:' + saveTo[cur.save], w, keyW),
+					// 				   this._changeTabelValue('',  '数量：' + cur.maxNum || 0, w, keyW)],
+					// 				[this._changeTabelValue('',  '容积：' + cur.sinNum || 0, w, keyW),
+					// 				 this._changeTabelValue('',  specialTo[cur.special] || '未获取到库房存放数据', w, keyW)]
+							
+							
+					// 	]
+					// 	);
+					// 	if (cur.special == 1) {
+					// 		ele[index].push([this._changeTabelValue('', '库房数量：' + cur.specialNum || 0, w, keyW, 2)]);
+					// 	}
+					// 	ele[index].push([this._changeTabelValue('', cur.source == 1 ? `购买于：${this._getBuyCompany(cur.companyData)}` : '自主生产', w, keyW)]);
+					// 	index ++;
+					// }
+				// } 
+				return narr;
+			},
+			///获取购买公司  -  危险化学品
+			_getBuyCompany(data) {
+				var temp = [];
+				data.forEach(item => {
+				  temp.push(`\n单位名称:${item.buyCompany};信用代码:${item.code};联系人:${item.name};联系电话:${item.phone}`)
+				})
+				if (temp.length > 0) {
+					return temp.join(',')
+				}else {
+					return '';
 				}
+			},
+			//_changeHigh 高温熔融
+			_changeHigh(opts) {
+				this.log(opts, '高温熔融');
+				var w = this.s_width;
+				var contentW = this.s_width - 20 - 4 - 70;
+				var half = contentW / 2 - 70;
+				var keyW = 70;
+				var speciesTo = {
+					1: '钢',
+					2: '铁',
+					3: '铝',
+					4: '铜',
+					5: '其他',
+				};
+				var pouringTo = {
+					1: '全自动机械浇筑',
+					2: '人工浇筑',
+					3: '全自动机械浇筑+人工浇筑'
+				}
+				var all = [];
+				var temp = [];
+
+				all.push(
+					[this._changeTabelValue("高温熔融", null, w, keyW)],
+					[this._changeTabelValue("浇筑方式", pouringTo[opts.pouring], w, keyW, 3)],
+					[this._changeTabelValue("熔炼金属种类", opts.species == 5 ? opts.speciesOther : speciesTo[opts.species], w, keyW, 3)],
+					[this._changeTabelValue("高温熔融金属转运方式", this._changeArray2Str(opts.turnType), w, keyW, 3)],
+				);
+				for (var i = 0; i < this.listData.length; i++) {
+					var item = this.listData[i].data;
+					for (var j = 0; j < item.length; j++) {
+						var ele = item[j];
+						if (opts[ele['checkValue']]) {
+							temp[0] = [this._changeTabelValue("熔炉装置", null, w, keyW)];
+							temp.push([
+								this._changeTabelValue(ele['checkName'], null, w, keyW),
+								this._changeTabelValue("", opts[ele['num']] + '个', w, keyW),
+								this._changeTabelValue("", '最大熔炼量:' + opts[ele['maxNum']], w, keyW)
+							])
+						}
+					}
+				}
+				if (temp.length > 0) {
+					temp[0][0].row = temp.length;
+					all.push(...temp);
+				}
+				all[0][0]['row'] = all.length;
 				return all;
 			},
 			//特殊作业及特种设备 1
@@ -343,7 +564,9 @@
 				var half = contentW / 2 - 70;
 				var keyW = 70;
 				var all = [];
-				var devicTempArr = [ [this._changeTabelValue('吊装转运', null, w, keyW)] ]; //吊装转运
+				var devicTempArr = [
+					[this._changeTabelValue('吊装转运', null, w, keyW)]
+				]; //吊装转运
 				var hoistingArr = this._comparedCommon(opts, this.hoistingData, false, 'ts');
 				var hoistTempArr = [
 					[this._changeTabelValue('动火作业', null, w, keyW)]
@@ -351,7 +574,7 @@
 				this._commonSpecialJob(all, opts, w, keyW, devicTempArr);
 				this._specialFillArr(hoistTempArr, hoistingArr);
 				hoistTempArr[0][0]['row'] = hoistTempArr.length;
-				   
+
 				if (hoistTempArr.length > 1) {
 					all.push(...hoistTempArr);
 				}
@@ -369,27 +592,33 @@
 				var half = contentW / 2 - 70;
 				var keyW = 70;
 				var all = [];
-				
-				var fireTempArr = [ [ this._changeTabelValue('动火作业', null, w, keyW) ] ];
-				var devicTempArr = [ [this._changeTabelValue('吊装转运', null, w, keyW)] ]; //吊装转运
-				var electricityArr = [ [ this._changeTabelValue('电工作业', null, w, keyW) ] ];
-				var fireArr = this._comparedCommon(opts, this.dhData, true); 
+
+				var fireTempArr = [
+					[this._changeTabelValue('动火作业', null, w, keyW)]
+				];
+				var devicTempArr = [
+					[this._changeTabelValue('吊装转运', null, w, keyW)]
+				]; //吊装转运
+				var electricityArr = [
+					[this._changeTabelValue('电工作业', null, w, keyW)]
+				];
+				var fireArr = this._comparedCommon(opts, this.dhData, true);
 				this._commonSpecialJob(all, opts, w, keyW, devicTempArr);
 				this._fillArr(fireTempArr, fireArr, w, keyW, true, 'ts');
-				
-				electricityArr.push([  
+
+				electricityArr.push([
 					this._changeTabelValue('', `${opts.uniqueSelect == 1 ? '有' : '无'}专用变电站/配电房(室)`, w, keyW, this.commonCol)
 				]);
 				if (opts.uniqueSelect == 1) {
-					electricityArr.push([  
-						this._changeTabelValue('',  opts.uniqueWork == 1 ? '自有电工作业' : '外包电工作业', w, keyW),
-						this._changeTabelValue('',  `作业人员${opts.uniqueWorkNum}名`, w, keyW, this.commonCol - 1),
+					electricityArr.push([
+						this._changeTabelValue('', opts.uniqueWork == 1 ? '自有电工作业' : '外包电工作业', w, keyW),
+						this._changeTabelValue('', `作业人员${opts.uniqueWorkNum}名`, w, keyW, this.commonCol - 1),
 					]);
 				}
-				
-				fireTempArr[0][0]['row'] = fireTempArr.length;  
+
+				fireTempArr[0][0]['row'] = fireTempArr.length;
 				electricityArr[0][0]['row'] = electricityArr.length;
-				all.push(...electricityArr); 
+				all.push(...electricityArr);
 				if (fireTempArr.length > 1) {
 					all.push(...fireTempArr);
 				}
@@ -399,10 +628,10 @@
 				all[0][0]['row'] = all.length;
 				return all;
 			},
-			_commonSpecialJob(all, opts, w, keyW, devicTempArr) { 
+			_commonSpecialJob(all, opts, w, keyW, devicTempArr) {
 				var deviceData = opts.deviceData;
 				var devicegArr = this._comparedCommon(opts, deviceData, false, 'ts');
-				
+
 				all.push([this._changeTabelValue("特殊作业", null, w, keyW)]);
 
 				this._specialFillArr(devicTempArr, devicegArr);
@@ -433,7 +662,7 @@
 				var listArr = this._comparedCommon(opts, list, true);
 				all.push([this._changeTabelValue("有限空间", null, w, keyW)]);
 				this._fillArr(all, listArr, w, keyW, true);
-				console.log(listArr, '1111111111')
+				this.log(listArr, '1111111111')
 				all[0][0].row = all.length;
 				return all;
 			},
@@ -450,7 +679,7 @@
 				var leftArr = this._comparedCommon(opts, leftData);
 				var rightBotArr = this._comparedCommon(opts, rightBotData);
 				var rightTopArr = this._comparedCommon(opts, rightTopData);
-				console.log(leftArr, rightBotArr, rightTopArr);
+				this.log(leftArr, rightBotArr, rightTopArr);
 				var all = [];
 				all.push([this._changeTabelValue("有限空间", null, w, keyW)]);
 				this._fillArr(all, leftArr, w, keyW);
@@ -499,17 +728,18 @@
 							str = `${ outTo[arr[i]['out']] }外包作业；`;
 						}
 
-						
+
 						if (state == 'ts') {
-							console.log(arr[i], "================")
+							this.log(arr[i], "================")
 							temp.push([
 								this._changeTabelValue(arr[i]['name'], null, w, keyW),
-								this._changeTabelValue("", '作业人员' + arr[i]['num'] + '名', w, keyW) ,
+								this._changeTabelValue("", '作业人员' + arr[i]['num'] + '名', w, keyW),
 								this._changeTabelValue('', str, w, keyW, 2)
-								]) 
-						}else { 
+							])
+						} else {
 							temp.push([this._changeTabelValue(arr[i]['name'], arr[i]['value'] + '个', w, keyW),
-								this._changeTabelValue('', str, w, keyW, 2)])
+								this._changeTabelValue('', str, w, keyW, 2)
+							])
 						}
 
 					} else {
@@ -541,7 +771,6 @@
 						if (oarr[i].length == 1) {
 							oarr[i][0]['col'] = 3;
 						}
-						console.log(oarr)
 					}
 					this.handleArr(arr, oarr, num);
 				}
@@ -564,7 +793,7 @@
 										code: opts[temp['code']], //'信用代码'  '特种作业操作证编号'
 										phone: opts[temp['phone']], //联系电话
 										contact: opts[temp['contact']] || '', //联系人
-										num:opts[temp['num']] || '', //作业人数
+										num: opts[temp['num']] || '', //作业人数
 									});
 								} else {
 									if (state == 'ts') { //特殊作业
@@ -628,30 +857,34 @@
 				this._changeCommonDust(opts, all, w, keyW);
 				var mode = [this._changeTabelValue('清灰方式', dustClearTo[opts.dustClear], w, keyW)];
 				if (opts.dustClear != 3) {
+					mode[0].col = 1;
 					mode.push(this._changeTabelValue('清灰次数', (opts.dustNum && opts.dustNum > 0) ? (opts.dustNum + '次/天') : '不清洗', w,
 						keyW))
 				}
-				all.push(mode);
+				// all.push(mode);
 				if (opts.dustOut == 1 || opts.dustOut == 2) {
-					all.push([this._changeTabelValue("主要集尘方式", setDustTo[opts.setDust], w, keyW),
-						this._changeTabelValue("数量", opts.postNum + '套', w, keyW)
-					]);
-					all.push([
+					mode.push(this._changeTabelValue("主要集尘方式", setDustTo[opts.setDust], w, keyW),
+						this._changeTabelValue("数量", opts.postNum + '套', w, keyW),
 						this._changeTabelValue("吸尘方式", suckDustTo[opts.suckDust], w, keyW),
 						this._changeTabelValue("防爆设施", this._changeArray2Str(opts.poom, opts.poomOther, '其他'), w, keyW)
-					])
+					);
 					if (opts.dustOut == 2) {
-						all.push([this._changeTabelValue("除尘方式", this._changeArray2Str(opts.dustMode), w, keyW, 3)]);
+						mode.push(
+							this._changeTabelValue("除尘方式", this._changeArray2Str(opts.dustMode), w, keyW, 3)
+						);
 					}
 				} else if (opts.dustOut == 3) {
-					all.push([this._changeTabelValue("车间通风方式", windTo[opts.wind], w, keyW)])
+					mode.push(this._changeTabelValue("车间通风方式", windTo[opts.wind], w, keyW));
 				}
+				var arr = [];
+				this.handleArr(mode, arr, 2);
+				all.push(...arr);
 				all[0][0].row = all.length;
 				return all;
 			},
 			// //可燃性粉尘-食品
 			_changeDustTwo(opts) {
-				console.log(opts, "可燃性粉尘-食品_changeDustTwo")
+				this.log(opts, "可燃性粉尘-食品_changeDustTwo")
 				if (opts.dustType[0] == '无') return;
 				var setDustTo = {
 						1: '中央集尘',
@@ -743,42 +976,23 @@
 				var _gas = [this._changeTabelValue("煤气作业", null, w, keyW), this._changeTabelValue("产能(万吨)", dataS.num, w, keyW, 4)];
 				all.push(_gas);
 				var temp = [];
-				if (dataS.stoveCheck) {
-					temp.push([this._changeTabelValue("", "高炉", w, keyW), this._changeTabelValue("", dataS.stoveNum + '个', w, keyW),
-						this._changeTabelValue("", '规格m³:' + dataS.stoveSpec, w, keyW, 2)
-					])
-				}
-				if (dataS.turnCheck) {
-					temp.push([this._changeTabelValue("", "转炉", w, keyW), this._changeTabelValue("", dataS.turnNum + '个', w, keyW),
-						this._changeTabelValue("", `规格t：${dataS.turnSpec}`, w, keyW, 2)
-					])
-				}
-				if (dataS.dcCheck) {
-					temp.push([this._changeTabelValue("", "", w, keyW), this._changeTabelValue("", dataS.dcNum + '个', w, keyW), this._changeTabelValue(
-						"", `规格(t)：${dataS.dcSpec}`, w, keyW, 2)])
-				}
-				if (dataS.gasCheck) {
-					temp.push([this._changeTabelValue("", "煤气罐", w, keyW), this._changeTabelValue("", dataS.gasNum + '个', w, keyW),
-						this._changeTabelValue("", `规格(万m³)：${dataS.gasSpec}`, w, keyW, 2)
-					])
-				}
-				if (listData.length > 4) {
-					for (var i = 4; i < listData.length; i++) {
-						var snap = listData[i];
-						if (dataS[snap['checkValue']]) {
-							temp.push([
-								this._changeTabelValue("", snap['checkName'], w, keyW),
-								this._changeTabelValue("", `${ dataS[snap['num']] }个`, w, keyW),
-								this._changeTabelValue("", `${ snap['specName'] }:${ dataS[snap['specNum']] }`, w, keyW, 2)
-							])
-						}
+				for (var i = 0; i < listData.length; i++) {
+					var ele = listData[i];
+					if (dataS[ele['checkValue']]) {
+						temp[0] = [this._changeTabelValue("煤气锅炉", null, w, keyW)];
+						// console.log(ele['checkName'], '煤气作业')
+						temp.push([
+							this._changeTabelValue(ele['checkName'], null, w, keyW),
+							this._changeTabelValue("", dataS[ele['num']] + '个', w, keyW),
+							this._changeTabelValue("", ele['specName'] + ':' + dataS[ele['specNum']], w, keyW, 2)
+						])
 					}
 				}
 				if (temp.length > 0) {
-					temp[0] = [this._changeTabelValue("煤气锅炉", null, w, keyW), ...temp[0]]
+					temp[0][0].row = temp.length;
 					all.push(...temp);
 				}
-				all[0][0].row = all.length;
+				all[0][0]['row'] = all.length;
 				return all;
 			},
 			// 是or否 有or无
@@ -802,9 +1016,13 @@
 					} else if (type == 'string') {
 						narr.push(str + arr1);
 					}
-
 				}
-				return narr.join(',');
+				if (narr && narr.length > 0) {
+					return narr.join(',');
+				} else {
+					return null;
+				}
+
 			},
 
 			//主营产品
@@ -935,3 +1153,72 @@
 
 	.risk_info {}
 </style>
+<!-- //风险信息 -- 根据type判断风险类别
+			_changeType(type, content, all) {
+				if (content == "" || content == undefined || content == null || content == "{}") return;
+				var obj = {};
+				try {
+					obj = JSON.parse(content);
+				} catch (e) {
+					this.log(e)
+				}
+				if (type == 1 && this.industry.indexOf('有限空间') !== -1) {
+					if (obj.space) {
+						var opts = obj.space;
+						// this.spaceFinalData = this._changeSpace1(opts)
+						all.push(...this._changeSpace1(opts));
+					} else if (obj.space2) {
+						var opts = obj.space2;
+						// all.push(...this._changeSpace2(opts));
+						this.spaceFinalData = this._changeSpace2(opts)
+					} else if (obj.space3) {
+						var opts = obj.space3;
+						var list = obj.infoData;
+						// all.push(...this._changeSpace3(opts, list));
+						this.spaceFinalData = this._changeSpace3(opts)
+					}
+				}
+				if (type == 2 && this.industry.indexOf('特殊作业及特种设备') !== -1) {
+					this.log(obj)
+					if (obj.workOne != undefined) {
+						var opts = obj.workOne;
+						// all.push(...this._changeSpecialJob1(opts));
+						this.workFinalData = this._changeSpecialJob1(opts);
+					} else if (obj.workTwo != undefined) {
+						var opts = obj.workTwo;
+						// all.push(...this._changeSpecialJob2(opts));
+						this.workFinalData = this._changeSpecialJob2(opts);
+					}
+				}
+				if (type == 3 && this.industry.indexOf('可燃性粉尘') !== -1) {
+					if (obj.dustOne != undefined) {
+						var opts = obj.dustOne;
+						// all.push(...this._changeDustOne(opts));
+						this.dangerFinalData = this._changeDustOne(opts);
+					} else if (obj.dustTwo != undefined) {
+						var opts = obj.dustTwo;
+						// all.push(...this._changeDustTwo(opts));
+						this.dangerFinalData = this._changeDustOne(opts);
+					}
+				}
+				if (type == 4 && this.industry.indexOf('危险化学品') !== -1) {
+
+				}
+				if (type == 5 && this.industry.indexOf('高温熔融') !== -1) {
+
+				}
+				if (type == 6 && this.industry.indexOf('冷库') !== -1) {
+					// all.push(this._changeColdStorage(obj));
+					this.clodFinalData = this._changeColdStorage(obj);
+				}
+				if (type == 7 && this.industry.indexOf('煤气作业') !== -1) {
+					// all.push(...this._changeGasWork(obj));
+					this.gasFinalData = this._changeGasWork(obj);
+				}
+				all.push(...this.spaceFinalData);
+				all.push(...this.workFinalData);
+				all.push(...this.dustFinalData);
+				all.push(...this.gasFinalData);
+				all.push(...this.clodFinalData);
+				return all;
+			}, -->
