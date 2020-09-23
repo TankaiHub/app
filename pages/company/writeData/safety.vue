@@ -152,6 +152,114 @@
 					// safety_inspection_pj5:'',// 达标等级
 					// safety_inspection_pj6:'',// 达标--年月
 				},
+				scaleRule: [{
+					msg: '请选择厂房性质',
+					key: 'factory_property',
+				}, {
+					msg: '请选择主要能源',
+					key: 'energy_select_list',
+					other: true,
+					isArray: true,
+				}, {
+					msg: '请选择天然气供给方式',
+					key: 'energy2',
+					other: true,
+					dependent: 'energy_select_list',
+					dependent_val: '2',
+					dependent_type: "Array"
+				}, {
+					msg: '请选择购买渠道',
+					key: 'energy3',
+					other: true,
+					dependent: 'energy2',
+					dependent_val: '2'
+				}, {
+					msg: '请选择最大存储量',
+					key: 'energy4',
+					other: true,
+					dependent: 'energy2',
+					dependent_val: '2'
+				}, {
+					msg: '请选择单位',
+					key: 'energy4Unit',
+					other: true,
+					dependent: 'energy2',
+					dependent_val: '2'
+				}, {
+					msg: '有无配电房',
+					key: 'energy5',
+					other: true,
+					dependent: 'energy_select_list',
+					dependent_val: '1',
+					dependent_type: "Array"
+				}],
+				allRule:[
+					{
+						msg: '请选择厂房性质',
+						key: 'factory_property',
+					},
+					{
+						msg: '请选择是否有房屋产权证',
+						key: 'property_cert',
+					},
+					{
+						msg: '请选择是否通过消防验收',
+						key: 'fire_inspection',
+					},
+					{
+						msg: '请选择是否配备消火栓',
+						key: 'fire_hydrant',
+					},
+					{
+						msg: '请选择投保情况',
+						key: 'insured',
+					},
+					{
+						msg: '请输入其他投保情况',
+						key: 'insuredOther',
+						dependent: 'isShowInsuredOther', //依赖
+						dependent_val: true, //依赖值
+						dependent_other:true
+					},
+					{
+						msg: '请选择主要能源',
+						key: 'energy_select_list',
+						other: true,
+						isArray: true,
+					}, {
+						msg: '请选择天然气供给方式',
+						key: 'energy2',
+						other: true,
+						dependent: 'energy_select_list',
+						dependent_val: '2',
+						dependent_type: "Array"
+					}, {
+						msg: '请选择购买渠道',
+						key: 'energy3',
+						other: true,
+						dependent: 'energy2',
+						dependent_val: '2'
+					}, {
+						msg: '请选择最大存储量',
+						key: 'energy4',
+						other: true,
+						dependent: 'energy2',
+						dependent_val: '2'
+					}, {
+						msg: '请选择单位',
+						key: 'energy4Unit',
+						other: true,
+						dependent: 'energy2',
+						dependent_val: '2'
+					}, {
+						msg: '有无配电房',
+						key: 'energy5',
+						other: true,
+						dependent: 'energy_select_list',
+						dependent_val: '1',
+						dependent_type: "Array"
+					}
+				],
 				//////////投保
 				insured_selse_list: [], //选中 的 投保
 				insuredDefaultSelected: [], //投保默认值
@@ -409,7 +517,7 @@
 						this.isShowCannedMode = true;
 					} else if (key == 'energy2' && e.value == '1') {
 						this.isShowCannedMode = false;
-						this.energy2 = "";
+						// this.energy2 = "";
 						this.energy3 = "";
 						this.energy4 = "";
 						this.energy4Unit = "";
@@ -463,7 +571,89 @@
 					this.energy5 = '';
 				}
 			},
+			_changeRule(rule, souce) {
+				for (var i = 0; i < rule.length; i++) {
+					var temp = rule[i];
+					if (temp.other) { 
+						// dependent: 'isShowInsuredOther', //依赖
+						// dependent_val: true, //依赖值
+						// other:true
+						if (temp['dependent_type'] && temp['dependent_type'] == "Array") { 
+							for (var j = 0; j < this[temp['dependent']].length; j++) {
+								var in_temp = this[temp['dependent']][j];
+								this.log(in_temp['value'] , temp['dependent_val'], 'in_temp  arr' + temp['msg'])
+								if (in_temp['value'] == temp['dependent_val']) {
+									if (this[[temp['key']]] == '' || this[[temp['key']]] == null || this[[temp['key']]] == undefined) {
+										uni.showToast({
+											title: temp['msg'],
+											icon: 'none'
+										})
+										return false;
+									}
+								}
+							}
+						} else if (temp.isArray) {
+							console.log(this[temp['key']], "????????")
+							if (this[temp['key']].length == 0) {
+								uni.showToast({
+									title: temp['msg'],
+									icon: 'none'
+								})
+								return false;
+							}
+						} else if (this[temp['dependent']] == temp['dependent_val']) {
+							this.log(this[temp['dependent']], '依存')
+							if (this[[temp['key']]] == '' || this[[temp['key']]] == null || this[[temp['key']]] == undefined) {
+								uni.showToast({
+									title: temp['msg'],
+									icon: 'none'
+								})
+								return false;
+							}
+						} 
+						
+					} else {
+						if (temp['dependent_other']) {
+							if (this[temp['dependent']] == temp['dependent_val']) {
+								console.log("===================================")
+								if (souce[temp['key']] == '' || souce[temp['key']] == null || souce[temp['key']] == undefined) {
+									uni.showToast({
+										title: temp['msg'],
+										icon: 'none'
+									})
+									return false;
+								}
+							}
+						}else if (souce[temp['key']] == '' || souce[temp['key']] == null || souce[temp['key']] == undefined) {
+							uni.showToast({
+								title: temp['msg'],
+								icon: 'none'
+							})
+							return false;
+						}
+						
+					}
+				}
+				return true;
+			},
+			_hasStr(str1, str2) {
+				
+				if (str1 == null || str1 == undefined || str1 == "" || str1.length == 0) return false;	
+				for (var i = 0; i < str1.length; i ++) {
+					if (str1[i] == str2) {
+						return true;
+					}
+				}
+				return false;
+			},
 			onSubmit(bool) {
+				if(this.isIndividual) {
+					var state = this._changeRule(this.scaleRule, this.safetyData);
+					if (!state) return;
+				}else {
+					var state = this._changeRule(this.allRule, this.safetyData);
+					if (!state) return;
+				}  
 				if (bool) {
 					this.safetyData.energy = this.energyStr + ',' + this.energy2 + "," + this.energy3 + ',' + this.energy4 + ',' +
 						this.energy4Unit + ',' + this.energy5;
@@ -479,7 +669,7 @@
 								url = './riskMainPage/individual';
 							} else {
 								url = this._changeUrl();
-							} 
+							}
 							uni.showToast({
 								title: res.msg,
 								icon: "success",
@@ -505,7 +695,7 @@
 			},
 			_changeUrl() {
 				var name = this.safetyData.industry_category_zfl;
-				switch (name) { 
+				switch (name) {
 					case '塑料':
 						return './riskMainPage/plastic';
 					case '纺织':

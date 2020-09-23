@@ -12,20 +12,32 @@ export default {
 		},
 	},
 	render: function(h) {
-		let _content = this.owner.$scopedSlots.content();
-		return h(
-			'uni-view', // 标签名称 - 第一个参数 
-			[
-				this.owner.$slots.default,
-				h(
-					'uni-view', {
-						'class': {
-							'slotsWrap': true
-						}
-					},
-					[h('uni-view', _content, this.data)]
+		try {
+			var _content = null;
+			if (this.owner && this.owner.$scopedSlots && this.owner.$scopedSlots.content) {
+				_content = this.owner.$scopedSlots.content();
+				return h(
+					'uni-view', // 标签名称 - 第一个参数 
+					[
+						this.owner.$slots.default,
+						h(
+							'uni-view', {
+								'class': {
+									'slotsWrap': true
+								}
+							},
+							[h('uni-view', _content, this.data)]
+						)
+					]
 				)
-			]
-		)
+			} else {
+				return _content;
+			}
+
+		} catch (e) {
+			console.log(e)
+		}
+
+
 	}
 };

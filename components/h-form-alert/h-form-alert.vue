@@ -83,7 +83,7 @@
 <style lang="scss">
 	.a_mask{
 		position: fixed;
-		z-index: 99999;
+		z-index: 9;
 		background-color: rgba(0,0,0,0.5);
 		top: 0;
 		left: 0;

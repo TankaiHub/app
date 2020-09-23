@@ -27,6 +27,15 @@
 		mapMutations
 	} from 'vuex'
 	export default {
+		props:{
+			cmpData:{
+				type:Object,
+				default() {
+					return {};
+				},
+			},
+			bool:Boolean
+		},
 		data() {
 			return {
 				coldData: {
@@ -71,7 +80,35 @@
 		computed: {
 			...mapState(['userInfo']),
 		},
+		watch:{
+			bool(nv) {
+				if (nv) {
+					this._syncData();
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() {
+				console.log(this.cmpData);
+				if (this.cmpData != undefined || this.cmpData != null) {
+					
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined) {
+						try{
+							var data = JSON.parse(content);
+							console.log(data)
+							this.coldData = data;
+						}catch(e){
+							//TODO handle the exception
+						}
+					}
+					
+				}
+			},
 			///selsec
 			onSelectBtn(e, key) {
 				this['coldData'][key] = e.value;
@@ -89,9 +126,8 @@
 				return opts;
 			},
 			submit() {
-				if (!this._changeData()) {
-					return;
-				}
+				var bool = this._changeData();
+				if (!bool) return "interrupt"; 
 				var opts = this.getData();
 				this.$http.post("riskSave", opts).then(res=> {
 					if (res.code == 200) {

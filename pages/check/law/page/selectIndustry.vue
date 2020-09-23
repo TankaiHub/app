@@ -347,6 +347,9 @@
 					this.total = res.Total;
 				})
 			},
+			onNewAddPlan() {
+				
+			},
 			/////////////////////select////////////////////////////
 			onSelectBtn(e, key) {
 				if (e.flag) {

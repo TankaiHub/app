@@ -5,10 +5,14 @@
 
 			<app-item-input title="动火作业">
 				<view class="s_w_a_d_t_item_wrap" slot='item'>
-					<checkbox-group v-for="(item, index) in dhData" :key="index" @change="onCheckBox($event, item, index)">
+					<!-- <checkbox-group v-for="(item, index) in dhData" :key="index" @change="onCheckBox($event, item, index)"> -->
+					<block v-for="(item, index) in dhData" :key="index">
 						<view class="swadt_item mar_bottom_10px">
 							<label>
-								<checkbox :value="checkValue" :checked="wordData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+								<app-checkbox v-model="wordData[item.checkValue]" @changeCheckBox="onCheckBox($event, item, index)">
+									<text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+								</app-checkbox>
+								<!-- <checkbox :value="checkValue" :checked="wordData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text> -->
 							</label>
 							<uni-list>
 								<uni-list-item title="作业人员" :showArrow="false" class="list_border_1px">
@@ -65,7 +69,10 @@
 								</block>
 							</uni-list>
 						</view>
-					</checkbox-group>
+
+					</block>
+
+					<!-- </checkbox-group> -->
 				</view>
 			</app-item-input>
 			<app-item-input title="电工作业">
@@ -100,10 +107,14 @@
 
 			<app-item-input title="特种设备">
 				<view class="s_w_a_d_t_item_wrap" slot='item'>
-					<checkbox-group v-for="(item, index) in deviceData" :key='index' @change="onCheckBox($event, item, index)">
+					<!-- <checkbox-group v-for="(item, index) in deviceData" :key='index' @change="onCheckBox($event, item, index)"> -->
+					<block v-for="(item, index) in deviceData" :key='index'>
 						<view class="swadt_item mar_bottom_10px">
 							<label>
-								<checkbox :value="checkValue" :checked="wordData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+								<app-checkbox v-model="wordData[item.checkValue]" @changeCheckBox="onCheckBox($event, item, index)">
+									<text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+								</app-checkbox>
+								<!-- <checkbox :value="checkValue" :checked="wordData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text> -->
 								<image v-if="item.del" @click="onDel('deviceData', item, index)" src="../../../../static/icon/del.png" class="img_size_40px vertical_align_center mar_left_5px"
 								 mode="aspectFill"></image>
 							</label>
@@ -124,12 +135,18 @@
 								</uni-list-item>
 							</uni-list>
 						</view>
-					</checkbox-group>
+
+					</block>
+
+					<!-- </checkbox-group> -->
 				</view>
 			</app-item-input>
 
 			<app-btn-add text="添加" @onBtn="onAddBtn('deviceData')"></app-btn-add>
-			<app-btn-check text="不涉及特殊作业及特种设备" @change="onChange" :check="isNotInvolv"></app-btn-check>
+			<!-- <app-btn-check text="不涉及特殊作业及特种设备" @change="onChange" :check="isNotInvolv"></app-btn-check> -->
+			<app-checkbox v-model="isNotInvolv" @changeCheckBox="onChange">
+				<text class="font_weight_bold vertical_align_center">不涉及特殊作业及特种设备</text>
+			</app-checkbox>
 			<hFormAlert v-if="isShowCancel" placeholder="请输入名称" title='名称' confirmText="添加" @confirm="onDetermine($event, 'deviceData')"
 			 @cancel="onCancel"></hFormAlert>
 		</view>
@@ -142,11 +159,21 @@
 	import appBtnCheck from "@/components/app-btn/app-btn-check"
 	import appPickerSelect from '@/components/app-picker/app-picker-select'
 	import hFormAlert from '@/components/h-form-alert/h-form-alert.vue'
+	import appCheckbox from "@/components/app-input/app-checkbox"
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex'
 	export default {
+		props: {
+			cmpData: {
+				type: Object,
+				default () {
+					return {};
+				},
+			},
+			bool: Boolean
+		},
 		data() {
 			return {
 				isShowCancel: false, //添加其他特种设备
@@ -156,7 +183,7 @@
 					uniqueSelect: '',
 					uniqueWork: '',
 					uniqueWorkNum: '',
-					state:false,
+					state: false,
 				},
 				checkValue: 'cb',
 				deviceData: [{
@@ -226,7 +253,7 @@
 					label: '个人',
 					value: "2",
 					show: true,
-				}], 
+				}],
 				commonArray: [{
 					label: '有',
 					value: "1",
@@ -252,12 +279,43 @@
 			appBtnAdd,
 			appBtnCheck,
 			appPickerSelect,
-			hFormAlert
+			hFormAlert,
+			appCheckbox
 		},
 		computed: {
 			...mapState(['userInfo']),
 		},
+		watch: {
+			bool(nv) {
+				if (nv) {
+					this._syncData();
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() { 
+				if (this.cmpData != undefined || this.cmpData != null) {
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined || content != "") {
+						try{
+							var con_obj = JSON.parse(content);
+							var data = con_obj.workTwo;
+							this.deviceData = data.deviceData;
+							this.wordData = data; 
+						}catch(e){
+							//TODO handle the exception
+							console.log(e)
+						}
+
+					}
+					this.isNotInvolv = state == 1 ? false : true;
+
+				}
+			},
 			onSelectBtn(e, key) {
 				if (e.flag) {
 					this.$set(this.wordData, key, e.value);
@@ -293,44 +351,149 @@
 				this[tag].splice(index, 1);
 			},
 			onCheckBox(e, item, index) {
-				var val = e.detail.value;
+				// var val = e.detail.value;
 				this.isNotInvolv = false;
-				if (val.length > 0) {
-					this.$set(this.wordData, item.checkValue, true);
-				} else {
-					this.$set(this.wordData, item.checkValue, false);
-				}
+				// if (val.length > 0) {
+				// 	this.$set(this.wordData, item.checkValue, true);
+				// } else {
+				// 	this.$set(this.wordData, item.checkValue, false);
+				// }
 			},
 			//不涉及
 			onChange(bool) {
 				this.isNotInvolv = bool;
-				if (bool) {
-					var reg = /Check/g;
-					for (var prop in this.wordData) {
-						if (prop.match(reg) != null && prop.match(reg).length > 0) {
-							this.wordData[prop] = false; 
-						}
-					}
+				var arr = this.deviceData.concat(this.dhData);
+				for (var i = 0; i < arr.length; i ++) {
+					var temp = arr[i];
+					this.wordData[temp['checkValue']] = false;
 				}
+				// if (bool) {
+				// 	var reg = /Check/g;
+				// 	for (var prop in this.wordData) {
+				// 		if (prop.match(reg) != null && prop.match(reg).length > 0) {
+				// 			this.wordData[prop] = false;
+				// 		}
+				// 	}
+				// }
 			},
 			submit() {
+				var bool = this._changeRule([], this.wordData);
+				if (!bool) return "interrupt";
+				// if (!this.isNotInvolv) {
+				// 	this.toast('请选择不涉及特殊作业及特种设备');
+				// 	return "interrupt";
+				// }
 				this.wordData.state = this.isNotInvolv;
 				this.wordData.deviceData = this.deviceData;
 				var content = {
-					workTwo:this.wordData
+					workTwo: this.wordData
 				};
 				var opts = {
 					company_id: this.userInfo.company_id,
-					content:JSON.stringify(content),
+					content: JSON.stringify(content),
 					type: 2,
-					state: this.isNotInvolv ? 2 : 1, 
+					state: this.isNotInvolv ? 2 : 1,
 				};
-				this.$http.post("riskSave", opts).then(res=> {
+				this.$http.post("riskSave", opts).then(res => {
 					if (res.code == 200) {
 						this.$emit("changeNext", true);
 					}
 				});
-			}
+			},
+			_changeRule(rule, source) {
+				var flag = false;
+				for (let i = 0; i < this.dhData.length; i++) {
+					var temp = this.dhData[i];
+					if (source[temp['checkValue']]) {
+						flag = true;
+						if (source[temp['num']] == '' || source[temp['num']] == undefined) {
+							this.toast('请输入作业人员人数');
+							return false;
+						}
+						if (source[temp['out']] == '' || source[temp['out']] == undefined) {
+							this.toast('请选择是否外包');
+							return false;
+						}
+
+						if (source[temp['out']] == '1') {
+							if (source[temp['type']] == '' || source[temp['type']] == undefined) {
+								console.log(source[temp['out']], temp['out'], "==================")
+								this.toast('请选择承包方类型');
+								return false;
+							}
+							if (source[temp['type']] == '1') { //企业
+								if (source[temp['name']] == '' || source[temp['name']] == undefined) {
+									this.toast('请输入单位名称');
+									return false;
+								}
+								if (source[temp['code']] == '' || source[temp['code']] == undefined) {
+									this.toast('请输入信用代码');
+									return false;
+								}
+								if (source[temp['contact']] == '' || source[temp['contact']] == undefined) {
+									this.toast('请输入联系人');
+									return false;
+								}
+								if (source[temp['phone']] == '' || source[temp['phone']] == undefined) {
+									this.toast('请输入联系电话');
+									return false;
+								}
+							} else if (source[temp['type']] == '2') {
+								if (source[temp['name']] == '' || source[temp['name']] == undefined) {
+									this.toast('请输入姓名');
+									return false;
+								}
+								if (source[temp['code']] == '' || source[temp['code']] == undefined) {
+									this.toast('请输入特种作业操作证编号');
+									return false;
+								}
+								if (source[temp['phone']] == '' || source[temp['phone']] == undefined) {
+									this.toast('请输入联系电话');
+									return false;
+								}
+							}
+						}
+					}
+				}
+
+				if (source['uniqueSelect'] != '') {
+					flag = true;
+					if (source['uniqueWork'] == '' || source['uniqueWork'] == undefined) {
+						this.toast('请选择承接方类型');
+						return false
+					}
+					if (source['uniqueWorkNum'] == '' || source['uniqueWorkNum'] == undefined) {
+						this.toast('请输入作业人员');
+						return false;
+					}
+				}
+
+				for (let j = 0; j < this.deviceData.length; j++) {
+					var temp = this.deviceData[j];
+					if (source[temp['checkValue']]) {
+						flag = true;
+						if (source[temp['num']] == '' || source[temp['num']] == undefined) {
+							this.toast(`请输入${temp['checkName']}数量`);
+							return false;
+						}
+						if (source[temp['man']] == '' || source[temp['man']] == undefined) {
+							this.toast(`请输入${temp['checkName']}作业人员人数`);
+							return false;
+						}
+					}
+				}
+
+				if (!flag && !this.isNotInvolv) {
+					this.toast('请选择不涉及特殊作业及特种设备');
+				}
+				return true;
+			},
+			toast(title) {
+				uni.showToast({
+					title,
+					icon: 'none'
+				})
+			},
 		}
 	}
 </script>

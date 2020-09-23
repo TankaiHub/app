@@ -221,7 +221,7 @@
 				this.drawerVisible = bool;
 			},
 			_initData() {
-				this.log("?????????????????????????????????" , this.month , this.year )
+				 
 				if (this.month && this.year == "") {
 					uni.showToast({
 						title:"请选择年",
@@ -232,7 +232,7 @@
 				const opts = {
 					page: this.page,
 					page_size: this.pageSize,
-					type: this.typeSerch,
+					type: this.lawType,
 					mouth: this.month || '',
 					year: this.year || '',
 				}
@@ -315,14 +315,14 @@
 			onLaw(state, data) {
 				this.$store.commit("set_admin_law_plan_info", data);
 				this.$store.commit("set_admin_law_add_company_select_info", data);
-
+				var _self = this;
 				uni.navigateTo({
 					url: './page/lawTask?state=' + state,
 					success() {
-						this.log('success')
+						_self.log('success')
 					},
 					fail(err) {
-						this.log(err)
+						_self.log(err)
 					}
 				})
 			},

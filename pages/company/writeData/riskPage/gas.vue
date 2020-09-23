@@ -68,6 +68,15 @@
 		mapMutations
 	} from 'vuex'
 	export default {
+		props: {
+			cmpData: {
+				type: Object,
+				default () {
+					return {};
+				},
+			},
+			bool: Boolean
+		},
 		data() {
 			return {
 				checkValue: 'cb',
@@ -141,7 +150,30 @@
 		computed: {
 			...mapState(['userInfo']),
 		},
+		watch: {
+			bool(nv) {
+				if (nv) {
+					this._syncData();
+					console.log("nv", nv)
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() {
+				if (this.cmpData != undefined || this.cmpData != null) {
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined) {
+						var con_obj = JSON.parse(content);
+						this.listData = con_obj.listData;
+						this.gasData = con_obj;
+						
+					}
+				}
+			},
 			//添加
 			onAddBtn(tag) {
 				this.currentAdd = tag;
@@ -192,6 +224,8 @@
 				}
 			},
 			submit() {
+				var bool = this._changeRule([], this.gasData);
+				if (!bool) return "interrupt";
 				this.gasData.listData = this.listData;
 				var opts = {
 					company_id: this.userInfo.company_id,
@@ -203,8 +237,40 @@
 					if (res.code == 200) {
 						this.$emit("changeNext", true);
 					}
+				}) 
+			},
+			_changeRule(rule, socure) {
+				if (socure['state'] == '' || socure['state'] == undefined) {
+					this.toast('请选择煤气作业');
+					return false;
+				}
+				if (socure['state'] == 1) {
+					if (socure['num'] == '' || socure['num'] == undefined) {
+						this.toast('请输入产能');
+						return false;
+					}
+					
+					for (var i = 0; i < this.listData.length; i ++) {
+						var temp = this.listData[i];
+						if (socure[temp['checkValue']]) {
+							if (socure[temp['specNum']] == '' || socure[temp['specNum']] == undefined) {
+								this.toast('请输入数量');
+								return false;
+							}
+							if (socure[temp['num']] == '' || socure[temp['num']] == undefined) {
+								this.toast('请输入最大熔炼量');
+								return false;
+							}
+						}
+					} 
+				}
+				return true;
+			},
+			toast(title) {
+				uni.showToast({
+					title,
+					icon:'none'
 				})
-
 			},
 		}
 	}

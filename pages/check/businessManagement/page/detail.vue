@@ -6,28 +6,10 @@
 			<view class="de_bus_top_btn dis_flex_center">
 				<button type="primary" @click="onGoAdd">新增经营点</button>
 				<button type="primary" @click="onGoLaw">添加执法任务</button>
-				<button type="primary">地图导航</button>
+				<button type="primary" @click="onMap">地图导航</button>
 			</view>
-			<view class="de_bus_all_table_wrap">
-				<!-- 基本信息 -->
-				<view class="de_bus_a_t_base_table_wrap">
-					<app-title text="基本信息 "></app-title>
-					<view class="de_bus_t_wrap">
-						<view class="">
-							
-						</view>
-					</view>
-				</view>
-				
-				
-				 
-				
-				
-				
-				
-				
-				
-				
+			<view class="de_bus_all_table_wrap"> 
+				<common-table></common-table>
 			</view>
 		</view>
 	</view>
@@ -36,6 +18,7 @@
 <script>
 	import appNav from '@/components/app-nav/app-nav'
 	import appTitle from "@/components/app-title/app-title"
+	import commonTable from "../../../common-table/common-table.vue"
 	import {
 		mapState
 	} from "vuex"
@@ -47,7 +30,8 @@
 		},
 		components:{
 			appNav,
-			appTitle
+			appTitle,
+			commonTable
 		},
 		computed: {
 			...mapState(['admin_item_company_info']),
@@ -69,6 +53,11 @@
 			onGoLaw() {
 				uni.navigateTo({
 					url:'../../law/page/addCompany?s=m&code=' + this.admin_item_company_info.credit_code
+				})
+			},
+			onMap() {
+				uni.navigateTo({
+					url:'./map'
 				})
 			},
 		}

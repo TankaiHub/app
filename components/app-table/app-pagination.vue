@@ -6,8 +6,14 @@
 				<app-select @onSelectItem="onSelectItem"></app-select>
 			</view>
 			<view class="c_a_p_btn_wrap">
-				<button @click="onPrev" class="c_a_p_btn" :disabled="isPrev" type="default">11</button>
-				<button @click="onNext" class="c_a_p_btn" :disabled="isNext" type="default">11</button>
+				<button @click="onPrev" class="c_a_p_btn" :disabled="isPrev" type="default">
+					<image src="../../static/icon/left.png" v-if="!isPrev" class="img_size_40px vertical_align_center" mode="aspectFill"></image>
+					<image src="../../static/icon/left_ccc.png" v-else class="img_size_40px vertical_align_center" mode="aspectFill"></image>
+				</button>
+				<button @click="onNext" class="c_a_p_btn" :disabled="isNext" type="default">
+					<image src="../../static/icon/left.png" v-if="!isNext" class="img_size_40px vertical_align_center right_img" mode="aspectFill"></image>
+					<image src="../../static/icon/left_ccc.png" v-else class="img_size_40px vertical_align_center right_img" mode="aspectFill"></image>
+				</button>
 				
 			</view>
 		</view>
@@ -39,6 +45,7 @@
 				}
 			},
 			isNext() {
+				if (this.totalPage == 0) return true;
 				if (this.page == this.totalPage) {
 					return true;
 				}else {
@@ -67,6 +74,7 @@
 </script>
 
 <style lang="less">
+	@import url("@/common/less/base.less");
 	.cmp_app_pagination_container {
 		margin-top:10px; 
 		padding:0 10px 40px;
@@ -86,6 +94,11 @@
 					padding: 0 8px;
 					height: 35px;
 					font-size: 14px;
+					image{
+						&.right_img{
+							transform: rotateZ(180deg);
+						}
+					}
 					
 				}
 			}

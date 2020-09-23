@@ -16,7 +16,7 @@
 					<li v-for="(item, index) in listData" class="list_item_wrap " :key="index">
 						<div class="file_wrap">
 							<div class="file_icon item_con">
-						 		<image src="../../../static/icon-file.png" class="icon-style" v-if="item.type==1" />
+								<image src="../../../static/icon-file.png" class="icon-style" v-if="item.type==1" />
 								<image :src="item.url" class="icon-style" v-if="item.type==2" />
 								<image src="../../../static/icon-video.png" class="icon-style" v-if="item.type==3" />
 								<image src="../../../static/icon-wenjian.png" class="icon-style" v-if="item.type==4" />
@@ -34,32 +34,45 @@
 							<!-- -->
 							<div class="edit_wrap item_con" v-if="adminUserInfo.type==2">
 								<view class="ewi_btn_wrap clearfix">
-									<view @click="changeMes(item.file_id)" class="color_red_btb ed_w_i">删除</view>
-									<view @click="editShow(item)" class="color_blue_btb mar_left_10px ed_w_i">编辑</view>
-									<navigator  :href="item.url" download class="e_w_a_btn ed_w_i" v-if="item.type!=1">
-										<view class="color_blue_btb ed_w_i">下载</view>
-									</navigator >
+									<view @click="onDelFile(item)" class="color_red_btb ed_w_i">删除</view>
+									<view @click="onEditFile(item)" class="color_blue_btb mar_left_10px ed_w_i">编辑</view>
+
+									<view @click="onDownload(item)" class="color_blue_btb mar_left_10px ed_w_i" v-if="item.type!=1">下载</view>
+
 								</view>
 							</div>
-						</div> 
-					</li> 
+						</div>
+					</li>
 					<li v-if="listData.length == 0" class="not_data">暂无数据</li>
 				</ul>
 				<!--分页-->
-				 
-				 <app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
-				  @onNext="onNext"></app-pagination>
-				 
+
+				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
+				 @onNext="onNext"></app-pagination>
+
 			</view>
+			<!-- <button type="default" @click="getSaveFileList">文件列表</button>
+			
+			<view class="">
+				<view class="" v-for="(item, index) in saveFileList" :key="index">
+					{{item.filePath}}
+				</view>
+			</view> -->
+			
+			
 		</view>
+		<app-alert v-if="isShowNewFile" title="新建文件夹" placeholder="请输入文件夹名称" @cancel="cancelNewFile" @confirm="confirmNewFile"></app-alert>
+		<app-alert v-if="isShowEditFileTitle" title="文件标题编辑" placeholder="请输入文件标题" @cancel="cancelEditFileTitle" @confirm="confirmEditFileTitle"></app-alert>
 	</view>
 </template>
 
 <script>
 	import appNav from '@/components/app-nav/app-nav'
 	import appPagination from '@/components/app-table/app-pagination'
-	
-	import { changeTime } from "@/common/js/base.js"
+	import appAlert from '@/components/h-form-alert/h-form-alert'
+	import {
+		changeTime
+	} from "@/common/js/base.js"
 
 	import {
 		mapState,
@@ -128,7 +141,11 @@
 					id: 1
 				}],
 				refresh: true,
-				showType: 1
+				showType: 1,
+				isShowNewFile: false, //新建文件夹弹窗
+				isShowEditFileTitle: false,
+				editFileTitleData: {},
+				saveFileList:[], 
 			}
 		},
 		computed: {
@@ -136,7 +153,8 @@
 		},
 		components: {
 			appNav,
-			appPagination
+			appPagination,
+			appAlert
 		},
 		onShow() {
 			this._initData()
@@ -183,7 +201,7 @@
 				this._initData();
 				this.log(this.page, "-------------")
 			},
-		 
+
 			//////////////list////////////////////
 			// 文件单击时
 			fileClick(item) {
@@ -243,15 +261,121 @@
 				let fileFormat = url.substring(0, fileName); //截
 				return fileFormat;
 			},
-			
-			onGoNewFile() {
-				uni.navigateTo({
-					url:'./systemPage/newCreateFile'
+			onDelFile(opts) {
+				console.log(opts)
+				var _self = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定删除\` ' + opts.name + ' \`？',
+					success: function(res) {
+						if (res.confirm) {
+							_self.$http.post('deleteFile', {
+								file_id: opts.file_id
+							}).then(res => {
+								if (res.code == 200) {
+									uni.showToast({
+										title: '删除成功',
+										icon: 'success',
+										success() {
+											setTimeout(() => {
+												_self._initData();
+											}, 1500)
+										}
+									})
+
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			onEditFile(opts) {
+				this.isShowEditFileTitle = true;
+				this.editFileTitleData = opts;
+			},
+			cancelNewFile() {
+				this.isShowNewFile = false;
+			},
+			confirmNewFile(e) {
+				var opts = {
+					name: e,
+					pid: 1,
+					type: 1
+				};
+				var _self = this;
+				this.$http.post('upload', opts).then(res => {
+					if (res.code == 200) {
+						this.isShowNewFile = false;
+						uni.showToast({
+							title: res.msg,
+							icon: 'success',
+							success() {
+								setTimeout(() => {
+									_self._initData();
+								}, 1000);
+							}
+						})
+					}
 				})
+			},
+			cancelEditFileTitle() {
+				this.isShowEditFileTitle = false;
+			},
+			confirmEditFileTitle(e) {
+				var opts = {
+					...this.editFileTitleData,
+					name: e
+				};
+				var _self = this;
+				this.$http.post('editFile', opts).then(res => {
+					if (res.code == 200) {
+						this.isShowEditFileTitle = false;
+						uni.showToast({
+							title: res.msg,
+							icon: 'success',
+							success() {
+								setTimeout(() => {
+									_self._initData();
+								}, 1000);
+							}
+						})
+					}
+				})
+			},
+			//新建文件夹
+			onGoNewFile() {
+				this.isShowNewFile = true;
+			},
+			onDownload(opts) {
+				console.log(opts)
+				var task = uni.downloadFile({
+					url: opts.url,
+					success(res) {
+						console.log(res, "====down")
+						uni.saveFile({
+							tempFilePath: res.tempFilePath,
+							success(result) {
+								console.log(result, "save")
+							}
+						});
+					}
+				});
+			},
+			getSaveFileList() {
+				var _self = this;
+				uni.getSavedFileList({
+					success(res) {
+						_self.saveFileList = res.fileList; 
+						
+						console.log(_self.saveFileList )
+					}
+				});
 			},
 			onGoUpFile() {
 				uni.navigateTo({
-					url:'./systemPage/upFile'
+					url: './systemPage/upFile'
 				})
 			},
 
@@ -293,6 +417,7 @@
 
 				.list_item_wrap {
 					margin: 20px 0;
+
 					.file_wrap {
 
 						.file_icon {
@@ -316,7 +441,7 @@
 								line-height: 20px;
 								overflow: hidden;
 								text-overflow: ellipsis;
-								white-space: nowrap; 
+								white-space: nowrap;
 								font-size: 14px;
 
 								&.time_text {
@@ -334,11 +459,13 @@
 							.e_w_a_btn {
 								margin-left: 10px;
 							}
-							.ewi_btn_wrap{
+
+							.ewi_btn_wrap {
 								float: right;
-								width:110px;
+								width: 110px;
 								text-align: right;
-								.ed_w_i{
+
+								.ed_w_i {
 									display: inline-block;
 								}
 							}

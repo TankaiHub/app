@@ -5,14 +5,14 @@
 		<view class="l_sch_wrap">
 			<view class="l_sch_top_btn_wrap clearfix">
 				<view class="l_sch_t_b_bd_wrap clearfix">
-					<view class="l_sch_com_tips_wrap">
+					<view class="l_sch_com_tips_wrap" @click="onComTips">
 						<text>?</text>
 						企业已关闭/搬迁
 					</view>
 					<button class="l_sch_top_btn" type="primary" v-if="carryOutState" @click="onGoAddLawPlan">新增</button>
 				</view>
 			</view>
- 
+
 			<view class="l_sch_table_wrap">
 				<app-table :headerData="headerData" :bodyData="checkList" :tablePorps="tableProps" :isShowOper="isShowOper">
 					<template slot="other" slot-scope="props">
@@ -44,7 +44,9 @@
 		mapState,
 		mapMutations
 	} from "vuex"
-	import { DivideAthousandTime } from '@/common/js/base.js'
+	import {
+		DivideAthousandTime
+	} from '@/common/js/base.js'
 	export default {
 		data() {
 			return {
@@ -70,7 +72,7 @@
 				tableProps: [{
 					isContent: true,
 					style: {},
-					props: "plan"
+					props: "content"
 				}, {
 					style: {},
 					props: "state",
@@ -182,8 +184,8 @@
 			//检查完成
 			onCarryOut(time) {
 				if (time != '') {
-					time = new Date(time + '/01').getTime(); 
-				}else {
+					time = new Date(time + '/01').getTime();
+				} else {
 					time = '';
 				}
 				var opts = {
@@ -196,10 +198,10 @@
 						this.$refs['date-time'].show();
 					} else if (res.code == 200) {
 						uni.showToast({
-							title:'提交成功',
-							icon:"none",
+							title: '提交成功',
+							icon: "none",
 							success() {
-								setTimeout(()=> {
+								setTimeout(() => {
 									uni.navigateBack()
 								}, 1000);
 							}
@@ -210,6 +212,28 @@
 						// }); 
 					}
 				})
+			},
+			onComTips() {
+				var thi = this;
+				uni.showModal({
+					title: '提示',
+					content: '企业已关闭/搬迁?',
+					success: function(res) {
+						if (res.confirm) {
+							var opts = {
+								task_id: this.admin_law_detail_info.task_id
+							};
+							this.$http.post("taskStop", opts).then(res => {
+								if (res.code == 200) {
+									uni.navigateBack()
+								}
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+
 			},
 		},
 	}

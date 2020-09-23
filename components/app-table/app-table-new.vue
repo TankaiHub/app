@@ -9,12 +9,12 @@
 				<view class="header_item dis_inline_block" v-if='isShowCheckbox'>
 					<checkbox-group @change="onHeaderCheckBox">
 						<label>
-							<checkbox :value="checkboxVal" class="check_box_size" :checked="isCheckAll" />
+							<checkbox :value="checkboxVal" class="check_box_size" :disabled="tableData.length == 0" :checked="isCheckAll" />
 						</label>
 					</checkbox-group>
 				</view>
 				<view class="header_item dis_inline_block padding_5px" v-if="isShowExpand" :style="{ width:(expandWidth)*2+'upx' }"></view>
-				<view class="header_item dis_inline_block padding_5px" v-for="(item, index) in headerArray" :key="index" :style="{ width:item.isInWidth ? tdW*2 + 'upx' : item.width * 2 + 'upx' }">
+				<view class="header_item dis_inline_block padding_5px color_blue_btb font14 font_weight_bold" v-for="(item, index) in headerArray" :key="index" :style="{ width:item.isInWidth ? tdW*2 + 'upx' : item.width * 2 + 'upx' }">
 					{{item.key}}
 				</view>
 			</view>
@@ -44,7 +44,7 @@
 							{{index+1}} </view>
 						<!-- 当前显示的内容 -->
 						<view class="item_td padding_5px dis_inline_block vertical_align_center" :style="{ width:(  ele.isInWidth ? tdW*2 + 'upx' : ele.width*2 +'upx' ) }"
-						 v-for="(ele, indx) in showContent" :key="indx">
+						 v-for="(ele, indx) in showContent" :key="indx" @click="onContent(ele.isClickContent, item)">
 								{{item[ele['key']]}}
 						</view>
 					</view>
@@ -55,8 +55,7 @@
 				<view class="not_data" v-if="tableData.length == 0">
 					暂无数据
 				</view>
-			</view>
-
+			</view> 
 		</view> 
 	</view>
 </template>
@@ -71,7 +70,7 @@
 				default () {
 					return [];
 				}
-			},
+			}, 
 			isShowIndex: { //是否显示序号
 				type: Boolean,
 				default: false
@@ -123,11 +122,11 @@
 		watch: {
 			tableData(nv) {
 				this._initData();
-				this.isCheckAll = false;
-			}, 
+				this.isCheckAll = false; 
+			},  
 		},
 		computed: {
-
+			
 		},
 		components: {
 			appTable,
@@ -266,6 +265,11 @@
 				}
 				return true;
 			},
+			onContent(bool, item) {
+				if (bool) {
+					this.$emit('onContent', item);
+				}
+			}
 		},
 
 	}

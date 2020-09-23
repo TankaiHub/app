@@ -14,6 +14,9 @@ export default {
 	admin_law_add_law_plan_arr:[],///执法计划 新增执法内容, 
 	admin_law_add_company:[],///////执法计划 -- 添加企业
 	admin_law_add_company_select_info:{},///////执法计划 -- 添加企业 -- select
+	admin_law_edit_law_content:{},//执法计划 --编辑检查内容
+	admin_feedbackDetail:{},//企业反馈--详情
+	admin_email_send:{},//发送邮件
 	
 	///////////////////企业端////////////////////////
 	userInfo:{},//用户信息 ,

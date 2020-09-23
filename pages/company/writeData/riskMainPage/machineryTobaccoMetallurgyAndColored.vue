@@ -6,17 +6,17 @@
 		<view class="business_wrapper padding_10px">
 			<app-in-nav :data='navData' :active="currentIndex"></app-in-nav>
 			<!-- 可燃性粉尘 -->
-			<combustible-dust v-if="currentIndex == 0" ref="page0" @changeNext="changeNext"></combustible-dust>
+			<combustible-dust v-if="currentIndex == 0" :cmpData="dustData" :bool="change_bool" ref="page0" @changeNext="changeNext"></combustible-dust>
 			<!-- 有限空间 -->
-			<limitedSpace-o v-if="currentIndex == 1" ref="page1" @changeNext="changeNext" :spaceData="spaceData"></limitedSpace-o>
+			<limitedSpace-o v-if="currentIndex == 1" :cmpData="spaceData" :bool="change_bool" ref="page1" @changeNext="changeNext" :spaceData="spaceData"></limitedSpace-o>
 			<!-- 高温熔融 -->
-			<high v-if="currentIndex == 2" ref="page2" @changeNext="changeNext"></high>
+			<high v-if="currentIndex == 2"  :cmpData="highData" :bool="change_bool" ref="page2" @changeNext="changeNext"></high>
 			<!-- 煤气作业 -->
-			<gas v-if="currentIndex == 3" ref="page3" @changeNext="changeNext"></gas>
+			<gas v-if="currentIndex == 3" :cmpData="gasData" :bool="change_bool"  ref="page3" @changeNext="changeNext"></gas>
 			<!-- 特殊作业及特种设备 -->
-			<special-work-and-device-t v-if="currentIndex == 4" ref="page4" @changeNext="changeNext"></special-work-and-device-t>
+			<special-work-and-device-t :cmpData="workAndDevicData" :bool="change_bool" v-if="currentIndex == 4" ref="page4" @changeNext="changeNext"></special-work-and-device-t>
 			<!-- 危险化学品 -->
-			<hazardous-chemicals v-if="currentIndex == 5" ref="page5" @changeNext="changeNext"></hazardous-chemicals>
+			<hazardous-chemicals :cmpData="hazardousChemicalsData" :bool="change_bool" v-if="currentIndex == 5" ref="page5" @changeNext="changeNext"></hazardous-chemicals>
 			<view class="mar_top_20px mar_bottom_20px dis_flex_center">
 				<button type="primary" @click="onSubmit(false)" v-if="currentIndex >= 0">上一步</button>
 				<button type="primary" @click="onSubmit(true)" v-if="currentIndex < navData.length - 1">下一步</button>
@@ -51,6 +51,8 @@
 				coldData:{},
 				highData:{},
 				gasData:{}, 
+				change_bool:false,
+				requestInfo:{}
 			}
 		},
 		components: {
@@ -65,25 +67,74 @@
 		computed: {
 			...mapState(['userInfo']),
 		},
-		onLoad() {
+		
+		watch:{
+			currentIndex(nv) {
+				uni.pageScrollTo({
+					scrollTop:0
+				})
+			}
+		},
+		onLoad(opts) {
+			this.requestInfo = opts; 
+			if (opts.p == 'max') {
+				this.currentIndex = 5; 
+			}
 			this._initData();
+		},
+		onBackPress(e) {
+			if (e.from == "backbutton") {
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					return false; 
+				}else {
+					return true;
+				} 
+				return true;
+			} else if (e.from == 'navigateBack') {
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					return false; 
+				}else {
+					return true;
+				} 
+			}
 		},
 		methods: {
 			onNavBarLeft() {
-		
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					this._router('', false, 1);
+				}else {
+					this.currentIndex --;
+					if (this.currentIndex < 0) {
+						this.currentIndex = 0;
+						uni.redirectTo({
+							url: '../safety'
+						});
+						return;
+					}
+				}
 			},
-			_initData(state) { 
+			_router(url, bool, delta) {
+				if (bool) {
+					uni.navigateTo({
+						url,
+						fail(err) {
+							console.log(err, '=======true======')
+						}
+					})
+				}else {
+					uni.navigateBack({
+						delta
+					})
+				}
+			},
+			_initData() { 
 				var opts = {
 					company_id: this.userInfo.company_id
 				};
+				this.change_bool = false; 
 				this.$http.post('riskInfo', opts).then(res => {
-					if (res.code == 200) {
-						if (state == 'back') {
-							this._back();
-						} else if (state == 'next') {
-							this._next();
-						}
-						this._changeBaseData(res.data);
+					if (res.code == 200) { 
+						this._changeBaseData(res.data); 
 					}
 				});
 			},
@@ -92,11 +143,13 @@
 					var temp = data[i],
 						type = temp.type,
 						content = temp.content;
-					this._changeType(type, content);
-				}
+					this._changeType(type, temp);
+				} 
+				this.change_bool = true;
 			},
 			_changeType(num, content) {
-				var content = this._changeJSON(content);
+				// var content = this._changeJSON(content);
+				// console.log(content, num)
 				switch (num) {
 					case 1://有限空间
 						this.spaceData = content;
@@ -104,7 +157,7 @@
 					case 2://特殊作业及特种设备
 						this.workAndDevicData = content;
 					break;
-					case 3://可燃性粉尘 -食物
+					case 3://可燃性粉尘  
 						this.dustData = content;
 					break;
 					case 4://危险化学品
@@ -128,23 +181,27 @@
 			 * @param {Object} bool true-下一步 false-上一步
 			 */
 			onSubmit(bool) {
-				if (bool) {
-					this._initData('next');
+				if (bool) { 
+					this._next();
 				} else {
-					this._initData('back');
-				}
-		
+					this._back(); 
+				} 
 			},
-			_next() {
-				console.log(this.currentIndex, this.navData.length - 1)
+			_next() { 
+				var check = this.$refs['page' + this.currentIndex].submit();
+				var _self = this;
+				if (check == 'interrupt') return; 
 				if (this.currentIndex == this.navData.length - 1) {
 					this.currentIndex = this.navData.length - 1;
 					uni.redirectTo({
-						url: '../../companyTable/companyTable'
+						url:'./finalTable',
+						// success() {
+						// 	_self.change_bool = false;
+						// }
 					});
-				} else {
-					this.$refs['page' + this.currentIndex].submit();
-				}
+					return;
+				} 
+				this._initData();
 			},
 			_back() {
 				this.currentIndex--;
@@ -153,7 +210,9 @@
 					uni.redirectTo({
 						url: '../safety'
 					});
+					return;
 				}
+				this._initData();
 			},
 			changeNext(bool) {
 				if (bool) {

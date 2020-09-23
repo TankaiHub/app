@@ -28,6 +28,9 @@
 		{//企业管理
 			"path": "pages/check/businessManagement/businessManagement" 
 		}, 
+		{//企业管理  - 详情 - 地图
+			"path": "pages/check/businessManagement/page/map" 
+		}, 
 		{//新增企业
 			"path": "pages/check/businessManagement/page/newEnterprise" 
 		},
@@ -85,14 +88,41 @@
 		{//企业反馈
 			"path": "pages/check/system/companyFeedbackC" 
 		},
+		{//企业反馈 -- 详情
+			"path": "pages/check/system/systemPage/feedbackDetail" 
+		},
+		{//企业反馈 -- 标题 详情
+			"path": "pages/check/system/companyFeedbackDetailC" 
+		},
+		{//企业反馈 -- 回收站
+			"path": "pages/check/system/systemPage/companyFeedbackRecovery" 
+		},
 		{//回收站
 			"path": "pages/check/system/systemPage/emailRecycleBin" 
 		},
 		{//发件箱
 			"path": "pages/check/system/companyMsg" 
 		},
+		{//发件箱 -- 发送邮件
+			"path": "pages/check/system/systemPage/sendEmail" 
+		},
+		{//发件箱 -- 发送邮件 - 选择
+			"path": "pages/check/system/systemPage/showSendCompany" 
+		},
+		{//发件箱 -- 发送邮件 - 选择 - 编辑
+			"path": "pages/check/system/systemPage/companyMsgSend" 
+		},
+		{//发件箱 -- 接收单位
+			"path": "pages/check/system/systemPage/acceptCompany" 
+		}, 
+		{//发件箱 --  查看详情
+			"path": "pages/check/system/systemPage/companyMsgDetail" 
+		},
 		{//收件箱
 			"path": "pages/check/system/emailGet" 
+		}, 
+		{//收件箱 -- 详情
+			"path": "pages/check/system/systemPage/emailDetail" 
 		},
 		{//资源共享
 			"path": "pages/check/system/resourcePost" 
@@ -144,8 +174,14 @@
 		{//首页 --企业风险信息填写 --  纸制品
 			"path": "pages/company/writeData/riskMainPage/paperProducts" 
 		}, 
+		{//首页 --企业风险信息填写 --  table
+			"path": "pages/company/writeData/riskMainPage/finalTable" 
+		}, 
 		{//首页 --企业info -table
 			"path": "pages/company/companyTable/companyTable" 
+		}, 
+		{//安全技术要求
+			"path": "pages/company/claim/claim" 
 		}, 
 		{
 			"path":"pages/test"

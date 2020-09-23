@@ -33,16 +33,12 @@
 				<block v-if="isIndividual">
 					<uni-list-item title="主营产品" :showArrow="false">
 						<view class="n_ent_list_down_wrap" slot="right">
-							<view class="n_show_list_wrap" @click="onTabInp(3)"> 
+							<view class="n_show_list_wrap" @click="onTabInp(3)">
 								<text class="color_ccc" v-if="individual_select_list && individual_select_list.length == 0">请选择</text>
 								<view class="n_show_item text_align_right" v-for="(item, index) in individual_select_list" :key="index">{{item.lbmc}}</view>
 							</view>
-							<multiple-select v-model="showIndividual" 
-											label-name="lbmc" 
-											value-name="xldm"
-											:data="individual_list" 
-											:default-selected="defaultProessSelected" 
-											@confirm="mainIndividualSelectBtn">
+							<multiple-select v-model="showIndividual" label-name="lbmc" value-name="xldm" :data="individual_list"
+							 :default-selected="defaultProessSelected" @confirm="mainIndividualSelectBtn">
 							</multiple-select>
 						</view>
 					</uni-list-item>
@@ -164,6 +160,7 @@
 					main_products: '', //主营产品
 					main_process: '', //主要工序
 				},
+
 				security_officer: '', //安全员专职
 				security_officer2: '', //安全员兼职
 				/////////////////////////////////
@@ -218,12 +215,89 @@
 				isPlural: false,
 				showPress: false, //主要工序是否显示 - 双向绑定
 				isShowCancel: false, //主要工序其他弹窗
-				
+
 				//个体
-				showIndividual:false,//主要工序个体时弹窗
-				individual_list:product,
-				individual_select_list:[],
-				defaultindIvidualSelected:[], 
+				showIndividual: false, //主要工序个体时弹窗
+				individual_list: product,
+				individual_select_list: [],
+				defaultindIvidualSelected: [],
+				scaleRule: [{
+						msg: '请输入企业名称',
+						key: 'name',
+					}, {
+						msg: '请输入社信代码',
+						key: 'credit_code'
+					}, {
+						msg: '请输入法人代表',
+						key: 'cegal_person'
+					}, {
+						msg: '请输入法人联系电话',
+						key: 'phone'
+					}, {
+						msg: '请输入从业人员',
+						key: 'number_of_employees'
+					}, {
+						msg: '请重新选择主营产品',
+						key: 'industry_category'
+					}, {
+						msg: '请重新选择主营产品',
+						key: 'industry_category_1'
+					}, {
+						msg: '请重新选择主营产品',
+						key: 'industry_category_zfl'
+					},
+					{
+						msg: '请选择主营产品',
+						key: 'main_products'
+					}
+				],
+				allRule: [{
+					msg: '请输入企业名称',
+					key: 'name',
+				}, {
+					msg: '请输入社信代码',
+					key: 'credit_code'
+				}, {
+					msg: '请输入法人代表',
+					key: 'cegal_person'
+				}, {
+					msg: '请输入法人联系电话',
+					key: 'phone'
+				}, {
+					msg: '请输入从业人员',
+					key: 'number_of_employees'
+				}, {
+					msg: '请输入上年产值',
+					n_eq_msg:"上年产值必须大于0",
+					key: 'lastyear_value',
+					not_equal: '0.00',
+					isNot: true,
+				}, {
+					msg: '请输入安全管理负责人',
+					key: 'sp_principal'
+				}, {
+					msg: '请输入联系电话',
+					key: 'sp_principal_phone'
+				}, {
+					msg: '请输入专职安全员人数',
+					key: 'security_officer',
+					isOther: true,
+				}, {
+					msg: '请输入兼职安全员人数',
+					key: 'security_officer2',
+					isOther: true,
+				}, {
+					msg: '请选择行业类别',
+					key: 'industry_category_1', 
+				}, {
+					msg: '请选择主营产品',
+					key: 'main_products',
+					isArray: true,
+				}, {
+					msg: '请选择主要工序',
+					key: 'main_process',
+					isArray: true,
+				}],
 			}
 		},
 		components: {
@@ -274,7 +348,7 @@
 				this.baseInfoData['sp_principal_phone'] = data.sp_principal_phone;
 				this.baseInfoData['industry_category'] = data.industry_category;
 				this.baseInfoData['industry_category_1'] = data.industry_category_1;
-				
+
 				this.baseInfoData['main_process'] = data.main_process;
 				this.baseInfoData['main_products'] = data.main_products;
 				//安全员专职&兼职
@@ -295,7 +369,7 @@
 				this.security_officer = security_officer_arr[0];
 				this.security_officer2 = security_officer_arr[1];
 				this._changeProduct(data.industry_category);
-				
+
 				//主营产品 
 				// this.baseInfoData['main_products'] = data.main_products;
 				var temp = {
@@ -406,7 +480,7 @@
 					this.main_proess_list = [];
 					this.main_list = [];
 					this.main_proess_selse_list = [];
-					this.onSelectClear('industry_category_1'); 
+					this.onSelectClear('industry_category_1');
 				}
 				industryTypeTwo.forEach((item, index) => {
 					if (val == item.dh) {
@@ -422,6 +496,9 @@
 			// 根据 主营产品 选 行业分类  
 			_changeLightIndustry(e) {
 				this.baseInfoData.industry_category_zfl = e.dh;
+				console.log(e, "++++++++++++++++=")
+				this.main_selse_list = [];
+				this.main_proess_selse_list = [];
 				this.main_list = [];
 				qingong.forEach((item, index) => {
 					if (item.zl == e.value) {
@@ -483,18 +560,18 @@
 			//获取个体 主要工序信息
 			_changeIndividualCat(ele) {
 				var str = '';
-				try{ 
+				try {
 					str = ele.xldm.substring(0, 3);
 					this.baseInfoData.industry_category_1 = str;
 					this.baseInfoData.industry_category_zfl = ele.hylb;
 					this.baseInfoData.industry_category = ele.hylb;
-					qingong.forEach((item, index)=> {
+					qingong.forEach((item, index) => {
 						if (str == item.zl) {
 							this.baseInfoData.industry_category_zfl = item.zfl;
 						}
 					});
-					
-				}catch(e){
+
+				} catch (e) {
 					//TODO handle the exception
 				}
 			},
@@ -799,17 +876,25 @@
 				this.isShowCancel = false;
 			},
 			//提交数据  下一步
-			onSubmit() {
+			onSubmit() { 
+				if (this.isIndividual) {
+					console.log("111111111111111")
+					var bool = this._changeRule(this.scaleRule, this.baseInfoData);
+					if (!bool) return;
+				}else {
+					console.log("2222222222222222")
+					var bool = this._changeRule(this.allRule, this.baseInfoData);
+					if (!bool) return;
+				} 
 				var opts = this.baseInfoData;
 				opts.company_id = this.userInfo.company_id;
 				if (!this.isIndividual) {
 					opts.security_officer = (this.security_officer || '') + ',' + (this.security_officer2 || '');
-				}else {
+				} else {
 					opts.security_officer = '';
 				}
-				this.log(opts)
 				this.$http.post("save", opts).then(res => {
-					if (res.code == 200) { 
+					if (res.code == 200) {
 						uni.showToast({
 							title: res.msg,
 							icon: 'success',
@@ -819,10 +904,51 @@
 										url: './safety'
 									})
 								}, 1500);
-							}  
+							}
 						})
 					}
 				});
+			},
+			toast(title) {
+				uni.showToast({
+					title,
+					icon: 'none'
+				})
+			},
+			_changeRule(rule, souce) {
+				for (var i = 0; i < rule.length; i++) {
+					var temp = rule[i];
+					var ele = souce[temp['key']];
+					if (temp['isArray']) {
+						console.log(souce, [temp['key']], "----------------------")
+						if (ele == '' || ele == undefined || ele == null || ele.length == 0) {
+								this.toast(temp['msg']);
+								return false;
+							}
+					} else if (temp['isOther']) {
+						if (this[temp['key']] == ''|| this[temp['key']] == undefined || this[temp['key']] == null) {
+							this.toast(temp['msg']);
+							return false;
+						}
+					} else if (temp['isNot']) {
+						if (ele == temp['not_equal']) {
+							this.toast(temp['n_eq_msg']);
+							return false;
+						}
+						if (ele == '' || ele == undefined || ele == null ) { 
+							this.toast(temp['msg']);
+							return false; 
+						}
+					} else {
+						if (ele == '' || ele == undefined || ele == null) {
+							this.toast(temp['msg']);
+							return false;
+						}
+					}
+
+
+				}
+				return true;
 			},
 		}
 	}

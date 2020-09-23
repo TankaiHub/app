@@ -851,7 +851,7 @@
 						.a_t_risk_item_bt_left {
 							float: left;
 							height: 300px;
-							border: 1px solid #ccc;
+							// border: 1px solid #ccc;
 						}
 
 						.a_t_risk_item_bt_right {

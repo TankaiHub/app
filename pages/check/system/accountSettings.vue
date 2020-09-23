@@ -40,13 +40,14 @@
 			},
 			//onEditPsd  修改密码
 			onEditPsd() { 
+				var _self =this;
 				uni.navigateTo({
 					url:'./systemPage/resetPassword',
 					success() {
-						this.log("success")
+						_self.log("success")
 					},
 					fail(res) {
-						this.log("fail", res)
+						_self.log("fail", res)
 					}
 				})
 			},

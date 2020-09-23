@@ -50,54 +50,46 @@
 			onNavBarLeft() {
 				uni.navigateBack();
 			},
-			validation() {
-				var flag = true;
-				this.log(this.oldPsd == '')
-				if (this.oldPsd == '') {
-					this.flag = false;
+			 
+			onCancel() {
+				uni.navigateBack()
+			},
+			onSubmit() { 
+				if (this.oldPsd == '') { 
 					uni.showToast({
 						title: "请输入旧密码",
 						icon: 'none'
 					})
-					return flag;
+					return ;
 				};
-				if (this.newPsd == '') {
-					this.flag = false;
+				if (this.newPsd == '') { 
 					uni.showToast({
 						title: "请输入新密码",
 						icon: 'none'
 					})
-					return flag;
+					return ;
 				};
 				if (this.oncePsd == '') {
-					this.flag = false;
 					uni.showToast({
 						title: "请确认新密码",
 						icon: 'none'
 					})
-					return flag;
+					return ;
 				}
 				if (this.oncePsd != this.newPsd) {
-					this.flag = false;
 					uni.showToast({
 						title: "密码不一致",
 						icon: 'none'
 					})
-					return flag;
+					return ;
 				}
-
-			},
-			onCancel() {
-				uni.navigateBack()
-			},
-			onSubmit() {
-				if (!this.validation()) return;
+				
 				var opts = {
 					oldPwd: this.oldPsd,
 					newPwd: this.newPsd,
 					affirmPwd: this.oncePsd,
 				};
-				thi.$http.post('editPwd', thi.editform).then(res => {
+				this.$http.post('editPwd', opts).then(res => {
 					if (res.code == 200) {
 						this.log('success')
 					}

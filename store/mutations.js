@@ -51,7 +51,17 @@ export default {
 		} 
 	},
 	
+	set_admin_law_edit_law_content(state, obj) {
+		state.admin_law_edit_law_content = obj;
+	},
 	
+	set_admin_feedbackDetail(state, obj) {
+		state.admin_feedbackDetail = obj;
+	},
+	
+	set_admin_email_send(state, obj) {
+		state.admin_email_send = obj;
+	},
 	
 	///////////////////////////////////
 	set_home_login_lock(state, bool) {

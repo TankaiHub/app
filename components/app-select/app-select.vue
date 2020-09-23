@@ -4,7 +4,8 @@
 		<view class="c_a_s_text_wrap"  @click="onSelect" hover-class="isSelect">
 			<text>{{number}}条/页</text>
 			<!-- <input type="text" v-model="number" disabled @focus="onSelect" /> -->
-			<text :class="{c_a_s_icon:true, is_reverse:isShowSelect}">V</text>
+			<image src="../../static/icon/up.png" :class="{c_a_s_icon:true, is_reverse:isShowSelect}" class="img_size_30px  vertical_align_center" mode="aspectFill"></image>
+			 
 		</view>
 		<view class="c_a_s_pagin_wrap" v-if="isShowSelect">
 			<view class="c_a_s_top"></view> 
@@ -45,6 +46,7 @@
 </script>
 
 <style lang="less">
+	@import url("@/common/less/base.less");
 	.cmp_app_select_container{
 		position: relative;
 		width:100%;
@@ -58,7 +60,10 @@
 			.c_a_s_icon{
 				display: inline-block; 
 				transition: all .3s;
-				&.is_reverse{
+				transform-origin: center center;
+				margin-left: 10upx;
+				&.is_reverse{ 
+					margin-right: 10upx;
 					transform: rotateZ(180deg);
 					
 				}

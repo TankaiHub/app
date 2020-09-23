@@ -2,6 +2,7 @@
 	<view class="cmp_title_container">
 		<view class="c_t_wrap">
 			{{text}}
+			<slot></slot>
 		</view>
 	</view>
 </template>

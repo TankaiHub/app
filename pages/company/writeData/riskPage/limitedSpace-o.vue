@@ -6,13 +6,16 @@
 				<uni-list v-for="(item, index) in listData" :key="index">
 					<uni-list-item :showArrow="false" class="list_border_1px">
 						<view class="">
-							<checkbox-group @change="onCheckBox($event, item, index)">
+							<!-- <checkbox-group @change="onCheckBox($event, item, index)"> -->
 								<label>
-									<checkbox :value="checkValue" :checked="inSpaceData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+									<app-checkbox v-model="inSpaceData[item['checkValue']]" @changeCheckBox="onCheckBox($event, item, index)">
+										<text class="font_weight_bold vertical_align_center">{{item.checkName}}</text>
+									</app-checkbox>
+									<!-- <checkbox :value="checkValue" :checked="inSpaceData[item.checkValue]" /><text class="font_weight_bold vertical_align_center">{{item.checkName}}</text> -->
 								</label>
-								<image v-if="item.del" @click="onDel('listData', item, index)" src="../../../../static/icon/del.png"
-								 class="img_size_40px vertical_align_center mar_left_5px" mode="aspectFill"></image>
-							</checkbox-group>
+								<image v-if="item.del" @click="onDel('listData', item, index)" src="../../../../static/icon/del.png" class="img_size_40px vertical_align_center mar_left_5px"
+								 mode="aspectFill"></image>
+							<!-- </checkbox-group> -->
 						</view>
 					</uni-list-item>
 					<uni-list-item title="数量" :showArrow="false" class="list_border_1px">
@@ -69,7 +72,10 @@
 				<hFormAlert v-if="isShowCancel" placeholder="请输入名称" title='添加' confirmText="确定" @confirm="onDetermine($event)"
 				 @cancel="onCancel"></hFormAlert>
 			</view>
-			<app-btn-check text="不涉及有限空间" @change="onChange" :check="isNotInvolv"></app-btn-check>
+			<!-- <app-btn-check text="不涉及有限空间" @change="onChange" :check="isNotInvolv"></app-btn-check> -->
+			<app-checkbox v-model="isNotInvolv" @changeCheckBox="onChange">
+				<text class="font_weight_bold vertical_align_center">不涉及有限空间</text>
+			</app-checkbox>
 		</view>
 	</view>
 </template>
@@ -79,13 +85,20 @@
 	import appBtnCheck from "@/components/app-btn/app-btn-check"
 	import appBtnAdd from "@/components/app-btn/app-btn-add"
 	import hFormAlert from '@/components/h-form-alert/h-form-alert.vue'
+	import appCheckbox from "@/components/app-input/app-checkbox"
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex'
 	export default {
 		props: {
-			spaceData: Object
+			cmpData: {
+				type: Object,
+				default () {
+					return {};
+				},
+			},
+			bool: Boolean
 		},
 		data() {
 			return {
@@ -222,21 +235,48 @@
 			appPickerSelect,
 			appBtnCheck,
 			appBtnAdd,
-			hFormAlert
+			hFormAlert,
+			appCheckbox
 		},
 		computed: {
 			...mapState(['userInfo']),
 		},
+		watch: {
+			bool(nv) {
+				if (nv) {
+					this._syncData();
+					console.log("nv", nv)
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() { 
+				if (this.cmpData != undefined || this.cmpData != null) {
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined) {
+						var con_obj = JSON.parse(content);
+						console.log(con_obj)
+						var data = con_obj.space;
+						this.listData = data.listData;
+						this.inSpaceData = data;
+						console.log(this.inSpaceData)
+					}
+					this.isNotInvolv = state == 1 ? false : true;
+				}
+			},
 			// this.inSpaceData.state = this.isNotInvolv;
 			onCheckBox(e, item, index) {
-				var val = e.detail.value;
+				// var val = e.detail.value;
 				this.isNotInvolv = false;
-				if (val.length > 0) {
+				/* if (val.length > 0) {
 					this.$set(this.inSpaceData, item.checkValue, true);
 				} else {
 					this.$set(this.inSpaceData, item.checkValue, false);
-				}
+				} */
 			},
 			onSelectBtn(e, key, bool = true) {
 				if (e.flag) {
@@ -250,13 +290,19 @@
 			onChange(bool) {
 				this.isNotInvolv = bool;
 				if (bool) {
-					var reg = /Check/g;
-					for (var prop in this.inSpaceData) {
-						if (prop.match(reg) != null && prop.match(reg).length > 0) {
-							this.inSpaceData[prop] = false;
-						}
+					for (var i = 0; i < this.listData.length; i ++) {
+						var temp = this.listData[i];
+						this.inSpaceData[temp['checkValue']] = false;
 					}
 				}
+				// if (bool) {
+				// 	var reg = /Check/g;
+				// 	for (var prop in this.inSpaceData) {
+				// 		if (prop.match(reg) != null && prop.match(reg).length > 0) {
+				// 			this.inSpaceData[prop] = false;
+				// 		}
+				// 	}
+				// }
 			},
 			//添加
 			onAddBtn(tag) {
@@ -267,31 +313,41 @@
 				this[tag].splice(index, 1);
 			},
 			//弹窗确定
-			onDetermine(checkName) { 
+			onDetermine(checkName) {
 				let index = this[this.currentAdd].length;
 				var obj = {
 					checkName,
-					checkValue: 'otherCheck'+index,
-					num: 'otherNum'+index,
-					out:'otherOut'+index,
-					name:'otherName'+index,
-					apt:'otherApt'+index,
-					code:'otherCode'+index,
-					type:'otherType'+index,
-					contact:'otherContact'+index,
-					phone:'otherPhone'+index,
-					del:true
+					checkValue: 'otherCheck' + index,
+					num: 'otherNum' + index,
+					out: 'otherOut' + index,
+					name: 'otherName' + index,
+					apt: 'otherApt' + index,
+					code: 'otherCode' + index,
+					type: 'otherType' + index,
+					contact: 'otherContact' + index,
+					phone: 'otherPhone' + index,
+					del: true
 				};
 				this[this.currentAdd].push(obj);
 				this.isShowCancel = false;
-			
+
 			},
 			//弹窗取消
 			onCancel() {
 				this.isShowCancel = false;
 			},
-			submit() { 
-				this.inSpaceData.state = this.isNotInvolv; 
+			toast(title) {
+				uni.showToast({
+					title,
+					icon: 'none'
+				})
+			},
+			submit() {
+				var source = this.inSpaceData;
+				var bool = this._changeRule([], source)
+				if (!bool) return "interrupt";
+
+				this.inSpaceData.state = this.isNotInvolv;
 
 				var content = {
 					space: this.inSpaceData
@@ -306,7 +362,7 @@
 				var opts = {
 					company_id: this.userInfo.company_id,
 					type: 1,
-					special:specialS.join(','),
+					special: specialS.join(','),
 					state: this.isNotInvolv ? 2 : 1,
 					content: JSON.stringify(content)
 				};
@@ -317,6 +373,72 @@
 					}
 				});
 			},
+			_changeRule(rule, souce) {
+				var flag = false;
+				for (var i = 0; i < this.listData.length; i++) {
+					var temp = this.listData[i];
+
+					if (souce[temp['checkValue']]) {
+						flag = true;
+						if (souce[temp['num']] == '' || souce[temp['num']] == undefined) {
+							console.log()
+							this.toast(`请输入${ temp['checkName'] }的数量`);
+							return false;
+						}
+						if (souce[temp['out']] == '' || souce[temp['out']] == undefined) {
+							this.toast(`请选择${ temp['checkName'] }是否外包`);
+							return false;
+						}
+						if (souce[temp['out']] == '1') {
+							if (souce[temp['type']] == '' || souce[temp['type']] == undefined) {
+								this.toast(`请选择${ temp['checkName'] }承包方类型`);
+								return false;
+							}
+							if (souce[temp['type']] == '1') { //企业
+								if (souce[temp['name']] == '' || souce[temp['name']] == undefined) {
+									this.toast(`请输入单位名称`);
+									return false;
+								}
+								if (souce[temp['code']] == '' || souce[temp['code']] == undefined) {
+									this.toast(`请输入信用代码`);
+									return false;
+								}
+								if (souce[temp['contact']] == '' || souce[temp['contact']] == undefined) {
+									this.toast(`请输入联系人`);
+									return false;
+								}
+								if (souce[temp['phone']] == '' || souce[temp['phone']] == undefined) {
+									this.toast(`请输入联系电话`);
+									return false;
+								}
+							}
+							if (souce[temp['type']] == '2') { //个人
+								if (souce[temp['name']] == '' || souce[temp['name']] == undefined) {
+									this.toast(`请输入姓名`);
+									return false;
+								}
+								if (souce[temp['code']] == '' || souce[temp['code']] == undefined) {
+									this.toast(`请输入特种作业操作证编号`);
+									return false;
+								}
+								if (souce[temp['phone']] == '' || souce[temp['phone']] == undefined) {
+									this.toast(`请输入联系电话`);
+									return false;
+								}
+							}
+						}
+
+					}
+
+				}
+				if (!flag) {
+					if (!this.isNotInvolv) {
+						this.toast(`请选择不涉及有限空间`);
+						return false;
+					}
+				}
+				return true;
+			}
 		}
 	}
 </script>

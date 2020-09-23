@@ -6,11 +6,10 @@ function changeTime(time, format) {
 	var date = new Date().getTime() + '';
 	if (type == 'number') {
 		time = '' + time;
-	}
+	} 
 	if (time.length < date.length) {
-		time = time * 1000;
-	}
-	console.log(time.length < date.length)
+		time = time * 1000; 
+	} 
 	var d = new Date((time)),
 		y = d.getFullYear(),
 		m = ('0' + (d.getMonth() + 1)).slice(-2),
@@ -56,7 +55,7 @@ function deepClone(origin, target) {
 		if (origin.hasOwnProperty(prop)) {
 			if (origin[prop] !== 'null' && typeof(origin[prop]) == 'object') {
 				target[prop] = (toStr.call(origin[prop]) == arrStr) == arrStr ? [] : {};
-				this.deepClone(origin[prop], target[prop]);
+				deepClone(origin[prop], target[prop]);
 			} else {
 				target[prop] = origin[prop];
 			}
@@ -65,7 +64,8 @@ function deepClone(origin, target) {
 	return target;
 }
 
-function DivideAthousandTime(time) {
+function DivideAthousandTime(time) { 
+	console.log(time)
 	if (time == '') {
 		return '';
 	} else {

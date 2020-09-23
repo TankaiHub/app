@@ -1,8 +1,8 @@
 import allUrl from './url.js'
+import { baseUrl } from './config.js'
 import log from '../common/js/base.js'
-class Request {
-	// baseUrl = 'http://api.cqgmaq.com/'
-	baseUrl = 'http://spmsapi.cqxddwl.com/'
+class Request { 
+	baseUrl = baseUrl
 	getData(obj, isShowLoading, isJudge) {
 		if (isShowLoading) {
 			uni.showLoading({
@@ -89,7 +89,7 @@ class Request {
 				title: "网络错误",
 				icon: "none"
 			})
-		} else {
+		} else { 
 			var text = data.msg
 			uni.showToast({
 				title: text,

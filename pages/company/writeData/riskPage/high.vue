@@ -28,9 +28,14 @@
 			<block v-if="highData.state==1">
 				<app-item-input v-for="(item, index) in listData" :key="index" :title="item.title" class="mar_top_10px">
 					<view class="high_item_wrap" slot='item'>
-						<checkbox-group v-for="(ele, inx) in item.data" :key="inx" class="mar_top_10px mar_bottom_10px" @change="onCheckBox($event, ele, index)">
+						<!-- <checkbox-group v-for="(ele, inx) in item.data" :key="inx" class="mar_top_10px mar_bottom_10px" @change="onCheckBox($event, ele, index)"> -->
+						<block v-for="(ele, inx) in item.data" :key="inx" class="mar_top_10px mar_bottom_10px">
 							<label>
-								<checkbox :value="checkValue" :checked="highData[ele.checkValue]" /><text class="font_weight_bold vertical_align_center">{{ele.checkName}}</text>
+								<!-- @changeCheckBox="onCheckBox($event, ele, index)" -->
+								<app-checkbox v-model="highData[ele.checkValue]" >
+									<text class="font_weight_bold vertical_align_center">{{ele.checkName}}</text>
+								</app-checkbox>
+								<!-- <checkbox :value="checkValue" :checked="highData[ele.checkValue]" /><text class="font_weight_bold vertical_align_center">{{ele.checkName}}</text> -->
 							</label>
 							<uni-list>
 								<uni-list-item title="数量" :showArrow="false" class="list_border_1px">
@@ -47,7 +52,8 @@
 									</view>
 								</uni-list-item>
 							</uni-list>
-						</checkbox-group>
+							</block>
+						<!-- </checkbox-group> -->
 					</view>
 				</app-item-input>
 
@@ -82,11 +88,21 @@
 	import appPickerSelect from '@/components/app-picker/app-picker-select'
 	import appItemInput from "@/components/app-item-input/app-item-input"
 	import multipleSelect from "@/components/momo-multipleSelect/momo-multipleSelect"
+	import appCheckbox from "@/components/app-input/app-checkbox"
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex'
 	export default {
+		props: {
+			cmpData: {
+				type: Object,
+				default () {
+					return {};
+				},
+			},
+			bool: Boolean
+		},
 		data() {
 			return {
 				checkValue: 'cb',
@@ -232,12 +248,48 @@
 		components: {
 			appPickerSelect,
 			appItemInput,
-			multipleSelect
+			multipleSelect,
+			appCheckbox
 		},
 		computed: {
 			...mapState(['userInfo']),
 		},
+		watch: {
+			bool(nv) {
+				if (nv) {
+					this._syncData();
+					console.log("nv", nv)
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() { 
+				if (this.cmpData != undefined || this.cmpData != null) {
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined) {
+						var con_obj = JSON.parse(content);
+						this.highData = con_obj;
+						this.high_select_list = this._constructorArr(this.highData.turnType);
+						this.defaultSelected = this.highData.turnType;
+					}
+				}
+			},
+			_constructorArr(arr) {
+				var narr = [];
+				if (arr && arr.length > 0)  { 
+					for (var i = 0; i < arr.length; i ++) {
+						narr.push({
+							label:arr[i],
+							value:arr[i]
+						});
+					}
+				}
+				return narr;
+			},
 			onSelectClear(str) {
 				this.$set(this['highData'], key, '');
 			},
@@ -254,15 +306,17 @@
 				this[str] = true;
 			},
 			onCheckBox(e, item, index) {
-				var val = e.detail.value; 
-				console.log(item)
-				if (val.length > 0) {
-					this.$set(this.highData, item.checkValue, true);
-				}else {
-					this.$set(this.highData, item.checkValue, false);
-				}
+				// var val = e.detail.value; 
+				// console.log(item)
+				// if (val.length > 0) {
+				// 	this.$set(this.highData, item.checkValue, true);
+				// }else {
+				// 	this.$set(this.highData, item.checkValue, false);
+				// }
 			},
 			submit() {
+				var bool = this._changeRule([], this.highData);
+				if (!bool) return "interrupt"; 
 				var special, 
 					speciesTo = {
 						1: '钢',
@@ -283,8 +337,62 @@
 					if (res.code == 200) {
 						this.$emit("changeNext", true);
 					}
-				})
+				}) 
+			},
+			_changeRule(rule, source) {
+				if (source['state'] == '' || source['state'] == undefined) {
+					this.toast("请选择高温熔融");
+					return false;
+				}
 				
+				if (source['state'] == '1') {
+					if (source['species'] == '' || source['species'] == undefined) {
+						this.toast("请选择熔炼金属种类");
+						return false;
+					}
+					if (source['species'] == '5') {
+						if (source['speciesOther'] == '' || source['speciesOther'] == undefined) {
+							this.toast("请输入其他熔炼金属种类");
+							return false;
+						} 
+					} 	
+					/////
+					for (var i = 0; i < this.listData.length; i ++) {
+						var temp = this.listData[i].data; 
+						for (var j = 0; j < temp.length; j ++) {
+							var ele = temp[j]; 
+							if (source[ele['checkValue']]) {
+								console.log("?22222222222222")
+								if (source[ele['num']] == '' || source[ele['num']] == undefined) {
+									this.toast(`请输入${ ele['checkName'] }数量`);
+									return false;
+								}
+								if (source[ele['maxNum']] == '' || source[ele['maxNum']] == undefined) {
+									this.toast(`请输入${ ele['checkName'] }最大熔炼量`);
+									return false;
+								}
+							}
+						}
+					}
+					
+					
+					//////////////
+					if (source['pouring'] == '' || source['pouring'] == undefined) {
+						this.toast("请选择浇筑方式");
+						return false;
+					}
+					if (source['turnType'] && source['turnType'].length == 0) {
+						this.toast("请选择高温熔融金属转运方式");
+						return false;
+					}
+				}
+				return true;
+			},
+			toast(title) {
+				uni.showToast({
+					title,
+					icon:'none'
+				})
 			},
 		}
 	}

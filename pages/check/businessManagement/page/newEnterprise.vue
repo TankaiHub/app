@@ -12,7 +12,7 @@
 							 placeholder="请输入企业名称" />
 							<lb-picker :props="companyProps" :list='companyData' ref="lb_com" @confirm="onCompanyItem"></lb-picker>
 						</view>
-					</uni-list-item> 
+					</uni-list-item>
 
 					<uni-list-item title="经营点：" :showArrow="false" v-if="isJyd">
 						<view class="n_ent_list_down_wrap" slot="right">
@@ -54,7 +54,7 @@
 							<view class="n_ebt_input clearfix">
 								<input class="n_ent_list_input b_ent_addr_inp" v-model="regAddressStr" @click="onShowSelectAddress" type="text"
 								 name="comRegAddr" placeholder="请选择注册地址" disabled />
-								<text class="n_ent_close" @click="onClearInputContent">X</text>
+								<image @click="onClearInputContent" src="../../../../static/icon/close.png" mode="aspectFill" class="img_size_40px vertical_align_center"></image>
 							</view>
 							<lb-picker v-model="mSleVal" mode='multiSelector' :level="4" :props="selectPrors" :list='list' ref="lb" @confirm="onSelectAddress"></lb-picker>
 						</view>
@@ -81,7 +81,7 @@
 							<view class="n_ebt_input clearfix">
 								<input class="n_ent_list_input b_ent_addr_inp" v-model="openAddressStr" @click="onShowSelectOpenAddress" type="text"
 								 name="comAddr" placeholder="请选择经营地址" disabled />
-								<text class="n_ent_close" @click="onClearOpenInputContent">X</text>
+								<image @click="onClearOpenInputContent" src="../../../../static/icon/close.png" mode="aspectFill" class="img_size_40px vertical_align_center"></image>
 							</view>
 							<lb-picker mode='multiSelector' :level="4" :props="selectPrors" :list='list' ref="op_lb" @confirm="onSelectOpenAddress"></lb-picker>
 						</view>
@@ -111,7 +111,8 @@
 	import LbPicker from '@/components/lb-picker'
 
 	import {
-		mapState
+		mapState,
+		mapMutations
 	} from "vuex"
 	import address from '@/common/js/address'
 	export default {
@@ -207,7 +208,7 @@
 			}
 		},
 		computed: {
-			...mapState(['admin_item_company_info']),
+			...mapState(['admin_item_company_info', "userInfo", 'home_login_lock', 'userHomeInfoData']),
 		},
 		components: {
 			appNav,
@@ -243,6 +244,7 @@
 
 		},
 		methods: {
+			...mapMutations(['set_userInfo', 'set_home_login_lock', 'set_userHomeInfoData']),
 			onNavBarLeft() {
 				this.clearData();
 				uni.navigateBack();
@@ -387,6 +389,7 @@
 				this.inptDataInfo['name'] = data.name;
 				this.inptDataInfo['credit_code'] = data.credit_code;
 				this.inptDataInfo['scale'] = data.scale;
+				this.inptDataInfo['company_id'] = data.company_id;
 				this.inptDataInfo['produce_state'] = data.produce_state;
 				var produce_address = data.produce_address;
 				var reg_address = data.reg_address;
@@ -400,7 +403,7 @@
 					this.isShowAddressSame = true;
 					this.inptDataInfo['openCommunity'] = data.community;
 					this.inptDataInfo['openStreet'] = data.community;
-				} 
+				}
 				if (reg_address != null) {
 					var reg_arr = this._resolveAddress(reg_address);
 					var numArr = reg_arr.numberArray;
@@ -629,7 +632,7 @@
 
 				//
 				var _self = this;
-				opts.point = data.point;
+				opts.point = data.point; 
 				opts.id = this.admin_item_company_info.id;
 				opts.approval_status = this.admin_item_company_info.approval_status;
 				opts.company_id = this.admin_item_company_info.company_id;
@@ -674,7 +677,36 @@
 			},
 			//修改企业信息
 			onEditCompInof() {
-				
+				if (this.inptDataInfo.company_id) { 
+					this.$store.commit("set_userHomeInfoData", {company_id:this.inptDataInfo.company_id});
+					this.$store.commit('set_home_login_lock', false);
+					this.$store.commit("set_userInfo", {company_id:this.inptDataInfo.company_id});
+					uni.navigateTo({
+						url:'../../../company/home/home'
+					})
+				} else {
+					if (this.inptDataInfo.credit_code) {
+						this.$http.post('login', {
+							password: '000000',
+							account: this.inptDataInfo.credit_code
+						}).then(res => {
+							if (res.code == 200) {
+								console.log(res)
+								uni.navigateTo({
+									url:'../../../company/home/home'
+								})
+								this.$store.commit("set_userInfo", res.data);
+							}
+
+						})
+					}else {
+						uni.showToast({
+							title:'未获取到社信代码或企业ID',
+							icon:'none'
+						})
+					}
+				}
+
 			},
 			//清除数据
 			clearData() {
@@ -694,26 +726,26 @@
 				//重庆市沙坪坝区青木关镇新青路社区2222递四方速递
 				var first_reg = /.+?(省|市|自治区|自治州|县|区)/g;;
 				var first_str = first_reg.exec(str);
-				var str_f_bd ;
-				var first_number ; 
+				var str_f_bd;
+				var first_number;
 				//沙坪坝区青木关镇新青路社区2222递四方速递
 				var f_str;
-				
+
 				var second_reg;
 				var second_str;
 				var str_s_bd;
 				var second_number;
 				//青木关镇新青路社区2222递四方速递
 				var s_str;
-				
-				
+
+
 				var third_reg;
 				var third_str;
 				var t_str;
-				var fourth_reg ;
+				var fourth_reg;
 				//新青路社区2222递四方速递
 				var fourth_str;
-				
+
 				var reg = /(三峡商圈)/g;
 				var reg1 = /(西站)/g;
 				var reg2 = /(民防办)/g;
@@ -724,8 +756,8 @@
 				//2222递四方速递
 				var fo_str;
 				var arr;
-				
-				
+
+
 				try {
 					str_f_bd = first_str[0];
 					first_number = this.changeNumber(str_f_bd);
@@ -738,7 +770,7 @@
 					s_str = f_str.replace(str_s_bd, "");
 					// this.log("去掉 --- 区|县 =得到", s_str)
 
-					
+
 
 					try {
 						third_reg = /.+?(街道|镇)/g;
@@ -784,7 +816,7 @@
 
 				} catch (e) {
 					fo_str = str;
-				} 
+				}
 				// this.log( "最终得到：", str_t_bd, str_t_bd, third_number, fourth_number, fo_str)
 
 

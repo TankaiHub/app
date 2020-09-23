@@ -3,29 +3,35 @@
 		<app-nav v-model="drawerVisible"></app-nav>
 		<uni-nav-bar left-icon="back" fixed="true" @clickLeft="onNavBarLeft" title="添加企业"></uni-nav-bar>
 		<view class="a_com_wrap">
-			<uni-list> 
+			<uni-list>
 				<uni-list-item title="检查类型：" :showArrow="false">
 					<view class="" slot="right">
-						<app-picker-select class="a_com_select" placeholder="请选择检查类型" :selectValue="typeValue" :selectData="typeData"
-						 @onSelectClear="onSelectClear('typeValue')" @onSelectBtn="onSelectBtn($event, 'typeValue')"></app-picker-select>
+						<app-picker-select ref="app_select" class="a_com_select" placeholder="请选择检查类型" :isCheck="isChange_app_select"
+						 :selectValue="typeValue" :selectData="typeData" @onSelectClear="onSelectClear('typeValue', 'app_select')"
+						 @onSelectBtn="onSelectBtn($event, 'typeValue', 'app_select')"></app-picker-select>
 					</view>
 				</uni-list-item>
 				<uni-list-item title="检查时间：" :showArrow="false">
 					<view class="" slot="right">
-						<input type="text" class="text_align_right" v-model="timeStr" disabled @click="onclcik" placeholder="请选择检查时间" />
+						<input type="text" class="text_align_right" v-model="timeStr" disabled @click="onclcik('date-time')" placeholder="请选择检查时间" />
 						<date-time-picker ref='date-time' :indicatorStyle='indicatorStyle' :type='type' :datestring='dateString' @change='dateTimeChange'></date-time-picker>
 					</view>
 				</uni-list-item>
 				<uni-list-item title="选择企业：" :showArrow="false">
 					<button slot="right" :disabled="isDisabled" class="a_com_btn" type="primary" @click="onAdd">立即添加</button>
 				</uni-list-item>
+				<uni-list-item title="手动输入名称：" :showArrow="false">
+					<button slot="right" type="primary" class="a_com_btn" @click="onNewAddPlan">手动输入名称</button>
+				</uni-list-item>
+
 			</uni-list>
 			<view class="a_com_table_wrap" v-if="isShowTable">
-				<app-table-new  :tableData="tableData":headerArray="headerArray" :showContent="showContent" :isShowIndex="true" :isShowExpand="isShowExpand" :isClickBar="isClickBar">
+				<app-table-new :tableData="tableData" :headerArray="headerArray" :showContent="showContent" :isShowIndex="true"
+				 :isShowExpand="isShowExpand" :isClickBar="isClickBar">
 					<block slot="content" slot-scope="props" v-if="props.data">
 						<view class="table_hide_total_container">
 							<view class="a_t_ul table_hide_info_wrap">
-					
+
 								<view class="a_t_li reg_addr clearfix">
 									<label>社信代码</label>
 									<view class="info_bd">{{props.data.credit_code}}</view>
@@ -40,7 +46,7 @@
 									<button type="warn" @click="onDelete(props.data)" class="btn_tb">删除</button>
 								</view>
 							</view>
-						</view> 
+						</view>
 					</block>
 				</app-table-new>
 				<!-- <app-table :tableData="tableData" :isShowExpand="isShowExpand" v-model="changeState" :isClickBar="isClickBar">
@@ -78,7 +84,39 @@
 
 
 			</view>
-
+			<app-empty-alert title="手动输入名称" @onAlertBtn='onAlertBtn' v-if="isShowEmptyAlear">
+				<uni-list>
+					<uni-list-item title="检查类型：" :showArrow="false">
+						<view class="" slot="right">
+							<view class="" @click="onChangeType">
+								<view v-if="addPlanText == ''" class="color_ccc">请选择检查类型</view>
+								<view class="text_align_right" v-else>
+									{{addPlanText}}
+								</view>
+							</view>
+							<input type="text" v-show="false" class="text_align_right" disabled v-model="newAddPlanData['type']" placeholder="请选择检查类型" />
+						</view>
+					</uni-list-item>
+					<uni-list-item title="任务时间：" :showArrow="false">
+						<view class="" slot="right">
+							<view class="" @click="onclcik('date-time', true)">
+								<view v-if="addPlanTimeText == ''" class="color_ccc">请选择任务时间</view>
+								<view class="text_align_right" v-else>
+									{{addPlanTimeText}}
+								</view>
+							</view>
+							<input type="text" v-show="false" class="text_align_right" v-model="newAddPlanData['task_time']" disabled @click="onclcik('date-time', true)"
+							 placeholder="请选择任务时间" />
+						</view>
+					</uni-list-item>
+					<uni-list-item title="企业名称：" :showArrow="false">
+						<view class="" slot="right">
+							<!-- company_name -->
+							<input type="text" class="text_align_right" v-model="newAddPlanData['company_name']" placeholder="请输入企业名称" />
+						</view>
+					</uni-list-item>
+				</uni-list>
+			</app-empty-alert>
 		</view>
 	</view>
 </template>
@@ -92,8 +130,11 @@
 	import appTable from '@/components/app-table/app-table'
 	import appTableBody from "@/components/app-table/app-table-body"
 	import appTableColumn from "@/components/app-table/app-table-column"
-	
+
 	import appTableNew from "@/components/app-table/app-table-new"
+
+	import appEmptyAlert from '@/components/h-form-alert/app-empty-alert'
+
 	import {
 		mapState,
 		mapMutations
@@ -108,22 +149,22 @@
 				isClickBar: true,
 				isShowTable: false,
 				drawerVisible: false,
-				headerArray: [
-					{
-						key:'序号', 
-						width:40,	
-						isInWidth:false,
+				
+				headerArray: [{
+						key: '序号',
+						width: 40,
+						isInWidth: false,
 					},
 					{
-						key:'企业名称',
-						isInWidth:true,
-						width:0
+						key: '企业名称',
+						isInWidth: true,
+						width: 0
 					}
 				],
-				showContent:[{
-					key:'name',
-					isInWidth:true,
-					width:0,
+				showContent: [{
+					key: 'name',
+					isInWidth: true,
+					width: 0,
 				}],
 				typeValue: '',
 				typeData: [{
@@ -152,6 +193,17 @@
 				isShowCheck: true,
 				source: '', //url携带的字段
 				isDisabled: false, //立即添加禁止
+				newAddPlanData: {
+					company_name: '',
+					task_time: '',
+					type: '',
+				}, 
+				isAlertDate: false,
+				isShowEmptyAlear: false, //显示手动输入名称
+				isChange_app_select: false,
+				addPlanText: '',
+				addPlanTimeText: '',
+				currentTypeText: '',
 			}
 		},
 		components: {
@@ -162,7 +214,8 @@
 			appTable,
 			// appTableBody,
 			appTableColumn,
-			appTableNew
+			appTableNew,
+			appEmptyAlert
 		},
 		computed: {
 			...mapState(['admin_law_add_company', 'admin_law_plan_info', "admin_law_add_company_select_info"]),
@@ -195,7 +248,8 @@
 				this.typeValue = 2;
 			}
 
-			this.timeStr = changeTime(this.admin_law_add_company_select_info.task_time, "yy/mm");
+			// this.timeStr = changeTime(this.admin_law_add_company_select_info.task_time, "yy/mm");
+			this.timeStr = this.admin_law_add_company_select_info.task_time;
 			if (this.tableData.length > 0) {
 				this.isShowTable = true;
 			} else {
@@ -209,31 +263,58 @@
 				// uni.navigateBack();
 				this.onCancel();
 			},
+
 			////////////////////////////select///////////////
-			onSelectBtn(e, key) {
+			onSelectBtn(e, key, ref) {
 				if (e.flag) {
-					this[key] = e.value;
-					this.$store.commit({
-						type: 'set_admin_law_add_company_select_info',
-						val: this[key] == 1 ? "计划检查" : "随机检查",
-						key: 'type',
-						state: "set" //
-					});
+					if (ref == 'app_select' && this.isChange_app_select) {
+						this.newAddPlanData.type = e.value;
+						this.addPlanText = e.label;
+
+					} else {
+						this[key] = e.value;
+						this.currentTypeText = e.label;
+						this.$store.commit({
+							type: 'set_admin_law_add_company_select_info',
+							val: this[key] == 1 ? "计划检查" : "随机检查",
+							key: 'type',
+							state: "set" //
+						});
+					}
+
+
 				}
 			},
-			onSelectClear(str) {
-				this[str] = "";
+			onSelectClear(str, ref) {
+				if (ref == 'app_select' && this.isChange_app_select) {
+					this.newAddPlanData.type = '';
+				} else {
+					this[str] = "";
+				}
+
 				// this._initData();
 			},
-			onclcik() {
-				this.$refs['date-time'].show();
+			onclcik(str, bool = false) {
+				this.isAlertDate = bool;
+				this.$refs[str].show();
+				console.log("????")
+			},
+			onChangeType() {
+				this.isChange_app_select = true;
+				this.$refs['app_select']._set_list(true);
 			},
 			dateTimeChange(e) {
 				var reg = /\-/g;
-				this.timeStr = e.replace(reg, "/");
+				var time;
+				if (this.isAlertDate) {
+					this.addPlanTimeText = e.replace(reg, "/");
+					time = DivideAthousandTime(new Date(this.addPlanTimeText + '/01').getTime());
+					this.newAddPlanData.task_time = time;
+				} else {
+					this.timeStr = e.replace(reg, "/");
+					time = DivideAthousandTime(new Date(this.timeStr + '/01').getTime());
+				}
 
-				var time = DivideAthousandTime(new Date(this.timeStr + '/01').getTime());
-				this.log(this.timeStr, time, new Date(this.timeStr + '/01'))
 				this.$store.commit({
 					type: 'set_admin_law_add_company_select_info',
 					val: time,
@@ -280,7 +361,7 @@
 						icon: "none"
 					})
 					return;
-				} 
+				}
 				var time;
 				try {
 					time = new Date(this.timeStr + '/01').getTime();
@@ -359,12 +440,69 @@
 					jslb: "",
 					fxlb: "",
 				}
-				this.$http.post('qcompanyList', opts).then(res =>{
+				this.$http.post('qcompanyList', opts).then(res => {
 					if (res.code == 200) {
 						this.tableData = res.data.lst;
 						this.isShowTable = true;
 					}
 				})
+			},
+			onNewAddPlan() { 
+				var time ;
+				if (this.timeStr == '' || this.timeStr == undefined) {
+					time = '';
+					this.timeStr = "";
+				}else { 
+					time = DivideAthousandTime(new Date(this.timeStr + '/01').getTime());
+				}
+				this.$set(this.newAddPlanData, 'task_time',  time);
+				console.log(this.newAddPlanData, time)
+				this.$set(this.newAddPlanData, 'type', this.typeValue);
+				this.addPlanTimeText = this.timeStr;
+				this.addPlanText = this.currentTypeText;
+				this.isShowEmptyAlear = true;
+			},
+			//alert - empty
+			onAlertBtn(bool) {
+				if (bool) {
+					if (this.newAddPlanData.type == '') {
+						uni.showToast({
+							title: '请选择检查类型!',
+							icon: 'none'
+						})
+						return;
+					}
+					if (this.newAddPlanData.task_time == '') {
+						uni.showToast({
+							title: '请选择检查时间!',
+							icon: 'none'
+						})
+						return;
+					}
+					if (this.newAddPlanData.company_name == '') {
+						uni.showToast({
+							title: '请选择输入企业名称!',
+							icon: 'none'
+						})
+						return;
+					}
+					var _self = this;
+					this.$http.post('makePlanS', this.newAddPlanData).then(res => {
+						if (res.code == 200) {
+							this.isShowEmptyAlear = false;
+							this.newAddPlanData = {};
+							uni.showToast({
+								title:'添加成功',
+								icon:'success',
+								success() {
+									_self.onCancel();
+								}
+							})
+						}
+					})
+				} else {
+					this.isShowEmptyAlear = false;
+				}
 			},
 		}
 	}

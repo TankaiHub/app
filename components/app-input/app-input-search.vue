@@ -1,7 +1,7 @@
 <template>
 	<view class="com_app_input-search">
 		<view class="c_a_i_s_wrap">
-			<input class="c_a_i_s_input" v-model="searchVal" confirm-type="search" placeholder="请输入社信代码或者企业名称" auto-focus @confirm="search"
+			<input class="c_a_i_s_input" v-model="searchVal" confirm-type="search" :placeholder="placeholder" auto-focus @confirm="search"
 			 @input="onKeyInput" placeholder-class="tui-input-plholder" />
 			<view hover-class="hoverClass" @click="onSearch" class="c_a_i_s_btn">搜索</view>
 		</view>
@@ -10,6 +10,12 @@
 
 <script>
 	export default {
+		props:{
+			placeholder:{
+				type:String,
+				default:'请输入社信代码或者企业名称',
+			}
+		},
 		data() {
 			return {
 				searchVal:''
@@ -30,22 +36,20 @@
 </script>
 
 <style lang="less">
-	.com_app_input-search {
-		width: 100%;
+	.com_app_input-search { 
+		padding-left:10px;
 		height: 35px;
 		border: 1px solid #ccc;
 		border-radius: 5px;
 		overflow: hidden;
 
 		.c_a_i_s_wrap {
-			position: relative;
-			width:100%;
+			position: relative;  
 			height:35px;
 			.c_a_i_s_input {
 				position: absolute;
 				top: 0;
-				left: 0;
-				margin-left: 10px;
+				left: 0; 
 				width: 75%;
 				height: 35px;
 				line-height: 35px;

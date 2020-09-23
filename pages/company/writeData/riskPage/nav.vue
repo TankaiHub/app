@@ -18,9 +18,18 @@
 			active:Number
 		},
 		computed:{
-			s_left() {
-				return (50 * this.active);
-			}
+			s_left() { 
+				return (80 * this.active);
+			},
+			s_w() {
+				var w;
+				try{
+					w = uni.getSystemInfoSync().windowWidth - 20;
+				}catch(e){
+					w = 375 - 20;
+				}
+				return w;
+			},
 		}
 	}
 </script>

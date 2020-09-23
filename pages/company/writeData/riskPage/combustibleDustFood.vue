@@ -94,9 +94,16 @@
 								</uni-list-item>
 								<uni-list-item title="防爆设施" :showArrow="false" class="list_border_1px">
 									<view class="" slot='right'>
-										<app-picker-select placeholder="请选择防爆设施" :selectValue="comData.preventExp" :selectData="poomArray" :isBorder="false"
+										<view class="n_show_list_wrap" @click="onTabShow('poomShow')">
+											<text class="color_ccc" v-if="poom_select_list && poom_select_list.length == 0">请选择防爆设施</text>
+											<view class="n_show_item text_align_right" v-for="(item, index) in poom_select_list" :key="index">{{item.label}}</view>
+										</view>
+										<multiple-select v-model="poomShow" :data="poomArray" :default-selected="poomDefaultSelected" @confirm="poomSelectBtn"
+										 label-name="label" value-name="value" :checkAll="true" :isPlural="true">
+										</multiple-select>
+										<!-- 		<app-picker-select placeholder="请选择防爆设施" :selectValue="comData.preventExp" :selectData="poomArray" :isBorder="false"
 										 textAlign="right" :isShowClose="false" :isPadding="false" @onSelectClear="onSelectClear('preventExp', false)"
-										 @onSelectBtn="onSelectBtn($event, 'preventExp', false)"></app-picker-select>
+										 @onSelectBtn="onSelectBtn($event, 'preventExp', false)"></app-picker-select> -->
 									</view>
 								</uni-list-item>
 							</block>
@@ -144,8 +151,20 @@
 		mapMutations
 	} from 'vuex'
 	export default {
+		props: {
+			cmpData: {
+				type: Object,
+				default () {
+					return {};
+				},
+			},
+			bool: Boolean
+		},
 		data() {
 			return {
+				poomShow: false,
+				poomDefaultSelected: [],
+				poom_select_list: [],
 				isShowWordDev: false,
 				d_mode: false,
 				isShowFacility: false,
@@ -159,6 +178,87 @@
 					maxNum: '', //涉尘车间最多作业人数
 					preventExp: [], //防爆设施
 				},
+				comRule: [{
+					msg: '请选择其他粉尘类别',
+					key: "dustOther",
+					isArray: true,
+					dependent: 'dustType', //依赖
+					dependent_val: '其他', //依赖值
+					not_eq_dep_val: false, //是否等于依赖值 true 不等于
+					dependent_type: "Array", //依赖值的类型
+				}, {
+					msg: '请选择厂房结构',
+					key: "homeStru",
+					isArray: true,
+					dependent: 'dustType', //依赖
+					dependent_val: '无', //依赖值
+					not_eq_dep_val: true, //是否等于依赖值 true 不等于
+					dependent_type: "Array", //依赖值的类型  
+				}, {
+					msg: '请输入涉尘车间最多作业人数',
+					key: "maxNum",
+					dependent: 'dustType', //依赖
+					dependent_val: '无', //依赖值
+					not_eq_dep_val: true, //是否等于依赖值 
+					dependent_type: "Array", //依赖值的类型
+				}, {
+					msg: '请选择除尘类型',
+					key: "dustOut",
+					dependent: 'dustType', //依赖
+					dependent_val: '无', //依赖值
+					not_eq_dep_val: true, //是否等于依赖值  
+					dependent_type: "Array", //依赖值的类型
+				}, {
+					msg: '请输入作业人数',
+					key: "workNum",
+					dependent: 'isShowWordDev', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请输入出尘设备',
+					key: "dustEqui",
+					dependent: 'isShowWordDev', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请选择主要集尘方式',
+					key: "setDust",
+					dependent: 'd_mode', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请选择主要尘降设施',
+					key: "dustLand",
+					dependent: 'isShowFacility', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请选择防爆设施',
+					key: "preventExp",
+					isArray: true,
+					dependent: 'isShowFacility', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请选集尘设施',
+					key: "dustFaci",
+					dependent: 'isShowJFacility', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请输入工位个数',
+					key: "postNum",
+					dependent: 'isShowPost', //依赖
+					dependent_val: true, //依赖值
+					dependent_is_other: true,
+				}, {
+					msg: '请输入粉尘清洗频次',
+					key: "dustRinseNum",
+					dependent: 'dustType', //依赖
+					dependent_val: '无', //依赖值
+					not_eq_dep_val: true, //是否等于依赖值 true 不等于
+					dependent_type: "Array", //依赖值的类型  
+				}],
 				homeStruTemp: '', //厂房结构
 				preventExp: '', //防爆设施
 				homeStruList: [{
@@ -423,7 +523,7 @@
 						}, {
 							"value": "其他",
 							"label": "其他"
-						},{
+						}, {
 							"value": "无",
 							"label": "无"
 						}];
@@ -573,7 +673,84 @@
 				}
 			}
 		},
+		watch: {
+			bool(nv) {
+				console.log(nv)
+				if (nv) {
+					this._syncData();
+					console.log("nv", nv)
+				}
+			}
+		},
+		created() {
+			this._syncData();
+		},
 		methods: {
+			_syncData() {
+
+				if (this.cmpData != undefined || this.cmpData != null) {
+					// console.log(this.cmpData)
+					var content = this.cmpData.content;
+					var state = this.cmpData.state;
+					if (content != undefined) {
+						
+						try{
+							var data = JSON.parse(content);
+							this.comData = data.dustTwo;
+							this.dust_select_list = this._constructorArr(this.comData.dustType);
+							this.dustDefaultSelected = this.comData.dustType;
+							this.other_select_list = this._constructorArr(this.comData.dustOther);
+							this.otherDefaultSelected = this.comData.dustOther;
+							this.homeStruTemp = this.comData.homeStru.join(' ');
+							this.poom_select_list = this._constructorArr(this.comData.preventExp);
+							this.poomDefaultSelected = this.comData.preventExp;
+							
+							if (this.comData.dustOut == '1') {
+								this.isShowWordDev = true;
+							} else {
+								this.isShowWordDev = false
+							}
+							if (this.comData.dustOut == '2') {
+								this.d_mode = true;
+							} else {
+								this.d_mode = false;
+							}
+							if (this.comData.setDust == '1') {
+								this.isShowFacility = true;
+							} else {
+								this.isShowFacility = false;
+							}
+							if (this.comData.setDust == '2') {
+								this.isShowJFacility = true;
+							} else {
+								this.isShowJFacility = false;
+							}
+							if (this.comData.setDust == '3') {
+								this.isShowPost = true;
+							} else {
+								this.isShowPost = false;
+							}
+						}catch(e){
+							//TODO handle the exception
+							console.log(e)
+						} 
+					} 
+
+				}
+			},
+			
+			_constructorArr(arr) {
+				var narr = [];
+				if (arr && arr.length > 0)  { 
+					for (var i = 0; i < arr.length; i ++) {
+						narr.push({
+							label:arr[i],
+							value:arr[i]
+						});
+					}
+				}
+				return narr;
+			},
 			/////////////////////select////////////////////////////
 			// onSelectDustTypeBtn(val, key) { 
 			// 	if (val == '无') {
@@ -608,6 +785,13 @@
 						this['comData'][key][0] = e.value;
 					}
 					this._changeKey(key);
+				}
+			},
+			poomSelectBtn(data) {
+				this.poom_select_list = data;
+				this.comData.preventExp = [];
+				for (var i = 0; i < data.length; i++) {
+					this.comData.preventExp.push(data[i]['value']);
 				}
 			},
 			_changeKey(key) {
@@ -668,8 +852,99 @@
 			onTabShow(key) {
 				this[key] = true;
 			},
+			_cheangeRule(rule, socue) {
+				this._contains();
+				// {
+				// 	msg: '请选择粉尘类别',
+				// 	key: "dustType",
+				// 	isArray: true,
+				// 	dependent: 'dustType', //依赖
+				// 	dependent_val: '无', //依赖值
+				// 	not_eq_dep_val: false, //是否等于依赖值 true 不等于
+				// 	dependent_type: "Array", //依赖值的类型
+				// }, 
+				if (socue['dustType'].length == 0) {
+					this.toast('请选择粉尘类别');
+					return false;
+				}
+				for (var i = 0; i < rule.length; i++) {
+					var temp = rule[i];
+					if (temp['isArray']) {
+						if (temp['dependent_type'] == "Array") {
+							if (socue[temp['dependent']].length > 0) {
+								var contains = socue[temp['dependent']].contains(temp['dependent_val']);
+
+								if (!contains && temp['not_eq_dep_val']) {
+
+									if (socue[temp['key']].length == 0) {
+										this.toast(temp['msg']);
+										return false;
+									}
+								}
+								if (contains && !temp['not_eq_dep_val']) {
+									console.log(contains, socue[temp['dependent']], temp.key)
+									if (socue[temp['key']].length == 0) {
+										this.toast(temp['msg']);
+										return false;
+									}
+								}
+							}
+						} else if (temp['dependent_is_other']) {
+							if (this[temp['dependent']] == temp['dependent_val']) {
+								if (socue[temp['key']].length == 0) {
+									this.toast(temp['msg']);
+									return false;
+								}
+							}
+						} else if (socue[temp['key']].length == 0) {
+							this.toast(temp['msg']);
+							return false;
+						}
+					} else {
+						if (temp['dependent_is_other']) {
+							if (this[temp['dependent']] == temp['dependent_val']) {
+								if (socue[temp['key']] == '' || socue[temp['key']] == undefined || socue[temp['key']] == null) {
+									this.toast(temp['msg']);
+									return false;
+								}
+							}
+						}
+						if (temp['dependent_type'] == "Array") {
+							if (socue[temp['dependent']].length > 0) {
+								var contains = socue[temp['dependent']].contains(temp['dependent_val']);
+								if (!contains && temp['not_eq_dep_val']) {
+									if (socue[temp['key']] == '' || socue[temp['key']] == undefined || socue[temp['key']] == null) {
+										this.toast(temp['msg']);
+										return false;
+									}
+								}
+							}
+						}
+					}
+				}
+				return true;
+			},
+			_contains() {
+				Array.prototype.contains = function(str) {
+					for (var i = 0; i < this.length; i++) {
+						if (this[i] == str) return true;
+					}
+					return false;
+				}
+			},
+			toast(title) {
+				uni.showToast({
+					title,
+					icon: 'none'
+				})
+			},
 			/////////////////////////end///////////////////////////////
 			submit() {
+				var bool = this._cheangeRule(this.comRule, this.comData);
+				if (!bool) return "interrupt";
+
+
+
 				var special = ''
 				if (this.comData.dustType.indexOf('无') === -1) {
 					if (this.comData.dustType.indexOf('其他') === -1) {

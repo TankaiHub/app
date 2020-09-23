@@ -5,7 +5,7 @@
 				{{title}}
 			</view>
 			<view class="a_input clearfix">
-				<view class="list_border_1px border_1px_409eff clearfix height50px" v-for="(item, index) in dataInfo">
+				<view class="list_border_1px border_1px_409eff clearfix height50px" v-for="(item, index) in dataInfo" :key="index">
 					<view class="clearfix">
 						<view class="float_left mar_bottom_10px mar_top_10px width70px">{{item.name}}</view>
 						<view class="float_left mar_bottom_10px mar_top_10px">
@@ -109,7 +109,7 @@
 	@import url("@/common/less/base.less");
 	.a_mask {
 		position: fixed;
-		z-index: 99999;
+		z-index: 9;
 		background-color: rgba(0, 0, 0, 0.5);
 		top: 0;
 		left: 0;

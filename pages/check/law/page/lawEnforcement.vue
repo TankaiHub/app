@@ -63,8 +63,11 @@
 											</view>
 										</view>
 										<view class="clearfix"></view>
-										<view class="l_enf_select_wrap" v-if="item['account_n_isRadio'+index]">
-											<app-picker-select placeholder="请选择处理措施" :selectValue="item['type_n'+index]" :selectData="typeData"
+										<view class="clearfix" v-if="item['account_n_isRadio'+index]">
+											<view class="float_left line_height_32px font14 mar_right_10px">
+												处理措施:
+											</view>
+											<app-picker-select class="float_left" placeholder="请选择处理措施" :selectValue="item['type_n'+index]" :selectData="typeData"
 											 @onSelectClear="onSelectClear('type_n'+index, index)" @onSelectBtn="onSelectBtn($event, 'type_n'+index, index)"></app-picker-select>
 										</view>
 									</label>

@@ -112,6 +112,7 @@
 				companyBaseInfo: {}, //企业基本信息
 				proWidth: 0, //进度条
 				stepData: {},
+				isLoad:false,
 			}
 		},
 		components: {
@@ -171,11 +172,16 @@
 				}
 			}
 		},
-		onLoad() {
-			this._initData();
-		},
+		// onLoad() {
+		// 	if (!this.isLoad) {
+		// 		this.isLoad = true;
+		// 		this._initData();
+		// 	}
+		// },
 		onShow() {
-			this._initData();
+			// if (this.isLoad) {
+				this._initData();
+			// }
 		},
 		methods: {
 			...mapMutations(['set_userInfo', 'set_home_login_lock', 'set_userHomeInfoData']),
@@ -185,7 +191,9 @@
 			},
 			//初始化
 			_initData() {
+				
 				if (this.home_login_lock) {
+					console.log("=====", this.home_login_lock)
 					this.$store.commit("set_home_login_lock", false);
 					this.childCompany = this.userInfo.oplist || [];
 
@@ -198,6 +206,7 @@
 						this._getApprovalStatus();
 					}
 				} else {
+					console.log("???")
 					this._getInfo();
 					this._getApprovalStatus();
 				}
@@ -284,7 +293,7 @@
 			},
 			_changePage1() {
 				uni.navigateTo({
-					url: "../writeData/base"
+					url: "../writeData/base?p=h"
 				})
 			},
 			_changePage2() {
@@ -296,7 +305,7 @@
 						success(res) {
 							if (res.confirm) {
 								uni.navigateTo({
-									url: '../writeData/base'
+									url: '../writeData/base?p=h'
 								})
 							} else if (res.cancel) {
 								this.log('用户点击取消');
@@ -305,7 +314,7 @@
 					});
 				} else {
 					uni.navigateTo({
-						url: '../writeData/safety'
+						url: '../writeData/safety?p=h'
 					})
 
 				}
@@ -315,7 +324,7 @@
 					if (this.companyBaseInfo.scale == 3) {
 						//个体
 						uni.navigateTo({
-							url: '../writeData/riskMainPage/individual'
+							url: '../writeData/riskMainPage/individual?p=h'
 						})
 					} else {
 						//非个体
@@ -340,32 +349,31 @@
 				}
 			},
 			_changeGoToPage(name) {
-				this.log(name, "??????????????????")
 				switch (name) {  
 					case '塑料':
-						return '../writeData/riskMainPage/plastic';
+						return '../writeData/riskMainPage/plastic?p=h';
 					case '纺织':
-						return '../writeData/riskMainPage/textile';
+						return '../writeData/riskMainPage/textile?p=h';
 					case '食品':
-						return '../writeData/riskMainPage/food';
+						return '../writeData/riskMainPage/food?p=h';
 					case '建材':
-						return '../writeData/riskMainPage/buildingMaterials';
+						return '../writeData/riskMainPage/buildingMaterials?p=h';
 					case '纸制品':
-						return '../writeData/riskMainPage/paperProducts';
+						return '../writeData/riskMainPage/paperProducts?p=h';
 					case '商贸':
-						return '../writeData/riskMainPage/business';
+						return '../writeData/riskMainPage/business?p=h';
 					case '轻工':
-						return '../writeData/riskMainPage/industryFurniture'; //comm
+						return '../writeData/riskMainPage/industryFurniture?p=h'; //comm
 					case '家具':
-						return '../writeData/riskMainPage/industryFurniture'; //comm
+						return '../writeData/riskMainPage/industryFurniture?p=h'; //comm
 					case '机械':
-						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored?p=h'; //comm1
 					case '烟草':
-						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored?p=h'; //comm1
 					case '冶金':
-						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored?p=h'; //comm1
 					case '有色':
-						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored?p=h'; //comm1
 					default:
 						return '';
 				}

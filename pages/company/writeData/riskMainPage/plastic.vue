@@ -45,6 +45,7 @@
 				coldData: {},
 				highData: {},
 				gasData: {},
+				requestInfo:{}
 			}
 		},
 		components: {
@@ -57,24 +58,71 @@
 		computed: {
 			...mapState(['userInfo']),
 		},
-		onLoad() {
+		watch:{
+			currentIndex(nv) {
+				uni.pageScrollTo({
+					scrollTop:0
+				})
+			}
+		},
+		onLoad(opts) {
+			this.requestInfo = opts;
+			if (opts.p == 'max') {
+				this.currentIndex = 3;
+			}
 			this._initData();
+		},
+		onBackPress(e) {
+			if (e.from == "backbutton") {
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					return false; 
+				}else {
+					return true;
+				} 
+				return true;
+			} else if (e.from == 'navigateBack') {
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					return false; 
+				}else {
+					return true;
+				} 
+			}
 		},
 		methods: {
 			onNavBarLeft() {
-
+				if ((this.requestInfo.p == 'h' || this.requestInfo.p == 't') && this.currentIndex == 0) {
+					this._router('', false, 1);
+				}else {
+					this.currentIndex --;
+					if (this.currentIndex < 0) {
+						this.currentIndex = 0;
+						uni.redirectTo({
+							url: '../safety'
+						});
+						return;
+					}
+				}
+			},
+			_router(url, bool, delta) {
+				if (bool) {
+					uni.navigateTo({
+						url,
+						fail(err) {
+							console.log(err, '=======true======')
+						}
+					})
+				}else {
+					uni.navigateBack({
+						delta
+					})
+				}
 			},
 			_initData(state) {
 				var opts = {
 					company_id: this.userInfo.company_id
 				};
 				this.$http.post('riskInfo', opts).then(res => {
-					if (res.code == 200) {
-						if (state == 'back') {
-							this._back();
-						} else if (state == 'next') {
-							this._next();
-						}
+					if (res.code == 200) { 
 						this._changeBaseData(res.data);
 					}
 				});
@@ -120,23 +168,23 @@
 			 * @param {Object} bool true-下一步 false-上一步
 			 */
 			onSubmit(bool) {
-				if (bool) {
-					this._initData('next');
-				} else {
-					this._initData('back');
-				}
-
-			},
+			 	if (bool) { 
+			 		this._next();
+			 	} else {
+			 		this._back(); 
+			 	} 
+			 },
 			_next() {
-				console.log(this.currentIndex, this.navData.length - 1)
+				var check = this.$refs['page' + this.currentIndex].submit();
+				if (check == 'interrupt') return; 
 				if (this.currentIndex == this.navData.length - 1) {
 					this.currentIndex = this.navData.length - 1;
 					uni.redirectTo({
-						url: '../../companyTable/companyTable'
+						url:'./finalTable'
 					});
-				} else {
-					this.$refs['page' + this.currentIndex].submit();
-				}
+					return;
+				} 
+				this._initData();
 			},
 			_back() {
 				this.currentIndex--;
@@ -145,7 +193,9 @@
 					uni.redirectTo({
 						url: '../safety'
 					});
+					return;
 				}
+				this._initData();
 			},
 			changeNext(bool) {
 				if (bool) {

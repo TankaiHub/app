@@ -10,7 +10,7 @@
 			</view>
 
 			<view class="s_det_bd_wrap" :style="{ marginBottom:marginBtHeight + 'px' }">
- 
+
 				<!-- /// 检查方案-->
 				<view class="s_det_not_add_plan_wrap s_det_common_wrap" v-if="isAddLawPlan">
 					<view class="s_det_n_a_p_title s_det_common_title">
@@ -28,7 +28,7 @@
 						<uni-list>
 							<uni-list-item title="检查时间：" :showArrow="false">
 								<view class="s_det_right" slot="right" :style="{ width:rightWidth }">
-									{{comInfo.inspection_time}}
+									{{changeTime( comInfo.inspection_time , "yy-mm-dd") }}
 								</view>
 							</uni-list-item>
 							<uni-list-item title="单位地址：" :showArrow="false">
@@ -76,7 +76,11 @@
 									{{comInfo.position}}
 								</view>
 							</uni-list-item>
-
+							<uni-list-item title="限期时间：" :showArrow="false">
+								<view class="s_det_right" slot="right" :style="{ width:rightWidth }">
+									{{ changeTime( comInfo.deadline , "yy-mm-dd") }}
+								</view>
+							</uni-list-item>
 						</uni-list>
 					</view>
 
@@ -95,15 +99,19 @@
 						<view class="s_det_l_r_title s_det_common_title">
 							检查记录：
 							<view class="mar_left_30px s_det_btn_wrap">
-								<button  v-if="comInfo.z_state == 2" class="btn_width_150px s_det_btn" @click="onGoToRview" type="primary">开始复查</button>
-								<button  v-if="comInfo.z_state == 3" class="btn_width_150px s_det_btn" type="primary" @click="onGoToReviewAnnal">复查记录</button>
-								<button  class="btn_width_150px s_det_btn" type="primary" @click="onAddLawContent">添加</button>
+								<button v-if="comInfo.z_state == 2" class="btn_width_150px s_det_btn" @click="onGoToRview" type="primary">开始复查</button>
+								<button v-if="comInfo.z_state == 3" class="btn_width_150px s_det_btn" type="primary" @click="onGoToReviewAnnal">复查记录</button>
+								<button class="btn_width_150px s_det_btn" type="primary" @click="onAddLawContent">添加</button>
 							</view>
 						</view>
 						<app-table :headerData="headerData" :bodyData="lawContentList" :tablePorps="tableProps" :isShowOper="isShowOper">
 							<template slot="handle" slot-scope="props">
 								<text v-if="props.data.conform ==1">/</text>
 								<text v-else-if="props.data.conform ==2">{{ typeTo[props.data.type]}}</text>
+							</template>
+							<template slot="edit" slot-scope="props">
+								<image src="../../../../static/edit.png" mode="aspectFill" class="img_size_40px mar_right_10px" @click="onEditLaw(props.data)"></image>
+								<image src="../../../../static/icon/del.png" mode="aspectFill" class="img_size_40px" @click="onDelLaw(props.data)"></image>
 							</template>
 						</app-table>
 					</view>
@@ -130,6 +138,8 @@
 			</view>
 
 		</view>
+		<app-alert v-if="isShowBookLawNumber" title='编辑执法文书编号' placeholder="请输入执法文书编号" type="number" @cancel="cancel"
+		 @confirm="confirm"></app-alert>
 	</view>
 </template>
 
@@ -137,7 +147,11 @@
 	import appNav from "@/components/app-nav/app-nav"
 	import appTitle from "@/components/app-title/app-title"
 	import appTable from "@/components/app-table/app-table-not-expand"
-
+	import appEmptyAlert from '@/components/h-form-alert/app-empty-alert'
+	import appAlert from '@/components/h-form-alert/h-form-alert'
+	import {
+		changeTime
+	} from '@/common/js/base.js'
 	import {
 		mapState,
 		mapMutations
@@ -145,7 +159,7 @@
 	export default {
 		data() {
 			return {
-
+				changeTime,
 				drawerVisible: false,
 				isAddLawPlan: true, //是否添加执法计划
 				comInfo: {}, //企业信息
@@ -169,11 +183,15 @@
 					text: "处理方式",
 					width: 100,
 					center: true
+				}, {
+					text: "编辑",
+					width: 100,
+					center: true
 				}],
-				tableProps:[{
-					isContent:true,
-					style:{},
-					props:"content"
+				tableProps: [{
+					isContent: true,
+					style: {},
+					props: "content"
 				}],
 				isShowOper: false,
 				typeTo: {
@@ -183,18 +201,20 @@
 					4: '当场处罚'
 				},
 				marginBtHeight: 0,
-				curentBookNumber:'',//当前修改的文书编号
-				currentBookId:'',//当前要修改的文书id
-				
+				curentBookNumber: '', //当前修改的文书编号
+				currentBookId: '', //当前要修改的文书id 
+				isShowBookLawNumber: false
 			}
 		},
 		computed: {
-			...mapState(['admin_law_detail_info', 'admin_law_company_detail_info']),
+			...mapState(['admin_law_detail_info', 'admin_law_company_detail_info', 'admin_law_edit_law_content']),
 		},
 		components: {
 			appTitle,
 			appNav,
-			appTable
+			appTable,
+			appEmptyAlert,
+			appAlert
 		},
 		onShow() {
 			this.log(111)
@@ -218,7 +238,7 @@
 
 		},
 		methods: {
-			...mapMutations(['set_admin_law_detail_info', 'set_admin_law_company_detail_info']),
+			...mapMutations(['set_admin_law_detail_info', 'set_admin_law_company_detail_info', 'set_admin_law_edit_law_content']),
 			onNavBarLeft() {
 				uni.navigateBack();
 			},
@@ -226,6 +246,7 @@
 				var opts = {
 					task_id: this.admin_law_detail_info.task_id
 				};
+				this.lawContentList = [];
 				this.$http.post('taskInfo', opts).then(res => {
 					if (res.code == 200) {
 						var msg = res.msg;
@@ -243,86 +264,130 @@
 					}
 				})
 			},
+			confirm(e) {
+				this.curentBookNumber = e;
+				this.onSubmitBookNumber();
+			},
+			cancel() {
+				this.isShowBookLawNumber = false;
+			},
 			onEditLawBook(item, index) {
 				this.currentBookId = item.ws_id;
-				var _self = this;
-				plus.nativeUI.prompt("编辑", (e)=> {
-					if (e.index == 0) {
-						//确定
-						var val = e.value;
-						if (val == '') {
-							uni.showToast({
-								title:"请输入文书编号",
-								icon:"none"
-							})
-							return;
-						}
-						var num = (+val).toString();
-						if (num == "NaN") {
-							uni.showToast({
-								title:"请输入数字",
-								icon:"none"
-							})
-							return;
-						} 
-						_self.curentBookNumber = val;
-						_self.onSubmitBookNumber();
-					} else if (e.index == 1) {
-						//取消
-					}
-				}, "", "请输入文书编号", ["确定", "取消"]);
+				this.isShowBookLawNumber = true;
+				// var _self = this;
+				// plus.nativeUI.prompt("编辑", (e) => {
+				// 	if (e.index == 0) {
+				// 		//确定
+				// 		var val = e.value;
+				// 		if (val == '') {
+				// 			uni.showToast({
+				// 				title: "请输入文书编号",
+				// 				icon: "none"
+				// 			})
+				// 			return;
+				// 		}
+				// 		var num = (+val).toString();
+				// 		if (num == "NaN") {
+				// 			uni.showToast({
+				// 				title: "请输入数字",
+				// 				icon: "none"
+				// 			})
+				// 			return;
+				// 		}
+				// 		_self.curentBookNumber = val;
+				// 		_self.onSubmitBookNumber();
+				// 	} else if (e.index == 1) {
+				// 		//取消
+				// 	}
+				// }, "", "请输入文书编号", ["确定", "取消"]);
 			},
 			onSubmitBookNumber() {
 				var opts = {
 					ws_id: this.currentBookId,
 					number: this.curentBookNumber
-				}; 
+				};
 				this.$http.post('wsNumEdit', opts).then(res => {
 
-					if (res.code == 200) { 
+					if (res.code == 200) {
 						this.currentBookId = '';
 						this.bookNumber = '';
+						this.isShowBookLawNumber = false;
 						this._initData();
-					} 
+					}
 				})
 			},
 			///////////////开始检查
 			onStartCheck() {
 				uni.navigateTo({
-					url:"./lawScheme?info_id=" + this.comInfo.info_id + "&task_id="+ this.admin_law_detail_info.task_id
+					url: "./lawScheme?info_id=" + this.comInfo.info_id + "&task_id=" + this.admin_law_detail_info.task_id
 				})
 			},
 			//////////编辑企业info
-			onEditComInfo() { 
+			onEditComInfo() {
 				uni.navigateTo({
-					url:"./editComInof"
+					url: "./editComInof"
 				})
 			},
 			////////////添加方案
-			onAddPlan() { 
+			onAddPlan() {
 				uni.navigateTo({
-					url:"./addLawPlan?s=1&num=1"
+					url: "./addLawPlan?s=1&num=1"
 				})
 			},
-			
+
 			///////////////添加
 			onAddLawContent() {
 				uni.navigateTo({
-					url:"./addLawContent?task_id=" + this.admin_law_detail_info.task_id
+					url: "./addLawContent?task_id=" + this.admin_law_detail_info.task_id
 				})
 			},
 			/////////////复查
 			onGoToRview() {
 				uni.navigateTo({
-					url:'./review?task_id=' + + this.admin_law_detail_info.task_id
+					url: './review?task_id=' + +this.admin_law_detail_info.task_id
 				})
 			},
 			//复查记录
 			onGoToReviewAnnal() {
 				uni.navigateTo({
-					url:'./reviewRecord?task_id=' + + this.admin_law_detail_info.task_id
+					url: './reviewRecord?task_id=' + +this.admin_law_detail_info.task_id
 				})
 			},
+			//编辑复查记录
+			onEditLaw(data) {
+				this.$store.commit('set_admin_law_edit_law_content', data);
+				uni.navigateTo({
+					url: "./addLawContent?task_id=" + this.admin_law_detail_info.task_id + "&edit=edit"
+				})
+			},
+			//删除复查记录
+			onDelLaw(data) {
+				console.log(data)
+				var _self = this;
+				var opts = {
+					record_id: data.record_id
+				}
+				uni.showModal({
+					title: '是否继续?',
+					content: '此操作将删除\`' + data.content + '\`',
+					success: function(res) {
+						if (res.confirm) {
+							_self.$http.post('recordDelete', opts).then(res => {
+								uni.showToast({
+									title: "删除成功",
+									icon: 'success'
+								});
+								_self._initData();
+							});
+
+
+						} else if (res.cancel) {
+
+						}
+					}
+				})
+			},
+
 		}
 	}
 </script>
@@ -349,8 +414,9 @@
 			.s_det_bd_wrap {
 				.s_det_common_wrap {
 					margin-bottom: 30upx;
-					.s_det_btn{
-						margin:20upx 0;
+
+					.s_det_btn {
+						margin: 20upx 0;
 					}
 				}
 
@@ -375,18 +441,20 @@
 
 				// 检查记录
 				.s_det_law_recording_wrap {
-					
+
 					.s_det_l_r_title {
 						margin-bottom: 20upx;
-						.s_det_btn_wrap{
+
+						.s_det_btn_wrap {
 							display: flex;
-							justify-content: space-between; 
-							button{
+							justify-content: space-between;
+
+							button {
 								margin-right: 10upx;
 							}
 						}
 					}
-					
+
 				}
 
 				// 执法文书
@@ -411,7 +479,7 @@
 				.s_det_common_content {
 					margin: 20upx 0;
 				}
-			} 
+			}
 		}
 	}
 </style>

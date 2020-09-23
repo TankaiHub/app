@@ -10,7 +10,7 @@
 			<view class="l_task_inp_wrap">
 				<view class="l_task_inp_search">
 					<app-search @onSearch="onSearch"></app-search>
-				</view> 
+				</view>
 				<view class="l_task_inp_select">
 					<app-picker-select class="half" placeholder="请选择检查状态" :selectData="lawStateData" :selectValue="stateValue"
 					 @onSelectClear="onSelectClear('stateValue')" @onSelectBtn="onSelectBtn($event, 'stateValue')"></app-picker-select>
@@ -18,17 +18,18 @@
 					 @onSelectClear="onSelectClear('zState')" @onSelectBtn="onSelectBtn($event, 'zState')"></app-picker-select>
 				</view>
 			</view>
-			<view class="l_task_t_text_wrap"> 
-				<text class="l_task_t_time_bd">检查时间：{{changeTime(admin_law_plan_info.task_time, "yy-mm-dd")}}</text>
+			<view class="l_task_t_text_wrap">
+				<text class="l_task_t_time_bd">检查时间：{{admin_law_plan_info.task_time}}</text>
 				<text>检查类型：{{admin_law_plan_info.type}}</text>
 			</view>
 			<!-- ///////////////table////////////////// -->
 			<view class="l_task_table_wrap app_table_wrap">
-				<app-table-new :tableData="tableData" :headerArray="headerArray" :showContent="showContent"  :isShowExpand="isShowExpand" :isClickBar="isClickBar">
+				<app-table-new :tableData="tableData" :headerArray="headerArray" :showContent="showContent" :isShowExpand="isShowExpand"
+				 :isClickBar="isClickBar">
 					<block slot="content" slot-scope="props" v-if="props.data">
 						<view class="table_hide_total_container">
 							<view class="a_t_ul table_hide_info_wrap">
-						
+
 								<view class="a_t_li reg_addr clearfix">
 									<label>检查状态</label>
 									<view class="info_bd">{{stateTo[props.data.state]}}</view>
@@ -59,7 +60,7 @@
 								<button @click="onLookDetail(props.data)" size="small" type="primary" class="btn_tb">查看详情</button>
 							</view>
 						</view>
-						
+
 					</block>
 				</app-table-new>
 				<!-- <app-table :tableData="tableData" :pageSize="pageSize" :page="page" :isShowExpand="isShowExpand" :isClickBar="isClickBar" v-model="changeState">
@@ -105,8 +106,8 @@
 
 					</template>
 				</app-table> -->
-				
-				
+
+
 				<app-pagination :total="total" :page="page" :pageSize="pageSize" @onSelectItem="onSelectItem" @onPrev="onPrev"
 				 @onNext="onNext"></app-pagination>
 			</view>
@@ -122,12 +123,13 @@
 	import appTable from '@/components/app-table/app-table'
 	import appPagination from '@/components/app-table/app-pagination'
 	import appTableColumn from "@/components/app-table/app-table-column"
-	
+
 	import appTableNew from "@/components/app-table/app-table-new"
-	
-	
+
+
 	import {
-		mapState, mapMutations
+		mapState,
+		mapMutations
 	} from "vuex"
 	import {
 		changeTime
@@ -137,52 +139,51 @@
 			return {
 				changeTime,
 				drawerVisible: false,
-				headerArray: [
-				{
-					key:'任务时间', 
-					width:100,	 
-				},
-				{
-					key:'企业名称', 
-					isInWidth:true,
-				}
+				headerArray: [{
+						key: '任务时间',
+						width: 100,
+					},
+					{
+						key: '企业名称',
+						isInWidth: true,
+					}
 				],
-				showContent:[{
-					key:'task_time',
-					isInWidth:false,
-					width:100,  
-				},{
-					key:'name',
-					isInWidth:true,
+				showContent: [{
+					key: 'task_time',
+					isInWidth: false,
+					width: 100,
+				}, {
+					key: 'name',
+					isInWidth: true,
 				}],
 				searchVal: '',
 				stateValue: '',
 				lawStateData: [{
 					label: "未检查",
 					value: "1",
-						show:true,
+					show: true,
 				}, {
 					label: "检查中",
 					value: "2",
-						show:true,
+					show: true,
 				}, {
 					label: "已检查",
 					value: "3",
-						show:true,
+					show: true,
 				}],
 				zState: '',
 				lawZStateData: [{
 					label: "不需要整改",
 					value: "1",
-						show:true,
+					show: true,
 				}, {
 					label: "整改中",
 					value: "2",
-						show:true,
+					show: true,
 				}, {
 					label: "整改完成",
 					value: "3",
-						show:true,
+					show: true,
 				}],
 				stateTo: {
 					1: '未检查',
@@ -198,14 +199,14 @@
 					1: '计划检查',
 					2: '随机抽查'
 				},
-				total:0,
+				total: 0,
 				tableData: [],
 				pageSize: 10,
 				page: 1,
-				isClickBar:true,//点击展开
+				isClickBar: true, //点击展开
 				changeState: false, //表格状态
 				isShowExpand: true, //表格是否展开
-				typeSerch:'',
+				typeSerch: '',
 			}
 		},
 		computed: {
@@ -222,7 +223,11 @@
 			appTableNew
 		},
 
-		onLoad() {
+		onLoad(opts) {
+			var state = opts.state;
+			if (state != undefined) {
+				this._changeUrlOpts(state);
+			}
 			this._initData();
 		},
 		methods: {
@@ -230,8 +235,27 @@
 			onNavBarLeft() {
 				// uni.navigateBack();
 				uni.navigateTo({
-					url:'../lawPlan'
+					url: '../lawPlan'
 				})
+			},
+			_changeUrlOpts(str) {
+				switch (str) {
+					case 'quantity': //企业数量
+						this.stateValue = '';
+						break;
+					case 'then': //已检查
+						this.stateValue = '3';
+						break;
+					case 'not': //未检查
+						this.stateValue = '2';
+						break;
+					case 'complete': //整改完成
+						this.zState = '3'
+						break;
+					case 'in': //整改中
+						this.zState = '2'
+						break;
+				}
 			},
 			_initData() {
 				var opts = {
@@ -244,11 +268,11 @@
 					state: this.stateValue,
 					z_state: this.zState,
 				};
-				this.$http.post('taskList', opts).then((res)=> {
+				this.$http.post('taskList', opts).then((res) => {
 					if (res.code == 200) {
 						this.total = res.Total;
 						var data = res.data;
-						for (var i = 0; i < data.length; i ++) {
+						for (var i = 0; i < data.length; i++) {
 							// task_time
 							data[i]['task_time'] = this.changeTime(data[i]['task_time'], 'yy-mm');
 						}
@@ -304,7 +328,7 @@
 					}
 				})
 			},
-			
+
 			/////////////////分页///////////////////
 			onSelectItem(num) {
 				this.pageSize = num;
@@ -324,18 +348,18 @@
 				this._initData();
 				this.log(this.page, "+++++++++++++");
 			},
-			
+
 			///////添加企业
 			onAddCom() {
-				
+
 				uni.navigateTo({
-					url:"./addCompany"
+					url: "./addCompany"
 				})
 			},
 			onLookDetail(data) {
 				this.$store.commit("set_admin_law_detail_info", data);
 				uni.navigateTo({
-					url:'./seeDetails'
+					url: './seeDetails'
 				})
 			},
 		}
@@ -349,14 +373,14 @@
 		.l_task_wrap {
 			padding: 20upx;
 
-			.l_task_top_title {
-				border:1px solid #ccc;
+			.l_task_top_title { 
+
 				.l_task_t_t_title {
 					float: left;
 				}
 
 				.l_task_t_t_btn {
-					height:70upx;
+					height: 70upx;
 					line-height: 70upx;
 					float: right;
 				}

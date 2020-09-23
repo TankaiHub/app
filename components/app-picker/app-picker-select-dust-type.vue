@@ -5,7 +5,9 @@
 				<view class="c_t_bd">
 					<input class="" placeholder-style="color:#ccc" type="text" v-model="selectVal" disabled placeholder="选择粉尘类别"
 					 @click="onInp" :style="{ textAlign:textAlign }" />
-					<view class="c_t_close_btn" @click="onClose" v-if="isShowClose">X</view>
+					<view class="" @click="onClose" v-if="isShowClose"><!--c_t_close_btn-->
+						<image src="../../static/icon/close.png" mode="aspectFill" class="img_size_40px vertical_align_center"></image>
+					</view>
 				</view>
 			</view>
 			<view class="app_picker_select_wrap_bd" v-if="isShowPickerSelect">

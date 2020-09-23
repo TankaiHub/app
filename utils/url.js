@@ -1,4 +1,6 @@
 var url={ 
+  // host: 'http://api.cqgmaq.com/',//上传
+  host: 'http://spmsapi.cqxddwl.com/',
   //管理员登录
   login : 'index/Login/login',
   //企业信息获取
@@ -223,9 +225,16 @@ var url={
   'lawTaskBgPdfUrl':'admin/Task/Bgdc',
   //检查记录编辑
   'recordEdit':'admin/Task/recordEdit',
+  //检查记录编辑(新版)
+    'recordEditN':'admin/Task/recordEditN',
   "zgSubmit2":"admin/Task/zgSubmit2",
-  "taskStop":"admin/Task/taskStop"
-
+  "taskStop":"admin/Task/taskStop",
+    // 新增执法计划(输入企业名称)
+   'makePlanS':'admin/Task/makePlanS',
+  //检查记录删除
+  'recordDelete':'admin/Task/recordDelete',
+  // 责令整改时间编辑
+    "deadlineEdit":'admin/Task/deadlineEdit',
 }
 
 export default url;

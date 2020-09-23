@@ -5,7 +5,9 @@
 				<!-- , isBorder:isBorder -->
 				<input @click="onPickerSelectTitle" placeholder-style="color:#ccc"  :style="{ textAlign:textAlign }" v-model="curVal" :placeholder="placeholder" disabled />
 				<input type="text" v-model="selectValue" v-show="isShow" />
-				<view class="t_s_close_btn c_t_close_btn" v-if="isShowClose" @click="onSelectClear">X</view>
+				<view class="" v-if="isShowClose" @click="onSelectClear"><!--t_s_close_btn c_t_close_btn-->
+					<image src="../../static/icon/close.png" mode="aspectFill" class="img_size_40px vertical_align_center"></image>
+				</view>
 			</view>
 		</view>
 		<view class="app_picker_select_wrap_bd" v-if="isShowPickerSelect">
@@ -63,7 +65,11 @@
 			isPadding:{
 				type:Boolean,
 				default:true
-			}
+			},
+			isCheck:{
+				type:Boolean,
+				default:false
+			},
 		},
 		data() {
 			return {
@@ -92,7 +98,11 @@
 			this._initData(this.selectValue);
 		},
 		methods: {
+			_set_list(bool) {
+				this.isShowPickerSelect = bool;
+			},
 			_initData(newVal) {
+				if (this.isCheck) return;
 				if (newVal == '') {
 					this.curVal = '';
 					return;
@@ -117,7 +127,9 @@
 				if (!obj.value) {
 					obj = this.selectData[0];
 				}
-				this.curVal = obj.label;
+				if (!this.isCheck) {
+					this.curVal = obj.label;
+				}
 				obj.flag = flag;
 				if (flag) {
 					this.$emit("onSelectBtn", obj);
@@ -163,7 +175,7 @@
 
 	.app_picker_select_wrap_bd {
 		position: fixed;
-		z-index: 5;
+		z-index: 10;
 		width: 100vw;
 		height: 100vh;
 		top: 0;

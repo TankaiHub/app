@@ -3,7 +3,9 @@
 		<view class="t_s_title_wrap c_t_wrap">
 			<view class="t_s_title_bd c_t_bd">
 				<text class="t_text_bd" @click="onPickerSelectTitle" :class="{ isActive:currentSelectText == '请选择' }">{{currentSelectText}}</text>
-				<view class="t_s_close_btn c_t_close_btn" @click="onSelectClear">X</view>
+				<view class="" @click="onSelectClear"><!--t_s_close_btn c_t_close_btn-->
+					<image src="../../static/icon/close.png" mode="aspectFill" class="img_size_40px vertical_align_center"></image>
+				</view>
 			</view>
 		</view>
 		<view class="cmp_app_picker_calendar_wrap_bd" v-if="isShowPickerTime">

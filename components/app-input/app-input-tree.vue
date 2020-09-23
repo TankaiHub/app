@@ -272,14 +272,14 @@
 			// 	}
 			// },
 			//恢复到初始
-			_initTreeData(data) {
+			_initTreeData(data, bool=false) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].children) {
-						data[i].checked = false;
+						data[i].checked = bool;
 						this.log(data[i].checked)
 						this._initTreeData(data[i].children);
 					} else {
-						data[i].checked = false;
+						data[i].checked = bool;
 					}
 				}
 			}, 
@@ -291,6 +291,11 @@
 				}).then(res => {
 					if (res.code == 200) {
 						var data = res.data;
+						if (data == null) {
+							this._initTreeData(this.treeList, true);
+							callback && callback();
+							return;
+						};
 						this.infoData = {
 							...data,
 							energy: data.energy ? data.energy.split(',')[0].split('-') : '',
@@ -332,9 +337,7 @@
 								} 
 							this.getIndustry(callback)
 						});
-					}
-
-
+					} 
 				})
 			},
 			changeDisabled(callback) {

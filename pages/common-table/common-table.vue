@@ -1,45 +1,57 @@
 <template>
 	<view class="app_common_table_container">
 		<view class="common_table_wrap">
-			<view class="base_info">
-				<app-title text="基本信息"></app-title>
-				<table cellspacing="0" class="border_1px_all_409eff">
-					<tr v-for="(item, index) in baseData" :key='index'>
-						<block v-for="(ele, indx) in item" :key='indx' v-if="ele.value != null && ele.show">
-							<td class="border_1px_all_409eff font_weight_bold padding_5px border_right_none border_bottom_none" :style="{ width:ele.keyW+ 'px' }"
-							 :class="{ border_left_none:indx == 0, border_top_none:index == 0 }">
-								{{ele.key}}
-							</td>
-							<td :colspan="ele.col" class="border_1px_all_409eff padding_8px border_right_none border_bottom_none" :class="{ border_top_none:index == 0 }">
-								{{ele.value}}
-							</td>
-						</block>
-
-					</tr>
-				</table>
-			</view>
-			<view class="safety_info mar_bottom_10px mar_top_10px">
-				<app-title text="安全信息"></app-title>
-				<table cellspacing="0" class="border_1px_all_409eff width100">
-					<tr v-for="(item, index) in safetyData" :key='index'>
-						<block v-for="(ele, indx) in item" :key='indx' v-if="ele.value != null && ele.show">
-							<td class="border_1px_all_409eff font_weight_bold padding_5px border_right_none border_bottom_none" :style="{ width:ele.keyW + 'px' }"
-							 :class="{ border_left_none:indx == 0, border_top_none:index == 0 }">
-								{{ele.key}}
-							</td>
-							<td :colspan="ele.col" class="border_1px_all_409eff padding_8px border_right_none border_bottom_none" :class="{ border_top_none:index == 0 }">
-								{{ele.value}}
-							</td>
-						</block>
-					</tr>
-				</table>
-			</view>
-			<view class="risk_info  mar_bottom_10px mar_top_10px">
+			<view class="base_info" v-if="baseData && baseData.length > 0">
 				<scroll-view scroll-x="true">
-					<app-title text="风险信息"></app-title>
-					<table cellspacing="0" class="border_1px_all_409eff  width125">
+					<app-title text="基本信息"> 
+						<slot name="base"></slot>
+					</app-title>
+					<table cellspacing="0" class="border_1px_all_409eff width125">
+						<tr v-for="(item, index) in baseData" :key='index'>
+							<block v-for="(ele, indx) in item" :key='indx' v-if="ele.value != null && ele.show">
+								<td class="border_1px_all_409eff font_weight_bold padding_5px border_right_none border_bottom_none" :style="{ width:ele.keyW+ 'px' }"
+								 :class="{ border_left_none:indx == 0, border_top_none:index == 0 }">
+									{{ele.key}}
+								</td>
+								<td :colspan="ele.col" class="border_1px_all_409eff padding_8px border_right_none border_bottom_none" :class="{ border_top_none:index == 0 }">
+									{{ele.value}}
+								</td>
+							</block>
+
+						</tr>
+					</table>
+				</scroll-view>
+			</view>
+			<view class="safety_info mar_bottom_10px mar_top_10px" v-if="safetyData && safetyData.length > 0">
+				<scroll-view scroll-x="true">
+					<app-title text="安全信息"> 
+						<slot name="safety"></slot>
+					</app-title>
+					<table cellspacing="0" class="border_1px_all_409eff width125">
+						<tr v-for="(item, index) in safetyData" :key='index'>
+							<block v-for="(ele, indx) in item" :key='indx' v-if="ele.value != null && ele.show">
+								<td class="border_1px_all_409eff font_weight_bold padding_5px border_right_none border_bottom_none" :style="{ width:ele.keyW + 'px' }"
+								 :class="{ border_left_none:indx == 0, border_top_none:index == 0 }">
+									{{ele.key}}
+								</td>
+								<td :colspan="ele.col" class="border_1px_all_409eff padding_8px border_right_none border_bottom_none" :class="{ border_top_none:index == 0 }">
+									{{ele.value}}
+								</td>
+							</block>
+						</tr>
+					</table>
+				</scroll-view>
+			</view>
+			<view class="risk_info  mar_bottom_10px mar_top_10px" v-if="riskData && riskData.length > 0">
+				<scroll-view scroll-x="true">
+					<app-title text="风险信息"> 
+						<slot name="risk"></slot>
+					</app-title>
+					<show :bool="isShowTable" :baseAndSafetyInfoData="baseAndSafetyInfoData"></show>
+				<!-- 	<table cellspacing="0" class="border_1px_all_409eff  width125">
 						<tr v-for="(item, index) in riskData" :key='index'>
 							<block v-for="(ele, indx) in item" :key='indx'>
+							
 								<td :rowspan="ele.row" v-if="ele.key != '' && ele.show" :style="{ width:ele.keyW + 'px' }" class="border_1px_all_409eff font_weight_bold padding_5px border_right_none border_bottom_none"
 								 :class="{ border_left_none:indx == 0, border_top_none:index == 0 }">
 									{{ele.key}}
@@ -50,7 +62,7 @@
 								</td>
 							</block>
 						</tr>
-					</table>
+					</table> -->
 				</scroll-view>
 			</view>
 		</view>
@@ -60,6 +72,7 @@
 <script>
 	import appTitle from "@/components/app-title/app-title"
 	import cell from "./cell.js"
+	import Show from "./show.vue"
 	import {
 		mapState,
 		mapMutations
@@ -68,12 +81,21 @@
 		produceTo
 	} from "@/common/js/change.js"
 	export default {
+		props: {
+			bar: {
+				type: String,
+				default: "",
+			}
+		},
 		data() {
 			return {
+				isShowInfoEditBtn: true, //是否显示修改
 				baseAndSafetyInfoData: {},
+				isShowTable:false,
 				riskInfoData: [],
 				// riskData: [],
 				commonCol: 3, //跨行
+				isScale: false, // 个体
 				//特殊作业
 				hoistingData: [{
 						checkName: '行车',
@@ -179,8 +201,16 @@
 		},
 		components: {
 			appTitle,
-			cell
-		}, 
+			cell,
+			Show
+		},
+		watch: {
+			bar(nv) {
+				if (nv == 'back') {
+					this.isShowInfoEditBtn = false;
+				}
+			}
+		},
 		computed: {
 			...mapState(['userInfo']),
 			s_width() {
@@ -230,8 +260,11 @@
 				all.push(...this.gasFinalData);
 				all.push(...this.workFinalData);
 				all.push(...this.dangerFinalData);
-
-				all.push(...this.clodFinalData);
+				if (this.clodFinalData.length > 0) {
+					all.push(this.clodFinalData); 
+				}
+				
+				console.log(all, '++++')
 				return all;
 			},
 		},
@@ -241,7 +274,8 @@
 		methods: {
 			_initData() {
 				var opts = {
-					company_id: 2433 || this.userInfo.company_id,
+					company_id: this.userInfo.company_id,
+					//|| 2433,
 					//2478,
 					// 2433, 食品
 					// 2282
@@ -250,9 +284,14 @@
 				this._getRiskInfo(opts);
 			},
 			_getInfo(opts) {
+				this.isShowTable = false;
 				this.$http.post('info', opts).then(res => {
 					if (res.code == 200) {
 						this.baseAndSafetyInfoData = res.data;
+						if (this.baseAndSafetyInfoData.scale == 3) {
+							this.isScale = true;
+						}
+						this.isShowTable = true;
 					}
 				});
 			},
@@ -263,10 +302,33 @@
 					}
 				});
 			},
+			//修改
+			onEditInfo(num) {
+				if (num == 1) {
+					uni.navigateTo({
+						url: '../writeData/base',
+						fail(err) {
+							console.log(err)
+						}
+					})
+				} else if (num == 2) {
+					uni.navigateTo({
+						url: '../writeData/safety'
+					})
+				} else if (num == 3) {
+					var url = this._changeGoToPage(this.baseAndSafetyInfoData.industry_category_zfl || "");
+					uni.navigateTo({
+						url,
+						fail(err) {
+							console.log(err)
+						}
+					})
+				}
+			},
 			//基本信息
 			_getBaseInfo(nv) {
 				var base = nv;
-				this.log(nv)
+				if (!base.id) return;
 				var w = this.s_width;
 				var contentW = this.s_width - 20 - 4 - 70;
 				var half = contentW / 2 - 70;
@@ -281,19 +343,28 @@
 					[this._changeTabelValue("从业人员", base['number_of_employees'], half, keyW), this._changeTabelValue("生产经营状态",
 						produceTo(base.produce_state, base.produce_stop_reason), half, keyW, base['number_of_employees'] == (null ||
 							undefined) ? 3 : 1)],
-					[this._changeTabelValue("安全管理负责人", base['sp_principal'], half, keyW), this._changeTabelValue("安全管理负责人电话", base[
-						'sp_principal_phone'], half, keyW)],
-					[this._changeTabelValue("安全员", this._changeSecurity_officer(base['security_officer']), half, keyW), this._changeTabelValue(
-						"上年产值", base['lastyear_value'] == "0.00" ? null : (base['lastyear_value'] + '万'), half, keyW)],
-					[this._changeTabelValue("行业类别", base['industry_category'], half, keyW), this._changeTabelValue("主要工序", base[
-						'main_process'], half, keyW)],
-					[this._changeTabelValue("主营产品", this._changeMain_products(base['main_products']), contentW, keyW, 3)]
 				];
+				if (!this.isScale) {
+					arr.push(
+						[this._changeTabelValue("安全管理负责人", base['sp_principal'], half, keyW), this._changeTabelValue("安全管理负责人电话", base[
+							'sp_principal_phone'], half, keyW)],
+
+						[this._changeTabelValue("安全员", this._changeSecurity_officer(base['security_officer']), half, keyW), this._changeTabelValue(
+							"上年产值", base['lastyear_value'] == "0.00" ? null : (base['lastyear_value'] + '万'), half, keyW)],
+
+						[this._changeTabelValue("行业类别", base['industry_category'], half, keyW), this._changeTabelValue("主要工序", base[
+							'main_process'], half, keyW)]
+					);
+				}
+
+
+				arr.push([this._changeTabelValue("主营产品", this._changeMain_products(base['main_products']), contentW, keyW, 3)])
 				return arr;
 			},
 			//安全信息
 			_changeSafetyInfo(nv) {
 				var base = nv;
+				if (!nv.id) return;
 				var w = this.s_width;
 				var contentW = this.s_width - 20 - 4 - 70;
 				var half = contentW / 2 - 70;
@@ -345,7 +416,6 @@
 			//风险信息
 			_changeRiskInfo(nv) {
 				var all = [];
-
 				for (var i = 0; i < nv.length; i++) {
 					var temp = nv[i];
 					var state = temp.state;
@@ -365,62 +435,62 @@
 							if (obj.space) {
 								var opts = obj.space;
 								this.spaceFinalData = this._changeSpace1(opts)
-								// all.push(...this._changeSpace1(opts));
+								console.log(111111111)
 							} else if (obj.space2) {
 								var opts = obj.space2;
-								// all.push(...this._changeSpace2(opts));
 								this.spaceFinalData = this._changeSpace2(opts)
+								console.log(2222222222)
 							} else if (obj.space3) {
 								var opts = obj.space3;
+								console.log(333333333)
 								var list = obj.infoData;
-								// all.push(...this._changeSpace3(opts, list));
 								this.spaceFinalData = this._changeSpace3(opts, list)
 							}
-							this.log("循环 有限空间 风险信息", this.spaceFinalData)
+							// this.log("循环 有限空间 风险信息", this.spaceFinalData)
 						}
 						if (type == 2 && this.industry.indexOf('特殊作业及特种设备') !== -1) {
 							this.log(obj)
 							if (obj.workOne != undefined) {
 								var opts = obj.workOne;
-								// all.push(...this._changeSpecialJob1(opts));
 								this.workFinalData = this._changeSpecialJob1(opts);
 							} else if (obj.workTwo != undefined) {
 								var opts = obj.workTwo;
-								// all.push(...this._changeSpecialJob2(opts));
 								this.workFinalData = this._changeSpecialJob2(opts);
 							}
-							this.log("循环 特殊作业及特种设备 风险信息", this.workFinalData)
+							// this.log("循环 特殊作业及特种设备 风险信息", this.workFinalData)
 						}
 						if (type == 3 && this.industry.indexOf('可燃性粉尘') !== -1) {
 							if (obj.dustOne != undefined) {
 								var opts = obj.dustOne;
-								// all.push(...this._changeDustOne(opts));
 								this.dangerFinalData = this._changeDustOne(opts);
 							} else if (obj.dustTwo != undefined) {
 								var opts = obj.dustTwo;
-								// all.push(...this._changeDustTwo(opts));
-								this.dangerFinalData = this._changeDustOne(opts);
+								this.dangerFinalData = this._changeDustTwo(opts);
 							}
-							this.log("循环 可燃性粉尘 风险信息", this.dangerFinalData)
+							// this.log("循环 可燃性粉尘 风险信息", this.dangerFinalData)
 						}
 						if (type == 4 && this.industry.indexOf('危险化学品') !== -1) {
 							var left = obj.leftData;
 							var right = obj.rightData;
-							this.dangerFinalData = this._changeDanger(left, right);
+							var all = this._changeDanger(left, right);
+
+							// this.dangerFinalData = all;
 						}
 						if (type == 5 && this.industry.indexOf('高温熔融') !== -1) {
 							this.highFinalData = this._changeHigh(obj);
-							this.log("循环 高温熔融 风险信息", this.highFinalData)
+							// this.log("循环 高温熔融 风险信息", this.highFinalData)
 						}
 						if (type == 6 && this.industry.indexOf('冷库') !== -1) {
-							// all.push(this._changeColdStorage(obj));
-							this.clodFinalData = this._changeColdStorage(obj);
-							this.log("循环 冷库 风险信息", this.clodFinalData)
+							var arr = this._changeColdStorage(obj);
+							if (arr.length > 0) {
+								this.clodFinalData = arr;
+							}
+							
+							// this.log("循环 冷库 风险信息", this.clodFinalData)
 						}
 						if (type == 7 && this.industry.indexOf('煤气作业') !== -1) {
-							// all.push(...this._changeGasWork(obj));
 							this.gasFinalData = this._changeGasWork(obj);
-							this.log("循环 煤气作业 风险信息", this.gasFinalData)
+							// this.log("循环 煤气作业 风险信息", this.gasFinalData)
 						}
 
 					}
@@ -432,18 +502,17 @@
 				var contentW = this.s_width - 20 - 4 - 70;
 				var half = contentW / 2 - 70;
 				var keyW = 70;
-				var left = this._changeDangerArray(leftArr, "气体类",  w, keyW);
+				var left = this._changeDangerArray(leftArr, "气体类", w, keyW);
 				// var right = this._changeDangerArray(rightArr,  '液体类/固体类', w, keyW);
 				var right = [];
 				var all = [];
 				left[0][0].row = left.length || 0;
-				right[0][0].row = right.length || 0;
+				// right[0][0].row = right.length || 0;
 				all.push([this._changeTabelValue("危险化学品", null, w, keyW)]);
-				all.push(...left, ...right);
-				
-				this.log(...left, "????????????????????")
+				// all.push(...left, ...right);
+				all.push(...left);
 				all[0][0].row = all.length;
-				// return all;
+				return all;
 			},
 			_changeDangerArray(arr, str, w, keyW) {
 				var narr = [];
@@ -468,43 +537,87 @@
 				var _self = this;
 				narr.push([this._changeTabelValue(str, null, w, keyW)]);
 				var index = 0;
+				var ele = [];
 				for (var i = 0; i < arr.length; i++) {
-					
+					var temp = arr[i];
+					if (temp['value']) {
+						var cur = temp.data;
+						ele.push(
+							[this._changeTabelValue(temp['name'], null, w, keyW)],
+							[this._changeTabelValue('', '存储方式:' + saveTo[cur.save], w, keyW),
+								this._changeTabelValue('', '数量：' + cur.maxNum || 0, w, keyW)
+							],
+							[this._changeTabelValue('', '容积：' + cur.sinNum || 0, w, keyW),
+								this._changeTabelValue('', specialTo[cur.special] || '未获取到库房存放数据', w, keyW)
+							]
+						);
+						if (cur.special == 1) {
+							ele.push([this._changeTabelValue('', '库房数量：' + cur.specialNum || 0, w, keyW)]);
+						}
+						ele.push([this._changeTabelValue('', cur.source == 1 ? `购买于：${this._getBuyCompany(cur.companyData)}` : '自主生产', w,
+							keyW)]);
+					}
 				}
-				// for (var i = 0; i < arr.length; i++) {
-					// var temp = arr[i];
-					// if (temp['value']) {
-					// 	var cur = temp.data;
-					// 	ele[index] = []
-					// 	ele[index].push([
-					// 		[ this._changeTabelValue(temp['name'], null, w, keyW) ],
-					// 				 [ this._changeTabelValue('', '存储方式:' + saveTo[cur.save], w, keyW),
-					// 				   this._changeTabelValue('',  '数量：' + cur.maxNum || 0, w, keyW)],
-					// 				[this._changeTabelValue('',  '容积：' + cur.sinNum || 0, w, keyW),
-					// 				 this._changeTabelValue('',  specialTo[cur.special] || '未获取到库房存放数据', w, keyW)]
-							
-							
-					// 	]
-					// 	);
-					// 	if (cur.special == 1) {
-					// 		ele[index].push([this._changeTabelValue('', '库房数量：' + cur.specialNum || 0, w, keyW, 2)]);
-					// 	}
-					// 	ele[index].push([this._changeTabelValue('', cur.source == 1 ? `购买于：${this._getBuyCompany(cur.companyData)}` : '自主生产', w, keyW)]);
-					// 	index ++;
-					// }
-				// } 
+
+				narr.push(...ele)
+				narr[0][0].row = narr.length;
+				// console.log(narr)
 				return narr;
+
+				// for (var i = 0; i < arr.length; i++) {
+				// 	var temp = arr[i];
+				// 	if (temp['value']) {
+				// 		var cur = temp.data;
+				// 		ele[index] = []
+				// 		ele[index].push([
+				// [ this._changeTabelValue(temp['name'], null, w, keyW) ],
+				// 		 [ this._changeTabelValue('', '存储方式:' + saveTo[cur.save], w, keyW),
+				// 		   this._changeTabelValue('',  '数量：' + cur.maxNum || 0, w, keyW)],
+				// 		[this._changeTabelValue('',  '容积：' + cur.sinNum || 0, w, keyW),
+				// 		 this._changeTabelValue('',  specialTo[cur.special] || '未获取到库房存放数据', w, keyW)]
+
+
+				// 		]
+				// 		);
+				// 		if (cur.special == 1) {
+				// ele[index].push([this._changeTabelValue('', '库房数量：' + cur.specialNum || 0, w, keyW, 2)]);
+				// 		}
+				// ele[index].push([this._changeTabelValue('', cur.source == 1 ? `购买于：${this._getBuyCompany(cur.companyData)}` : '自主生产', w, keyW)]);
+				// 		index ++;
+				// 	}
+				// } 
+
+
+				// return narr;
 			},
+
 			///获取购买公司  -  危险化学品
 			_getBuyCompany(data) {
 				var temp = [];
 				data.forEach(item => {
-				  temp.push(`\n单位名称:${item.buyCompany};信用代码:${item.code};联系人:${item.name};联系电话:${item.phone}`)
+					temp.push(`\n单位名称:${item.buyCompany};信用代码:${item.code};联系人:${item.name};联系电话:${item.phone}`)
 				})
 				if (temp.length > 0) {
 					return temp.join(',')
-				}else {
+				} else {
 					return '';
+				}
+			},
+			myTypeof(target) {
+				var template = {
+					"[object Array]": "array",
+					"[object Object]": "object",
+					"[object Number]": "number - object",
+					"[object Boolean]": "boolean - object",
+					"[object String]": "string - object"
+				};
+				if (target == null) {
+					return "null"
+				} else if (typeof(target) == "object") {
+					var str = Object.prototype.toString.call(target);
+					return template[str];
+				} else {
+					return typeof(target);
 				}
 			},
 			//_changeHigh 高温熔融
@@ -556,6 +669,28 @@
 				all[0][0]['row'] = all.length;
 				return all;
 			},
+			//拼接用电 _changeSpecialJob1
+			_Splicing(obj, w, keyW) {
+				console.log(obj['state'], obj['useDcSelect'] == 1,obj['type'] == 1, obj)
+				var str = '';
+				var arr = [];
+				if (obj['state']) {
+					if (obj['useDcSelect'] == 1) {
+						if (obj['type'] == 1) {
+							str += `单位名称:${obj.name};信用代码:${obj.code};联系人:${obj.content};联系电话:${obj.phone}`
+						} else {
+							str += `姓名:${obj.name}; 特种作业操作证编号:${obj.code};联系电话:${obj.phone}`
+						}
+						arr.push( [ this._changeTabelValue("", `作业人员${obj.useDcNum}名`, w, keyW),
+									this._changeTabelValue("", str || null, w, keyW, 2)] );
+					}else {
+						arr.push([
+								  this._changeTabelValue("", `作业人员${obj.useDcNum}名`, w, keyW, 3)]);
+					}
+				}  
+				
+				return arr;
+			},
 			//特殊作业及特种设备 1
 			_changeSpecialJob1(opts) {
 				this.log(opts, '特殊作业及特种设备 1');
@@ -564,23 +699,71 @@
 				var half = contentW / 2 - 70;
 				var keyW = 70;
 				var all = [];
-				var devicTempArr = [
-					[this._changeTabelValue('吊装转运', null, w, keyW)]
-				]; //吊装转运
-				var hoistingArr = this._comparedCommon(opts, this.hoistingData, false, 'ts');
-				var hoistTempArr = [
-					[this._changeTabelValue('动火作业', null, w, keyW)]
-				]; //动火作业
-				this._commonSpecialJob(all, opts, w, keyW, devicTempArr);
-				this._specialFillArr(hoistTempArr, hoistingArr);
-				hoistTempArr[0][0]['row'] = hoistTempArr.length;
+				all.push([this._changeTabelValue("特殊作业", null, w, keyW)]);
+				////////////用电/////////////////
+				var electricityArr = [  
+					[this._changeTabelValue('用电', null, w, keyW)]
+				];
+				var electricityTempArr = [];
+				var obj = {
+					code: opts.ydCode,
+					content: opts.ydContact,
+					name: opts.ydName,
+					phone: opts.ydPhone,
+					state: opts.ydState,
+					type: opts.ydType,
+					useDcSelect: opts.useDcSelect,
+					useDcNum: opts.useDcNum
+				};
+				electricityTempArr.push(...this._Splicing(obj)); 
+				electricityArr.push(...electricityTempArr);
+				////////////用电///////////////// 
 
-				if (hoistTempArr.length > 1) {
-					all.push(...hoistTempArr);
+
+				////////////////动火作业////////////////
+				var fireArr = [
+					[this._changeTabelValue('动火作业', null, w, keyW)]
+				];
+				var fireTempArr = this._comparedCommon(opts, this.dhData);
+				var f_temp = []
+				for (var  i = 0; i < fireTempArr.length; i ++) {
+					f_temp.push([this._changeTabelValue(fireTempArr[i]['name'], null, w, keyW), 
+						   this._changeTabelValue('', `作业人员${fireTempArr[i]['value']}名`, w, keyW, 2)
+						   ])
 				}
-				if (devicTempArr.length > 1) {
-					all.push(...devicTempArr);
+				fireArr.push(...f_temp);
+				////////////////动火作业////////////////
+				
+				/////////////吊装转运///////////
+				var devicArr = [ //吊装转运
+					[this._changeTabelValue('吊装转运', null, w, keyW)]
+				];
+				var devicTempArr = this._comparedCommon(opts, this.hoistingData, false, 'ts');
+				this._specialFillArr(devicArr, devicTempArr);
+				/////////////吊装转运///////////
+				var tsArr = [ /// 特种设备/
+					[this._changeTabelValue('特种设备', null, w, keyW)]
+				];
+				
+				var tsTempArr = this._comparedCommon(opts, opts.deviceData, false, 'ts');
+				this._specialFillArr(tsArr, tsTempArr);
+ 
+				electricityArr[0][0]['row'] = electricityArr.length;
+				fireArr[0][0]['row'] = fireArr.length;
+				devicArr[0][0]['row'] = devicArr.length;
+				tsArr[0][0]['row'] = tsArr.length;
+				if (electricityArr.length > 0) {
+					all.push(...electricityArr);
 				}
+				if (fireArr.length > 1) {
+					all.push(...fireArr);
+				}
+				if (devicArr.length > 1) {
+					all.push(...devicArr);
+				}
+				if (tsArr.length > 0) {
+					all.push(...tsArr);
+				} 
 				all[0][0]['row'] = all.length;
 				return all;
 			},
@@ -617,6 +800,7 @@
 				}
 
 				fireTempArr[0][0]['row'] = fireTempArr.length;
+				this.log(fireTempArr, "????????????????????")
 				electricityArr[0][0]['row'] = electricityArr.length;
 				all.push(...electricityArr);
 				if (fireTempArr.length > 1) {
@@ -957,11 +1141,14 @@
 				var half = contentW / 2 - 70;
 				var keyW = 70;
 				var arr = [];
+				
 				if (obj.lkSelct == 1) {
-					arr = [this._changeTabelValue("冷库", null, half, keyW),
-						this._changeTabelValue("制冷剂", zlTo[obj['zljSelect']], half, keyW, 3)
+					console.log(obj, "?????????????/")
+					arr = [this._changeTabelValue("冷库", null, w, keyW),
+						   this._changeTabelValue("制冷剂", zlTo[obj['zljSelect']], w, keyW, 3)
 					]
 				}
+				
 				return arr;
 			},
 			//煤气作业
@@ -1142,6 +1329,38 @@
 					show,
 					row
 				}
+
+			},
+
+			_changeGoToPage(name) {
+				switch (name) {
+					case '塑料':
+						return '../writeData/riskMainPage/plastic';
+					case '纺织':
+						return '../writeData/riskMainPage/textile';
+					case '食品':
+						return '../writeData/riskMainPage/food';
+					case '建材':
+						return '../writeData/riskMainPage/buildingMaterials';
+					case '纸制品':
+						return '../writeData/riskMainPage/paperProducts';
+					case '商贸':
+						return '../writeData/riskMainPage/business';
+					case '轻工':
+						return '../writeData/riskMainPage/industryFurniture'; //comm
+					case '家具':
+						return '../writeData/riskMainPage/industryFurniture'; //comm
+					case '机械':
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '烟草':
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '冶金':
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					case '有色':
+						return '../writeData/riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+					default:
+						return '';
+				}
 			}
 		}
 
@@ -1151,74 +1370,16 @@
 <style lang="less">
 	@import url("@/common/less/base.less");
 
+	.a_t_slot {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		left: 180upx;
+		font-size: 30upx;
+		color: #f56c6c;
+		text-decoration: underline;
+	}
+
 	.risk_info {}
 </style>
-<!-- //风险信息 -- 根据type判断风险类别
-			_changeType(type, content, all) {
-				if (content == "" || content == undefined || content == null || content == "{}") return;
-				var obj = {};
-				try {
-					obj = JSON.parse(content);
-				} catch (e) {
-					this.log(e)
-				}
-				if (type == 1 && this.industry.indexOf('有限空间') !== -1) {
-					if (obj.space) {
-						var opts = obj.space;
-						// this.spaceFinalData = this._changeSpace1(opts)
-						all.push(...this._changeSpace1(opts));
-					} else if (obj.space2) {
-						var opts = obj.space2;
-						// all.push(...this._changeSpace2(opts));
-						this.spaceFinalData = this._changeSpace2(opts)
-					} else if (obj.space3) {
-						var opts = obj.space3;
-						var list = obj.infoData;
-						// all.push(...this._changeSpace3(opts, list));
-						this.spaceFinalData = this._changeSpace3(opts)
-					}
-				}
-				if (type == 2 && this.industry.indexOf('特殊作业及特种设备') !== -1) {
-					this.log(obj)
-					if (obj.workOne != undefined) {
-						var opts = obj.workOne;
-						// all.push(...this._changeSpecialJob1(opts));
-						this.workFinalData = this._changeSpecialJob1(opts);
-					} else if (obj.workTwo != undefined) {
-						var opts = obj.workTwo;
-						// all.push(...this._changeSpecialJob2(opts));
-						this.workFinalData = this._changeSpecialJob2(opts);
-					}
-				}
-				if (type == 3 && this.industry.indexOf('可燃性粉尘') !== -1) {
-					if (obj.dustOne != undefined) {
-						var opts = obj.dustOne;
-						// all.push(...this._changeDustOne(opts));
-						this.dangerFinalData = this._changeDustOne(opts);
-					} else if (obj.dustTwo != undefined) {
-						var opts = obj.dustTwo;
-						// all.push(...this._changeDustTwo(opts));
-						this.dangerFinalData = this._changeDustOne(opts);
-					}
-				}
-				if (type == 4 && this.industry.indexOf('危险化学品') !== -1) {
-
-				}
-				if (type == 5 && this.industry.indexOf('高温熔融') !== -1) {
-
-				}
-				if (type == 6 && this.industry.indexOf('冷库') !== -1) {
-					// all.push(this._changeColdStorage(obj));
-					this.clodFinalData = this._changeColdStorage(obj);
-				}
-				if (type == 7 && this.industry.indexOf('煤气作业') !== -1) {
-					// all.push(...this._changeGasWork(obj));
-					this.gasFinalData = this._changeGasWork(obj);
-				}
-				all.push(...this.spaceFinalData);
-				all.push(...this.workFinalData);
-				all.push(...this.dustFinalData);
-				all.push(...this.gasFinalData);
-				all.push(...this.clodFinalData);
-				return all;
-			}, -->
+ 

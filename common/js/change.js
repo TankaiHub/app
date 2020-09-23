@@ -28,7 +28,7 @@ function resolveAddress(str, list) {
 	var numberArray = [];
 	//重庆市沙坪坝区青木关镇新青路社区2222递四方速递
 	var first_reg = /.+?(省|市|自治区|自治州|县|区)/g;;
-	var first_str = first_reg.exec(str); 
+	var first_str = first_reg.exec(str);
 	var str_f_bd;
 	var first_number;
 	//沙坪坝区青木关镇新青路社区2222递四方速递
@@ -63,13 +63,13 @@ function resolveAddress(str, list) {
 
 	try {
 		str_f_bd = first_str[0];
-		first_number =  changeNumber(str_f_bd, list);
+		first_number = changeNumber(str_f_bd, list);
 		f_str = str.replace(str_f_bd, "");
 		// console.log("去掉 --- 省|市|自治区|自治州|县|区 =得到", f_str) 
 		second_reg = /.+?(区|县)/g;
 		second_str = second_reg.exec(f_str);
 		str_s_bd = second_str[0];
-		second_number =  changeNumber(str_s_bd, list);
+		second_number = changeNumber(str_s_bd, list);
 		s_str = f_str.replace(str_s_bd, "");
 		// console.log("去掉 --- 区|县 =得到", s_str)
 
@@ -79,14 +79,14 @@ function resolveAddress(str, list) {
 			third_reg = /.+?(街道|镇)/g;
 			third_str = third_reg.exec(s_str);
 			str_t_bd = third_str[0];
-			third_number =  changeNumber(str_t_bd, list);
+			third_number = changeNumber(str_t_bd, list);
 			t_str = s_str.replace(str_t_bd, "");
 			// console.log( "去掉 --- 街道|镇 =得到", t_str);
 
 			fourth_reg = /.+?(社区|村)/g;
 			fourth_str = fourth_reg.exec(t_str);
 			str_fo_bd = fourth_str[0];
-			fourth_number =  changeNumber(str_fo_bd, list);
+			fourth_number = changeNumber(str_fo_bd, list);
 			fo_str = t_str.replace(str_fo_bd, "");
 			// console.log( "去掉 ---  社区|村 =得到", fo_str);
 		} catch (e) {
@@ -103,8 +103,8 @@ function resolveAddress(str, list) {
 				}
 				str_t_bd = arr[0];
 				str_fo_bd = arr[1];
-				third_number =  changeNumber(str_t_bd, list)
-				fourth_number =  changeNumber(str_fo_bd, list, true);
+				third_number = changeNumber(str_t_bd, list)
+				fourth_number = changeNumber(str_fo_bd, list, true);
 				fo_str = s_str.replace(str_fo_bd + str_t_bd, "");
 				// console.log("去掉 --- 三峡商圈|西站|民防办 =得到", fo_str);
 			} catch (e) {
@@ -165,10 +165,41 @@ function changeNumber(str, list, isCommon = false) {
 	return number;
 }
 
-
+function _changeUrl(name) {
+	// var name = this.safetyData.industry_category_zfl;
+	switch (name) {
+		case '塑料':
+			return './riskMainPage/plastic';
+		case '纺织':
+			return './riskMainPage/textile';
+		case '食品':
+			return './riskMainPage/food';
+		case '建材':
+			return './riskMainPage/buildingMaterials';
+		case '纸制品':
+			return './riskMainPage/paperProducts';
+		case '商贸':
+			return './riskMainPage/business';
+		case '轻工':
+			return './riskMainPage/industryFurniture'; //comm
+		case '家具':
+			return './riskMainPage/industryFurniture'; //comm
+		case '机械':
+			return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+		case '烟草':
+			return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+		case '冶金':
+			return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+		case '有色':
+			return './riskMainPage/machineryTobaccoMetallurgyAndColored'; //comm1
+		default:
+			return '';
+	}
+}
 
 export {
 	produceTo,
 	resolveAddress,
-	changeNumber
+	changeNumber,
+	_changeUrl
 }
