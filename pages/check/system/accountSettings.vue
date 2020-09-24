@@ -11,7 +11,7 @@
 				<uni-list-item title="账号：" :showArrow="false" :rightText="adminUserInfo.account"></uni-list-item>
 				<uni-list-item title="密码：" :showArrow="false" :rightText="handelPsd(adminUserInfo.pwd)"></uni-list-item>
 			</uni-list>
-			<button class="a_a_w_btn" type="primary" @click="onEditPsd">修改密码</button>
+			<button class="a_a_w_btn width80 ed_btn" type="primary" @click="onEditPsd">修改密码</button>
 		</view>
 	</view>
 </template>
@@ -66,6 +66,7 @@
 </script>
 
 <style lang="less">
+	@import url("@/common/less/base.less");
 	.app_accountSettings_container {
 		.a_a_wrap {
 			padding: 0 10px 10px;
@@ -74,6 +75,10 @@
 				padding: 0 10px;
 				margin: 10px auto;
 				width: 80%;
+			}
+			.ed_btn{
+				height:70upx;
+				line-height: 70upx;
 			}
 		}
 	}

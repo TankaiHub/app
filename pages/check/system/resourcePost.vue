@@ -61,6 +61,7 @@
 			
 			
 		</view>
+		<l-file ref="lFile" @up-success="upSuccess"></l-file>
 		<app-alert v-if="isShowNewFile" title="新建文件夹" placeholder="请输入文件夹名称" @cancel="cancelNewFile" @confirm="confirmNewFile"></app-alert>
 		<app-alert v-if="isShowEditFileTitle" title="文件标题编辑" placeholder="请输入文件标题" @cancel="cancelEditFileTitle" @confirm="confirmEditFileTitle"></app-alert>
 	</view>
@@ -70,6 +71,7 @@
 	import appNav from '@/components/app-nav/app-nav'
 	import appPagination from '@/components/app-table/app-pagination'
 	import appAlert from '@/components/h-form-alert/h-form-alert'
+	import lFile from '@/components/l-file/l-file.vue'
 	import {
 		changeTime
 	} from "@/common/js/base.js"
@@ -146,6 +148,7 @@
 				isShowEditFileTitle: false,
 				editFileTitleData: {},
 				saveFileList:[], 
+				localPath:'',
 			}
 		},
 		computed: {
@@ -154,7 +157,8 @@
 		components: {
 			appNav,
 			appPagination,
-			appAlert
+			appAlert,
+			lFile
 		},
 		onShow() {
 			this._initData()
@@ -162,6 +166,10 @@
 		methods: {
 			onNavBarLeft() {
 				this.drawerVisible = true;
+			},
+			///upSuccess 下载
+			upSuccess() {
+				
 			},
 			//导航
 			navClose(bool) {
@@ -349,19 +357,22 @@
 				this.isShowNewFile = true;
 			},
 			onDownload(opts) {
-				console.log(opts)
-				var task = uni.downloadFile({
-					url: opts.url,
-					success(res) {
-						console.log(res, "====down")
-						uni.saveFile({
-							tempFilePath: res.tempFilePath,
-							success(result) {
-								console.log(result, "save")
-							}
-						});
-					}
-				});
+				this.$refs.lFile.download(opts.url,'local').then(path=>{
+				    this.localPath = path;
+					console.log(path)
+				}); 
+				// var task = uni.downloadFile({
+				// 	url: opts.url,
+				// 	success(res) {
+				// 		console.log(res, "====down")
+				// 		uni.saveFile({
+				// 			tempFilePath: res.tempFilePath,
+				// 			success(result) {
+				// 				console.log(result, "save")
+				// 			}
+				// 		});
+				// 	}
+				// });
 			},
 			getSaveFileList() {
 				var _self = this;

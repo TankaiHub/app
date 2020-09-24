@@ -1,6 +1,6 @@
 <template>
 	<view class="page_login">
-		<uni-nav-bar title="登录"></uni-nav-bar> 
+		<uni-nav-bar title="登录"></uni-nav-bar>
 		<view class="com_app_login">
 			<view class="l_bg_wrap"></view>
 			<view class="l_top_text_wrap">
@@ -11,26 +11,36 @@
 				<view class="l_img_btn_wrap">
 					<view class="l_left_btn l_btn" @click="onChangeLogin(true)"></view>
 					<view class="l_right_btn l_btn" @click="onChangeLogin(false)"></view>
-				</view>   
+				</view>
 			</view>
 			<view class="l_form_wrap" v-if="isShowLoginForm">
 				<form @submit="formSubmit">
 					<view class="uni-form-item uni-column l_inp_wrap">
 						<!-- 92500106MA60TE0JX1  个体    1111-->
-						<input class="uni-input" :value="changeLoginStatus ? '92500106MA60TE0JX1' : 'yjjcjx'" name="account" :placeholder="changeLoginStatus ? '请输入社信代码':'请输入账号'" />
-						<input class="uni-input" :value="changeLoginStatus ? '000000' : '65465922'" :password="true" name="psd" placeholder="请输入密码" />
+						<view class="inp_wrap clearfix">
+							<image src="../static/icon/phone_icon.png" class="img_inp" mode="aspectFill"></image>
+							<input class="inp_bd" :value="changeLoginStatus ? '92500106MA60TE0JX1' : 'yjjcjx'" name="account"
+							 placeholder-style="color:#fff" :placeholder="changeLoginStatus ? '请输入社信代码':'请输入账号'" />
+						</view>
+						<view class="inp_wrap clearfix">
+							<image class="img_inp" src="../static/icon/shield_icon.png" mode="aspectFill"></image>
+							<input class="inp_bd" :value="changeLoginStatus ? '000000' : '65465922'" :password="true" name="psd"
+							 placeholder-style="color:#fff" placeholder="请输入密码" />
+						</view>
 					</view>
 					<view class="uni-btn-v">
-						<button form-type="submit">登录</button>
+						<button form-type="submit" class="sub_btn">登录</button>
+						<button type="default" class="sub_btn mar_top_10px" @click="onBack">返回</button>
+						<view class="n_psd" @click="onPsd">忘记密码</view>
 					</view>
 				</form>
 			</view>
-		</view> 
+		</view>
 	</view>
 
 </template>
 
-<script> 
+<script>
 	import {
 		mapState,
 		mapMutations
@@ -44,9 +54,12 @@
 		},
 		computed: {
 			...mapState(["adminUserInfo", "userInfo"])
-		}, 
+		},
 		methods: {
 			...mapMutations(['set_adminUserInfo', 'set_userInfo']),
+			onBack() {
+				this.isShowLoginForm = false;
+			},
 			onChangeLogin(bool) {
 				this.changeLoginStatus = bool;
 				this.isShowLoginForm = true;
@@ -80,7 +93,7 @@
 					pwd
 				};
 				this.$http.post("loginAdmin", opts).then(res => {
-					if (res.code == 200) { 
+					if (res.code == 200) {
 						this.$store.commit("set_adminUserInfo", res.data)
 						var token = res.data.jwt;
 						uni.setStorageSync('token', token);
@@ -98,7 +111,7 @@
 				var _self = this;
 				this.$http.post("login", opts).then(res => {
 					this.log(res)
-					if (res.code == 200) { 
+					if (res.code == 200) {
 						this.$store.commit("set_userInfo", res.data)
 						var token = res.data.jwt;
 						uni.setStorageSync('token', token);
@@ -110,13 +123,24 @@
 						});
 					}
 				});
+			},
+			onPsd() {
+				uni.navigateTo({
+					url:'./password'
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="less">
+	@import url("@/common/less/base.less");
+
 	.page_login {
+
+
+
+
 		.com_app_login {
 			width: 100%;
 			height: 100%;
@@ -181,20 +205,74 @@
 			}
 
 			.l_form_wrap {
-				margin: 20px auto;
+				margin: 50px auto;
 				width: 90%;
 
 				.l_inp_wrap {
-					input {
-						margin-bottom: 10px;
-						padding-left: 5px;
-						height: 40px;
-						border: 1px solid #ccc;
-						border-radius: 5px;
-						font-size: 14px;
+					.inp_wrap {
+						margin: 40upx 0;
+						padding: 10upx;
+						background-color: #b6d1ff;
+						border-radius: 54upx;
+						position: relative;
+
+						.img_inp {
+							position: absolute;
+							top: 50%;
+							left: 10px;
+							transform: translateY(-50%);
+							width: 56upx;
+							height: 56upx; 
+						}
+
+						.inp_bd {
+							margin-left: 30px;
+							padding: 15upx 20upx;
+							width: 80%; 
+							height: 56upx;
+							border: none;
+							outline: none;
+							background: #b6d1ff !important;
+						}
+
 					}
+
+					// input {
+					// 	margin-bottom: 10px;
+					// 	padding-left: 5px;
+					// 	height: 40px;
+					// 	border: 1px solid #ccc;
+					// 	border-radius: 5px;
+					// 	font-size: 14px;
+					// }
 				}
 			}
+		}
+
+		.sub_btn {
+			margin-top:100upx;
+			width: 100%;
+			height: 48px;
+			line-height: 48px;
+			color: #fff;
+			background-color: #3b7bec;
+			border-radius: 27px;
+			font-size: 18px;
+			text-align: center;
+			border: none;
+			outline: none;
+			&.mar_top_10px{
+				margin-top:20upx;
+				background-color: #f8f8f8;
+				color:#000;
+			}
+		}
+		.n_psd{
+			margin-top:20upx;
+			text-align: center;
+			line-height: 30px;
+			color: #fff;
+			font-size: 16px;
 		}
 	}
 </style>
